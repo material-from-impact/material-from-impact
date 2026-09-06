@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Continuous Material Property Estimation from Impact Sounds</title>
+<meta name="description" content="A feed-forward model that estimates continuous, renderer-compatible material parameters directly from impact sounds, for inverse modal sound rendering.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f6f7fb; --panel:#ffffff; --ink:#171a21; --muted:#5c6472; --line:#e5e8f0;
+    --accent:#4f46e5; --accent2:#0ea5a4; --accent-soft:#eef0fe; --shadow:0 1px 2px rgba(20,24,40,.05),0 8px 30px rgba(20,24,40,.06);
+    --mono:'JetBrains Mono',ui-monospace,Menlo,Consolas,monospace;
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --bg:#0d0f15; --panel:#151823; --ink:#e9ecf5; --muted:#9aa3b6; --line:#252a38;
+      --accent:#8b8cf6; --accent2:#2dd4bf; --accent-soft:#1b1f30; --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 34px rgba(0,0,0,.45);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0d0f15; --panel:#151823; --ink:#e9ecf5; --muted:#9aa3b6; --line:#252a38;
+    --accent:#8b8cf6; --accent2:#2dd4bf; --accent-soft:#1b1f30; --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 34px rgba(0,0,0,.45);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;line-height:1.65;
+    -webkit-font-smoothing:antialiased;}
+  a{color:var(--accent);text-decoration:none}
+  a:hover{text-decoration:underline}
+  .wrap{max-width:960px;margin:0 auto;padding:0 22px}
+  /* ---- hero ---- */
+  header.hero{padding:64px 0 26px;text-align:center;
+    background:radial-gradient(1100px 380px at 50% -80px,var(--accent-soft),transparent 70%);}
+  .venue{display:inline-block;font-weight:600;font-size:.8rem;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--accent);background:var(--accent-soft);border:1px solid var(--line);
+    padding:5px 12px;border-radius:999px;margin-bottom:18px}
+  h1{font-size:clamp(1.7rem,4.4vw,2.7rem);line-height:1.15;font-weight:800;margin:.1em 0 .35em;letter-spacing:-.02em}
+  h1 .grad{background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .authors{font-size:1.08rem;font-weight:500;margin:.2em 0}
+  .authors a{color:var(--ink)}
+  .aff{color:var(--muted);font-size:.96rem;margin:.15em 0 .1em}
+  .eq{color:var(--muted);font-size:.83rem;margin-top:.3em}
+  .links{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:22px 0 6px}
+  .btn{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:.94rem;
+    padding:10px 16px;border-radius:11px;border:1px solid var(--line);background:var(--panel);
+    color:var(--ink);box-shadow:var(--shadow)}
+  .btn:hover{text-decoration:none;border-color:var(--accent);transform:translateY(-1px);transition:.15s}
+  .btn.pri{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+  /* ---- sections ---- */
+  section{padding:34px 0}
+  h2{font-size:1.5rem;font-weight:750;letter-spacing:-.01em;margin:0 0 6px;display:flex;align-items:center;gap:10px}
+  h2::before{content:"";width:10px;height:22px;border-radius:3px;background:linear-gradient(var(--accent),var(--accent2))}
+  .lead{color:var(--muted);margin:.2em 0 1.2em;max-width:70ch}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow)}
+  figure{margin:0}
+  video{width:100%;display:block;border-radius:16px;background:#000}
+  .cap{color:var(--muted);font-size:.9rem;margin-top:10px;text-align:center}
+  .abstract{padding:22px 24px;font-size:1.02rem}
+  /* ---- pipeline chips ---- */
+  .flow{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:6px 0 4px}
+  .chip{background:var(--accent-soft);border:1px solid var(--line);border-radius:12px;
+    padding:10px 14px;font-weight:600;font-size:.92rem}
+  .chip small{display:block;font-weight:400;color:var(--muted);font-size:.78rem}
+  .arrow{color:var(--accent);font-weight:700}
+  .params{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+  .pill{font-family:var(--mono);font-size:.85rem;background:var(--panel);border:1px solid var(--line);
+    border-radius:9px;padding:6px 11px}
+  .pill b{color:var(--accent)}
+  /* ---- audio demos ---- */
+  .demos{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px}
+  .demo{padding:16px 16px 18px}
+  .demo .tag{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+    padding:3px 9px;border-radius:999px;background:var(--accent-soft);color:var(--accent);margin-bottom:8px}
+  .demo h3{margin:.1em 0 .5em;font-size:1.08rem}
+  .demo .row{display:flex;flex-direction:column;gap:4px;margin-top:12px}
+  .demo .row span{font-size:.82rem;font-weight:600;color:var(--muted)}
+  .demo audio{width:100%;height:38px}
+  .demo .row.pred span{color:var(--accent2)}
+  /* ---- table ---- */
+  .tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow)}
+  table{border-collapse:collapse;width:100%;font-size:.92rem;background:var(--panel)}
+  th,td{padding:10px 12px;text-align:center;border-bottom:1px solid var(--line);white-space:nowrap}
+  th{background:var(--accent-soft);font-weight:700;color:var(--ink)}
+  td:first-child,th:first-child{text-align:left}
+  tr.ours{background:var(--accent-soft);font-weight:600}
+  tr.ours td{color:var(--ink)}
+  .sub{color:var(--muted);font-size:.85rem}
+  .grp td{background:transparent;color:var(--muted);font-style:italic;font-size:.82rem;text-align:left;
+    border-bottom:none;padding-top:14px}
+  /* ---- bibtex ---- */
+  pre{background:#0d0f15;color:#e9ecf5;border-radius:14px;padding:18px 20px;overflow-x:auto;
+    font-family:var(--mono);font-size:.86rem;line-height:1.55;border:1px solid var(--line)}
+  footer{padding:40px 0 60px;color:var(--muted);font-size:.88rem;text-align:center}
+  .kfacts{display:flex;flex-wrap:wrap;gap:12px;margin-top:8px}
+  .fact{flex:1;min-width:150px;background:var(--panel);border:1px solid var(--line);border-radius:14px;
+    padding:16px 18px;box-shadow:var(--shadow)}
+  .fact b{display:block;font-size:1.5rem;background:linear-gradient(90deg,var(--accent),var(--accent2));
+    -webkit-background-clip:text;background-clip:text;color:transparent}
+  .fact span{color:var(--muted);font-size:.86rem}
+  /* ---- sticky nav ---- */
+  .nav{position:sticky;top:0;z-index:50;border-bottom:1px solid var(--line);
+    background:var(--bg);background:color-mix(in srgb,var(--bg) 80%,transparent);
+    -webkit-backdrop-filter:saturate(1.5) blur(12px);backdrop-filter:saturate(1.5) blur(12px)}
+  .nav-in{display:flex;align-items:center;gap:14px;height:56px}
+  .brand{display:flex;align-items:center;gap:9px;font-weight:750;color:var(--ink);
+    font-size:.98rem;white-space:nowrap}
+  .brand:hover{text-decoration:none}
+  .brand .dot{width:16px;height:16px;border-radius:5px;flex:none;
+    background:linear-gradient(135deg,var(--accent),var(--accent2))}
+  .nav-links{display:flex;gap:2px;margin:0 auto;overflow-x:auto;scrollbar-width:none}
+  .nav-links::-webkit-scrollbar{display:none}
+  .nav-links a{color:var(--muted);font-weight:600;font-size:.9rem;padding:7px 12px;
+    border-radius:9px;white-space:nowrap;transition:color .15s,background .15s}
+  .nav-links a:hover{color:var(--ink);background:var(--accent-soft);text-decoration:none}
+  .nav-links a.active{color:var(--accent);background:var(--accent-soft)}
+  .nav-cta{display:flex;gap:8px;flex:none}
+  .btn-sm{font-weight:600;font-size:.86rem;padding:7px 12px;border-radius:9px;
+    border:1px solid var(--line);background:var(--panel);color:var(--ink)}
+  .btn-sm:hover{border-color:var(--accent);text-decoration:none}
+  section{scroll-margin-top:72px}
+  @media (max-width:820px){.nav-cta{display:none}}
+  @media (max-width:560px){.brand .txt{display:none}}
+  /* scroll progress + theme toggle */
+  .progress{position:fixed;top:0;left:0;height:3px;width:0;z-index:60;
+    background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .08s linear}
+  .icon-btn{display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;
+    border-radius:9px;border:1px solid var(--line);background:var(--panel);color:var(--ink);
+    cursor:pointer;font-size:1.05rem;line-height:1}
+  .icon-btn:hover{border-color:var(--accent)}
+  /* ---- blend interpolation slider ---- */
+  .blend-head{display:flex;align-items:center;gap:16px}
+  .blend-head .mat-l,.blend-head .mat-r{font-weight:750;font-size:1.02rem;white-space:nowrap}
+  .blend-head .mat-l{color:var(--accent2)}.blend-head .mat-r{color:var(--accent)}
+  #blendSlider{flex:1;-webkit-appearance:none;appearance:none;height:8px;border-radius:999px;
+    background:linear-gradient(90deg,var(--accent2),var(--accent));outline:none}
+  #blendSlider::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;
+    background:var(--panel);border:3px solid var(--accent);cursor:pointer;box-shadow:var(--shadow)}
+  #blendSlider::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:var(--panel);
+    border:3px solid var(--accent);cursor:pointer}
+  .blend-mix{text-align:center;font-family:var(--mono);font-size:.9rem;color:var(--muted);margin:12px 0 4px}
+  .blend-body{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-top:12px}
+  .btn-play{flex:none;font-weight:700;font-size:.95rem;padding:11px 20px;border-radius:11px;border:none;
+    background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;cursor:pointer;
+    box-shadow:var(--shadow)}
+  .btn-play:hover{filter:brightness(1.06)}
+  .blend-params{display:flex;gap:8px;flex-wrap:wrap;flex:1}
+  .blend-params .pill{transition:background .12s}
+  .blend-params .pill b{color:var(--accent)}
+  .blend-params .pill .v{font-variant-numeric:tabular-nums}
+  /* copy button */
+  .cite-wrap{position:relative}
+  .copy-btn{position:absolute;top:12px;right:12px;font-weight:600;font-size:.8rem;padding:6px 12px;
+    border-radius:8px;border:1px solid #3a4152;background:#1b1f2b;color:#e9ecf5;cursor:pointer}
+  .copy-btn:hover{border-color:var(--accent)}
+  .copy-btn.ok{border-color:var(--accent2);color:var(--accent2)}
+  /* ---- modal-analysis gallery ---- */
+  .modal-gal{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-top:4px}
+  .modal-gal figure{background:var(--accent-soft);border:1px solid var(--line);border-radius:12px;
+    padding:8px 8px 6px;text-align:center}
+  .modal-gal img{width:100%;height:auto;display:block}
+  .modal-gal figcaption{font-family:var(--mono);font-size:.72rem;color:var(--muted);margin-top:2px}
+  /* ---- spectrogram inside demo card ---- */
+  .spec{margin-top:15px}
+  .spec .lbls{display:flex;font-size:.7rem;font-weight:700;color:var(--muted);
+    text-transform:uppercase;letter-spacing:.05em}
+  .spec .lbls span{flex:1;text-align:center}
+  .spec .lbls span.p{color:var(--accent2)}
+  .spec img{width:100%;display:block;border-radius:8px;margin-top:4px;background:#000;border:1px solid var(--line)}
+  /* ---- interactive 3D ---- */
+  model-viewer{width:100%;height:240px;border-radius:12px;border:1px solid var(--line);
+    background:radial-gradient(130% 130% at 50% 0%,var(--accent-soft),transparent 75%);
+    --poster-color:transparent}
+  .mv-hint{font-size:.74rem;color:var(--muted);text-align:center;margin-top:6px}
+</style>
+<script type="module" src="assets/js/model-viewer.min.js"></script>
+</head>
+<body>
+
+<div class="progress" id="progress"></div>
+
+<nav class="nav" id="nav">
+  <div class="nav-in wrap">
+    <a class="brand" href="#top"><span class="dot"></span><span class="txt">Material&nbsp;from&nbsp;Impact</span></a>
+    <div class="nav-links">
+      <a href="#abstract">Abstract</a>
+      <a href="#method">Method</a>
+      <a href="#listen-syn">Synthetic</a>
+      <a href="#blend">Blend</a>
+      <a href="#listen-real">Real</a>
+      <a href="#results">Results</a>
+      <a href="#cite">BibTeX</a>
+    </div>
+    <div class="nav-cta">
+      <a class="btn-sm" href="#">Paper</a>
+      <a class="btn-sm" href="#">&#60;/&#62; Code</a>
+      <button class="icon-btn" id="themeToggle" title="Toggle dark / light" aria-label="Toggle theme">&#9789;</button>
+    </div>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="wrap">
+    <span class="venue">arXiv 2026</span>
+    <h1>Continuous <span class="grad">Material Property</span><br>Estimation from Impact Sounds</h1>
+    <div class="authors">
+      <a href="#">Bumsoo Kim</a><sup>1,&#42;</sup>&nbsp;&nbsp;
+      <a href="#">Hyebin Cho</a><sup>2,&#42;</sup>
+    </div>
+    <div class="aff"><sup>1</sup>Chung-Ang University &nbsp;·&nbsp; <sup>2</sup>Korea Advanced Institute of Science and Technology (KAIST)</div>
+    <div class="eq">&#42; Equal contribution</div>
+    <div class="links">
+      <a class="btn pri" href="#">&#128196; Paper</a>
+      <a class="btn" href="#">arXiv</a>
+      <a class="btn" href="#">&#60;/&#62; Code</a>
+      <a class="btn" href="#">&#128190; NISR Dataset</a>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- TEASER VIDEO -->
+  <section id="teaser" style="padding-top:10px">
+    <figure class="card" style="overflow:hidden">
+      <video src="assets/video/teaser.mp4" autoplay muted loop playsinline controls></video>
+    </figure>
+    <p class="cap">We estimate continuous material parameters from an object's impact sound, then
+      re-render physically faithful audio for the same 3D object in a modal-sound simulator.</p>
+  </section>
+
+  <!-- ABSTRACT -->
+  <section id="abstract">
+    <h2>Abstract</h2>
+    <div class="card abstract">
+      Estimating material properties from unknown audio allows for the synthesis of physically faithful
+      impact sounds within 3D modal audio frameworks. Reusing these predicted parameters to synthesize
+      FEM-based sounds enables the creation of input resembling physical impact sounds, offering new
+      possibilities for immersive applications such as VR and gaming. We introduce a <b>feed-forward model
+      for continuous acoustic material parameter estimation</b> from impact sounds. We construct a
+      <b>blend-supervised multi-impact benchmark</b> pairing randomized pure and two-material impact sounds
+      with physically recomputed, renderer-compatible parameters. Our model aggregates multiple impact
+      recordings via <b>set pooling</b> and is trained with a <b>latent blend consistency</b> objective that
+      encourages the audio representation to vary smoothly across material identities, rather than relying on
+      discrete classification. Compared with conventional audio-feature regression and in-context learning
+      baselines built on general audio&ndash;language models, our supervised regressor substantially reduces
+      error across all five physical parameters, on both pure and mixed-material impacts, and supports
+      re-rendering of physically faithful sounds from the predicted parameters.
+    </div>
+    <div class="kfacts">
+      <div class="fact"><b>5</b><span>continuous physical parameters &nbsp;(E, &rho;, &nu;, &alpha;, &beta;)</span></div>
+      <div class="fact"><b>88k</b><span>impact clips &middot; 1,100 objects &middot; 8 base materials + blends</span></div>
+      <div class="fact"><b>0.078</b><span>Avg. NMAE (Ours) vs 0.17+ for the strongest baseline</span></div>
+    </div>
+  </section>
+
+  <!-- METHOD -->
+  <section id="method">
+    <h2>Method</h2>
+    <p class="lead">A set of <i>K</i> impact recordings from the same object is encoded, pooled as an
+      unordered set, and mapped to continuous, renderer-compatible material parameters. Blend supervision
+      regularizes both the prediction and the latent representation.</p>
+    <div class="card" style="padding:22px 22px 18px">
+      <div class="flow">
+        <div class="chip">K impact sounds<small>same object</small></div>
+        <span class="arrow">&rarr;</span>
+        <div class="chip">Audio Encoder<small>PANN CNN14</small></div>
+        <span class="arrow">&rarr;</span>
+        <div class="chip">Set Pooling<small>mean &amp; std over hits</small></div>
+        <span class="arrow">&rarr;</span>
+        <div class="chip">Regression Head<small>+ aux. material class</small></div>
+        <span class="arrow">&rarr;</span>
+        <div class="chip" style="background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;border:none">
+          Parameters<small style="color:#eef">&theta; = [logE, log&rho;, &nu;, log&alpha;, log&beta;]</small></div>
+      </div>
+      <div class="params">
+        <div class="pill"><b>E</b>&nbsp; Young's modulus</div>
+        <div class="pill"><b>&rho;</b>&nbsp; density</div>
+        <div class="pill"><b>&nu;</b>&nbsp; Poisson's ratio</div>
+        <div class="pill"><b>&alpha;,&beta;</b>&nbsp; Rayleigh damping</div>
+      </div>
+      <p class="cap" style="text-align:left;margin-top:16px">
+        Training combines a target-weighted regression loss, a soft-label material classification head,
+        a blend regression term, and a <b>latent blend consistency</b> loss that aligns a blend's audio
+        latent with the interpolation of its two base-material latents &mdash; teaching a continuous
+        acoustic-to-physical mapping instead of a lookup over discrete classes.</p>
+    </div>
+
+    <h3 style="font-size:1.12rem;margin:26px 0 4px">Physical modal analysis</h3>
+    <p class="lead" style="margin-bottom:12px">The parameters are <i>renderer-compatible</i>: every object
+      is voxelized and solved with FEM modal analysis, and the estimated parameters drive the <b>same modal
+      synthesizer</b> at re-render time &mdash; so the whole loop, from geometry to sound, stays physically
+      grounded. Below: a voxelized mesh and several of its FEM vibration modes (displacement magnitude).</p>
+    <div class="card" style="padding:18px 18px 14px">
+      <div class="modal-gal">
+        <figure><img src="assets/modes/bunny_voxel.png" alt="voxelized mesh"><figcaption>voxelized mesh</figcaption></figure>
+        <figure><img src="assets/modes/bunny_mode_2.png" alt="FEM mode 3"><figcaption>mode 3</figcaption></figure>
+        <figure><img src="assets/modes/bunny_mode_5.png" alt="FEM mode 6"><figcaption>mode 6</figcaption></figure>
+        <figure><img src="assets/modes/bunny_mode_9.png" alt="FEM mode 10"><figcaption>mode 10</figcaption></figure>
+        <figure><img src="assets/modes/bunny_mode_14.png" alt="FEM mode 15"><figcaption>mode 15</figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- INTERACTIVE AUDIO: SYNTHETIC -->
+  <section id="listen-syn">
+    <h2>Listen &middot; Synthetic re-rendering</h2>
+    <p class="lead">For each object we play the <b>input impact</b> and the sound <b>re-rendered from our
+      predicted parameters</b> (FEM modal synthesis, same object &amp; hit). Close match = accurate parameters.</p>
+    <div class="demos">
+      <div class="card demo">
+        <span class="tag">Ceramic</span><h3>Bowl &middot; pure</h3>
+        <div class="row"><span>Input impact</span><audio controls preload="none" src="assets/audio/syn_Ceramic_input.wav"></audio></div>
+        <div class="row pred"><span>Re-rendered (ours)</span><audio controls preload="none" src="assets/audio/syn_Ceramic_pred.wav"></audio></div>
+        <div class="spec"><div class="lbls"><span>Input</span><span class="p">Re-render</span></div>
+          <img loading="lazy" src="assets/spec/syn_Ceramic.png" alt="log-mel: input vs re-render"></div>
+      </div>
+      <div class="card demo">
+        <span class="tag">Glass</span><h3>Vessel &middot; pure</h3>
+        <div class="row"><span>Input impact</span><audio controls preload="none" src="assets/audio/syn_Glass_input.wav"></audio></div>
+        <div class="row pred"><span>Re-rendered (ours)</span><audio controls preload="none" src="assets/audio/syn_Glass_pred.wav"></audio></div>
+        <div class="spec"><div class="lbls"><span>Input</span><span class="p">Re-render</span></div>
+          <img loading="lazy" src="assets/spec/syn_Glass.png" alt="log-mel: input vs re-render"></div>
+      </div>
+      <div class="card demo">
+        <span class="tag">Plastic</span><h3>Object &middot; pure</h3>
+        <div class="row"><span>Input impact</span><audio controls preload="none" src="assets/audio/syn_Plastic_input.wav"></audio></div>
+        <div class="row pred"><span>Re-rendered (ours)</span><audio controls preload="none" src="assets/audio/syn_Plastic_pred.wav"></audio></div>
+        <div class="spec"><div class="lbls"><span>Input</span><span class="p">Re-render</span></div>
+          <img loading="lazy" src="assets/spec/syn_Plastic.png" alt="log-mel: input vs re-render"></div>
+      </div>
+    </div>
+    <p class="cap">Log-mel spectrograms (onset-aligned): the re-render reproduces the input's modal
+      structure and decay from the predicted parameters alone.</p>
+  </section>
+
+  <!-- BLEND INTERPOLATION -->
+  <section id="blend">
+    <h2>Continuous material blends</h2>
+    <p class="lead">Because the targets are <b>continuous</b>, a material can be <i>interpolated</i>.
+      Drag the slider to morph one object from <b>Plastic</b> to <b>Ceramic</b>: the impact sound and the
+      underlying physical parameters move smoothly together (&rho;,&nbsp;E,&nbsp;&alpha;,&nbsp;&beta; by
+      geometric mean, &nu; arithmetic) &mdash; the continuity our latent blend-consistency objective is built for.</p>
+    <div class="card" style="padding:24px 22px 22px">
+      <div class="blend-head">
+        <span class="mat-l">Plastic</span>
+        <input id="blendSlider" type="range" min="0" max="4" step="1" value="2" aria-label="material blend">
+        <span class="mat-r">Ceramic</span>
+      </div>
+      <div class="blend-mix" id="blendMix">&mdash;</div>
+      <div class="blend-body">
+        <button id="blendPlay" class="btn-play">&#9654;&nbsp; Play impact</button>
+        <div class="blend-params" id="blendParams"></div>
+      </div>
+      <audio id="blendAudio" preload="auto"></audio>
+    </div>
+    <p class="cap">Same object &amp; strike throughout &mdash; only the material changes. Each step is a full
+      FEM modal re-solve at the interpolated parameters.</p>
+  </section>
+
+  <!-- INTERACTIVE AUDIO: REAL -->
+  <section id="listen-real">
+    <h2>Listen &middot; Real-world objects</h2>
+    <p class="lead">Real recordings from <a href="https://objectfolder.stanford.edu/" target="_blank" rel="noopener">ObjectFolder-Real</a>:
+      the <b>real microphone recording</b> vs the sound <b>re-rendered from parameters our model predicted
+      from that recording</b>. Hit point is arbitrary and hit time is estimated (no metadata used).</p>
+    <div class="demos">
+      <div class="card demo">
+        <span class="tag">Steel</span><h3>Skimmer</h3>
+        <model-viewer src="assets/models/obj_84.glb" camera-controls touch-action="pan-y" reveal="auto"
+          shadow-intensity="0.8" exposure="1.05" interaction-prompt="none"
+          camera-orbit="25deg 72deg 1.7m" field-of-view="28deg" loading="eager"></model-viewer>
+        <div class="row"><span>Real recording</span><audio controls preload="none" src="assets/audio/of_84_Skimmer_input.wav"></audio></div>
+        <div class="row pred"><span>Re-rendered (ours)</span><audio controls preload="none" src="assets/audio/of_84_Skimmer_pred.wav"></audio></div>
+        <div class="spec"><div class="lbls"><span>Real input</span><span class="p">Re-render</span></div>
+          <img loading="lazy" src="assets/spec/of_84_Skimmer.png" alt="log-mel: real vs re-render"></div>
+      </div>
+      <div class="card demo">
+        <span class="tag">Glass</span><h3>Glass (green)</h3>
+        <model-viewer src="assets/models/obj_91.glb" camera-controls touch-action="pan-y" reveal="auto"
+          shadow-intensity="0.8" exposure="1.05" interaction-prompt="none"
+          camera-orbit="25deg 72deg 1.7m" field-of-view="28deg" loading="eager"></model-viewer>
+        <div class="row"><span>Real recording</span><audio controls preload="none" src="assets/audio/of_91_Glass_Green_input.wav"></audio></div>
+        <div class="row pred"><span>Re-rendered (ours)</span><audio controls preload="none" src="assets/audio/of_91_Glass_Green_pred.wav"></audio></div>
+        <div class="spec"><div class="lbls"><span>Real input</span><span class="p">Re-render</span></div>
+          <img loading="lazy" src="assets/spec/of_91_Glass_Green.png" alt="log-mel: real vs re-render"></div>
+      </div>
+      <div class="card demo">
+        <span class="tag">Polycarbonate</span><h3>Scoop</h3>
+        <model-viewer src="assets/models/obj_95.glb" camera-controls touch-action="pan-y" reveal="auto"
+          shadow-intensity="0.8" exposure="1.05" interaction-prompt="none"
+          camera-orbit="25deg 72deg 1.7m" field-of-view="28deg" loading="eager"></model-viewer>
+        <div class="row"><span>Real recording</span><audio controls preload="none" src="assets/audio/of_95_Scoop_input.wav"></audio></div>
+        <div class="row pred"><span>Re-rendered (ours)</span><audio controls preload="none" src="assets/audio/of_95_Scoop_pred.wav"></audio></div>
+        <div class="spec"><div class="lbls"><span>Real input</span><span class="p">Re-render</span></div>
+          <img loading="lazy" src="assets/spec/of_95_Scoop.png" alt="log-mel: real vs re-render"></div>
+      </div>
+    </div>
+    <p class="mv-hint">&#128257; Drag to rotate the 3D objects &middot; scroll to zoom. Meshes &amp; textures from ObjectFolder-Real.</p>
+  </section>
+
+  <!-- RESULTS -->
+  <section id="results">
+    <h2>Results</h2>
+    <p class="lead">Physical-parameter estimation error (MAE, lower is better). &rho; and E in log-space;
+      &nu; linear; &alpha;, &beta; in physical units. Our supervised regressor is far below conventional
+      DSP regression and in-context learning with general audio&ndash;language models.</p>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Method</th><th>Subset</th><th>&rho;</th><th>E</th><th>&nu;</th><th>&alpha;</th><th>&beta;</th><th>Avg. NMAE</th></tr></thead>
+        <tbody>
+          <tr class="grp"><td colspan="8">Conventional regression</td></tr>
+          <tr><td>DSP + reg.</td><td>Single</td><td>0.190</td><td>0.443</td><td>0.047</td><td>9.93</td><td>3.26&times;10<sup>-7</sup></td><td>&ndash;</td></tr>
+          <tr><td>DSP + reg.</td><td>Blend</td><td>0.131</td><td>0.321</td><td>0.032</td><td>5.19</td><td>1.83&times;10<sup>-7</sup></td><td>&ndash;</td></tr>
+          <tr class="grp"><td colspan="8">In-context learning (audio&ndash;language models)</td></tr>
+          <tr><td>Qwen2.5-Omni-7B</td><td>Single</td><td>0.338</td><td>0.614</td><td>0.071</td><td>13.38</td><td>1.61&times;10<sup>-1</sup></td><td>&ndash;</td></tr>
+          <tr><td>Audio Flamingo 3</td><td>Single</td><td>14.1</td><td>2.14</td><td>0.130</td><td>21.7</td><td>1.8&times;10<sup>-2</sup></td><td>&ndash;</td></tr>
+          <tr class="grp"><td colspan="8">Supervised (ours)</td></tr>
+          <tr class="ours"><td>Ours</td><td>Single</td><td>0.081</td><td>0.140</td><td>0.008</td><td>0.59</td><td>2.39&times;10<sup>-8</sup></td><td>0.078</td></tr>
+          <tr class="ours"><td>Ours</td><td>Blend</td><td>0.119</td><td>0.206</td><td>0.012</td><td>1.08</td><td>1.32&times;10<sup>-8</sup></td><td>0.116</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="cap">Averaging more impacts at inference (K = 1 &rarr; 8) further reduces error (all-sample
+      NMAE 0.112 &rarr; 0.093), as set pooling stably combines multiple observations.</p>
+  </section>
+
+  <!-- BIBTEX -->
+  <section id="cite">
+    <h2>BibTeX</h2>
+    <div class="cite-wrap">
+      <button class="copy-btn" id="copyBib">Copy</button>
+      <pre id="bib"> TBD </pre>
+    </div>
+  </section>
+
+</main>
+
+<script>
+  // highlight the nav link for the section currently in view (scroll-based, robust)
+  (function () {
+    var links = Array.prototype.slice.call(document.querySelectorAll('.nav-links a'));
+    var secs = links.map(function (a) {
+      var el = document.getElementById(a.getAttribute('href').slice(1));
+      return el ? { a: a, el: el } : null;
+    }).filter(Boolean);
+    if (!secs.length) return;
+    function update() {
+      var cur = null;
+      for (var i = 0; i < secs.length; i++) {
+        if (secs[i].el.getBoundingClientRect().top <= 100) cur = secs[i]; else break;
+      }
+      links.forEach(function (l) { l.classList.remove('active'); });
+      if (cur) cur.a.classList.add('active');
+    }
+    window.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    update();
+  })();
+
+  // scroll progress bar
+  (function () {
+    var bar = document.getElementById('progress');
+    if (!bar) return;
+    function upd() {
+      var h = document.documentElement.scrollHeight - window.innerHeight;
+      bar.style.width = (h > 0 ? (window.scrollY / h) * 100 : 0) + '%';
+    }
+    window.addEventListener('scroll', upd, { passive: true });
+    window.addEventListener('resize', upd);
+    upd();
+  })();
+
+  // dark / light toggle (persisted)
+  (function () {
+    var btn = document.getElementById('themeToggle');
+    if (!btn) return;
+    var SUN = '☀', MOON = '☽';
+    function sysDark() { return window.matchMedia('(prefers-color-scheme: dark)').matches; }
+    function apply(t) {
+      if (t === 'dark' || t === 'light') document.documentElement.setAttribute('data-theme', t);
+      else document.documentElement.removeAttribute('data-theme');
+      var dark = t === 'dark' || (t !== 'light' && sysDark());
+      btn.textContent = dark ? SUN : MOON;
+    }
+    var saved = null;
+    try { saved = localStorage.getItem('theme'); } catch (e) {}
+    apply(saved || 'system');
+    btn.addEventListener('click', function () {
+      var cur = document.documentElement.getAttribute('data-theme');
+      var isDark = cur === 'dark' || (!cur && sysDark());
+      var next = isDark ? 'light' : 'dark';
+      apply(next);
+      try { localStorage.setItem('theme', next); } catch (e) {}
+    });
+  })();
+
+  // BibTeX copy
+  (function () {
+    var btn = document.getElementById('copyBib'), pre = document.getElementById('bib');
+    if (!btn || !pre) return;
+    btn.addEventListener('click', function () {
+      var txt = pre.textContent.trim();
+      var done = function () { btn.textContent = 'Copied'; btn.classList.add('ok');
+        setTimeout(function () { btn.textContent = 'Copy'; btn.classList.remove('ok'); }, 1600); };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(txt).then(done, done);
+      } else {
+        var ta = document.createElement('textarea'); ta.value = txt; document.body.appendChild(ta);
+        ta.select(); try { document.execCommand('copy'); } catch (e) {} ta.remove(); done();
+      }
+    });
+  })();
+
+  // blend interpolation slider
+  (function () {
+    var DATA = {"m1":"Ceramic","m2":"Plastic","entries":[
+      {"pct_m1":0,"wav":"blend_c000.wav","rho":1070,"E":1.4e9,"nu":0.35,"alpha":30.0,"beta":1.0e-6},
+      {"pct_m1":25,"wav":"blend_c025.wav","rho":1348.6,"E":3.749e9,"nu":0.31,"alpha":20.06,"beta":5.623e-7},
+      {"pct_m1":50,"wav":"blend_c050.wav","rho":1699.7,"E":1.004e10,"nu":0.27,"alpha":13.42,"beta":3.162e-7},
+      {"pct_m1":75,"wav":"blend_c075.wav","rho":2142.2,"E":2.689e10,"nu":0.23,"alpha":8.97,"beta":1.778e-7},
+      {"pct_m1":100,"wav":"blend_c100.wav","rho":2700,"E":7.2e10,"nu":0.19,"alpha":6.0,"beta":1.0e-7}
+    ]};
+    var slider = document.getElementById('blendSlider');
+    var mix = document.getElementById('blendMix');
+    var box = document.getElementById('blendParams');
+    var au = document.getElementById('blendAudio');
+    var play = document.getElementById('blendPlay');
+    if (!slider) return;
+    function fmtE(x) { return (x / 1e9).toPrecision(3).replace(/\.?0+$/, '') + ' GPa'; }
+    function fmt(x, d) { return Number(x).toFixed(d); }
+    function render() {
+      var e = DATA.entries[+slider.value];
+      mix.innerHTML = e.pct_m1 + '% ' + DATA.m1 + ' &middot; ' + (100 - e.pct_m1) + '% ' + DATA.m2;
+      box.innerHTML =
+        '<div class="pill"><b>&rho;</b> <span class="v">' + fmt(e.rho, 0) + '</span> kg/m&sup3;</div>' +
+        '<div class="pill"><b>E</b> <span class="v">' + fmtE(e.E) + '</span></div>' +
+        '<div class="pill"><b>&nu;</b> <span class="v">' + fmt(e.nu, 3) + '</span></div>' +
+        '<div class="pill"><b>&alpha;</b> <span class="v">' + fmt(e.alpha, 2) + '</span></div>' +
+        '<div class="pill"><b>&beta;</b> <span class="v">' + e.beta.toExponential(2) + '</span></div>';
+      au.src = 'assets/blend/' + e.wav;
+    }
+    slider.addEventListener('input', function () { render(); au.play().catch(function () {}); });
+    play.addEventListener('click', function () { au.currentTime = 0; au.play().catch(function () {}); });
+    render();
+  })();
+</script>
+
+<footer>
+  <div class="wrap">
+    Project page for <i>Continuous Material Property Estimation from Impact Sounds</i>.<br>
+    Chung-Ang University &amp; KAIST &middot; 2026.
+  </div>
+</footer>
+
+</body>
+</html>
