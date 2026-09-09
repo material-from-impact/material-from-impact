@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Continuous Material Property Estimation from Impact Sounds</title>
-<meta name="description" content="A feed-forward model that estimates continuous, renderer-compatible material parameters directly from impact sounds, for inverse modal sound rendering.">
+<title>ImpactMat: Continuous Material Estimation from Impact Sounds</title>
+<meta name="description" content="ImpactMat: continuous material-parameter estimation from reference impact sounds for inverse sound rendering — a dataset, benchmark, and feed-forward framework.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
@@ -205,18 +205,19 @@
 <header class="hero" id="top">
   <div class="wrap">
     <span class="venue">arXiv 2026</span>
-    <h1>Continuous <span class="grad">Material Property</span><br>Estimation from Impact Sounds</h1>
+    <h1><span class="grad">ImpactMat</span>: Continuous Material Estimation<br>from Impact Sounds for Inverse Sound Rendering</h1>
     <div class="authors">
-      <a href="#">Bumsoo Kim</a><sup>1,&#42;</sup>&nbsp;&nbsp;
-      <a href="#">Hyebin Cho</a><sup>2,&#42;</sup>
+      <a href="#">Hyebin Cho</a><sup>1,&#42;</sup>&nbsp;&nbsp;
+      <a href="#">Bumsoo Kim</a><sup>2,&#42;</sup>&nbsp;&nbsp;
+      <a href="#">Joon Son Chung</a><sup>1</sup>
     </div>
-    <div class="aff"><sup>1</sup>Chung-Ang University &nbsp;·&nbsp; <sup>2</sup>Korea Advanced Institute of Science and Technology (KAIST)</div>
+    <div class="aff"><sup>1</sup>Korea Advanced Institute of Science and Technology (KAIST) &nbsp;·&nbsp; <sup>2</sup>Chung-Ang University</div>
     <div class="eq">&#42; Equal contribution</div>
     <div class="links">
       <a class="btn pri" href="#">&#128196; Paper</a>
       <a class="btn" href="#">arXiv</a>
       <a class="btn" href="#">&#60;/&#62; Code</a>
-      <a class="btn" href="#">&#128190; NISR Dataset</a>
+      <a class="btn" href="#">&#128190; ImpactMat Dataset</a>
     </div>
   </div>
 </header>
@@ -238,19 +239,17 @@
   <section id="abstract">
     <h2>Abstract</h2>
     <div class="card abstract">
-      Estimating material properties from unknown audio allows for the synthesis of physically faithful
-      impact sounds within 3D modal audio frameworks. Reusing these predicted parameters to synthesize
-      FEM-based sounds enables the creation of input resembling physical impact sounds, offering new
-      possibilities for immersive applications such as VR and gaming. We introduce a <b>feed-forward model
-      for continuous acoustic material parameter estimation</b> from impact sounds. We construct a
-      <b>blend-supervised multi-impact benchmark</b> pairing randomized pure and two-material impact sounds
-      with physically recomputed, renderer-compatible parameters. Our model aggregates multiple impact
-      recordings via <b>set pooling</b> and is trained with a <b>latent blend consistency</b> objective that
-      encourages the audio representation to vary smoothly across material identities, rather than relying on
-      discrete classification. Compared with conventional audio-feature regression and in-context learning
-      baselines built on general audio&ndash;language models, our supervised regressor substantially reduces
-      error across all five physical parameters, on both pure and mixed-material impacts, and supports
-      re-rendering of physically faithful sounds from the predicted parameters.
+      Impact sound rendering synthesizes the sound produced when a 3D object is struck, reflecting its
+      material properties. However, it often relies on fixed presets such as wood, plastic, and steel, which
+      cannot capture the full range of material variations. Therefore, we study <b>inverse sound rendering</b>
+      by estimating <b>continuous material parameters</b> from reference impact sounds. These estimates enable
+      synthesis of impact sounds that acoustically resemble the reference without manual material-parameter
+      tuning. To support this task, we introduce <b>ImpactMat</b>, a dataset and benchmark containing single-
+      and blended-material impact sounds paired with physical parameters. We further propose a framework that
+      supports continuous parameter prediction from one or more reference impact sounds. Our method outperforms
+      conventional audio-feature regression and audio&ndash;language-model baselines and supports re-rendering
+      from real-world impact recordings, providing a practical bridge from recorded sounds to controllable
+      physics-based synthesis.
     </div>
     <div class="kfacts">
       <div class="fact"><b>5</b><span>continuous physical parameters &nbsp;(E, &rho;, &nu;, &alpha;, &beta;)</span></div>
@@ -367,38 +366,45 @@
   <section id="listen-real">
     <h2>Listen &middot; Real-world objects</h2>
     <p class="lead">Real recordings from <a href="https://objectfolder.stanford.edu/" target="_blank" rel="noopener">ObjectFolder-Real</a>:
-      the <b>real microphone recording</b> vs the sound <b>re-rendered from parameters our model predicted
-      from that recording</b>. Hit point is arbitrary and hit time is estimated (no metadata used).</p>
+      each panel shows the <b>log-mel of the real recording</b> (left) next to the sound
+      <b>re-rendered from the material parameters our model predicted from that recording</b> (right, playable).
+      Hit point is arbitrary and hit time is estimated (no metadata used).</p>
     <div class="demos">
       <div class="card demo">
-        <span class="tag">Steel</span><h3>Skimmer</h3>
-        <model-viewer src="assets/models/obj_84.glb" camera-controls touch-action="pan-y" reveal="auto"
+        <span class="tag">Wood</span><h3>Cutting Board</h3>
+        <model-viewer src="assets/models/obj_31.glb" camera-controls touch-action="pan-y" reveal="auto"
           shadow-intensity="0.8" exposure="1.05" interaction-prompt="none"
           camera-orbit="25deg 72deg 1.7m" field-of-view="28deg" loading="eager"></model-viewer>
-        <div class="row"><span>Real recording</span><audio controls preload="none" src="assets/audio/of_84_Skimmer_input.wav"></audio></div>
-        <div class="row pred"><span>Re-rendered (ours)</span><audio controls preload="none" src="assets/audio/of_84_Skimmer_pred.wav"></audio></div>
+        <div class="row pred"><span>Re-rendered (ours)</span><audio controls preload="none" src="assets/audio/sel_31_37.wav"></audio></div>
         <div class="spec"><div class="lbls"><span>Real input</span><span class="p">Re-render</span></div>
-          <img loading="lazy" src="assets/spec/of_84_Skimmer.png" alt="log-mel: real vs re-render"></div>
+          <img loading="lazy" src="assets/spec/sel_31_37.png" alt="log-mel: real vs re-render"></div>
       </div>
       <div class="card demo">
-        <span class="tag">Glass</span><h3>Glass (green)</h3>
-        <model-viewer src="assets/models/obj_91.glb" camera-controls touch-action="pan-y" reveal="auto"
+        <span class="tag">Ceramic</span><h3>Vase (green)</h3>
+        <model-viewer src="assets/models/obj_75.glb" camera-controls touch-action="pan-y" reveal="auto"
           shadow-intensity="0.8" exposure="1.05" interaction-prompt="none"
           camera-orbit="25deg 72deg 1.7m" field-of-view="28deg" loading="eager"></model-viewer>
-        <div class="row"><span>Real recording</span><audio controls preload="none" src="assets/audio/of_91_Glass_Green_input.wav"></audio></div>
-        <div class="row pred"><span>Re-rendered (ours)</span><audio controls preload="none" src="assets/audio/of_91_Glass_Green_pred.wav"></audio></div>
+        <div class="row pred"><span>Re-rendered (ours)</span><audio controls preload="none" src="assets/audio/sel_75_9.wav"></audio></div>
         <div class="spec"><div class="lbls"><span>Real input</span><span class="p">Re-render</span></div>
-          <img loading="lazy" src="assets/spec/of_91_Glass_Green.png" alt="log-mel: real vs re-render"></div>
+          <img loading="lazy" src="assets/spec/sel_75_9.png" alt="log-mel: real vs re-render"></div>
       </div>
       <div class="card demo">
-        <span class="tag">Polycarbonate</span><h3>Scoop</h3>
-        <model-viewer src="assets/models/obj_95.glb" camera-controls touch-action="pan-y" reveal="auto"
+        <span class="tag">Glass</span><h3>Salad Bowl</h3>
+        <model-viewer src="assets/models/obj_94.glb" camera-controls touch-action="pan-y" reveal="auto"
           shadow-intensity="0.8" exposure="1.05" interaction-prompt="none"
           camera-orbit="25deg 72deg 1.7m" field-of-view="28deg" loading="eager"></model-viewer>
-        <div class="row"><span>Real recording</span><audio controls preload="none" src="assets/audio/of_95_Scoop_input.wav"></audio></div>
-        <div class="row pred"><span>Re-rendered (ours)</span><audio controls preload="none" src="assets/audio/of_95_Scoop_pred.wav"></audio></div>
+        <div class="row pred"><span>Re-rendered (ours)</span><audio controls preload="none" src="assets/audio/sel_94_36.wav"></audio></div>
         <div class="spec"><div class="lbls"><span>Real input</span><span class="p">Re-render</span></div>
-          <img loading="lazy" src="assets/spec/of_95_Scoop.png" alt="log-mel: real vs re-render"></div>
+          <img loading="lazy" src="assets/spec/sel_94_36.png" alt="log-mel: real vs re-render"></div>
+      </div>
+      <div class="card demo">
+        <span class="tag">Iron</span><h3>Kettlebell</h3>
+        <model-viewer src="assets/models/obj_98.glb" camera-controls touch-action="pan-y" reveal="auto"
+          shadow-intensity="0.8" exposure="1.05" interaction-prompt="none"
+          camera-orbit="25deg 72deg 1.7m" field-of-view="28deg" loading="eager"></model-viewer>
+        <div class="row pred"><span>Re-rendered (ours)</span><audio controls preload="none" src="assets/audio/sel_98_24.wav"></audio></div>
+        <div class="spec"><div class="lbls"><span>Real input</span><span class="p">Re-render</span></div>
+          <img loading="lazy" src="assets/spec/sel_98_24.png" alt="log-mel: real vs re-render"></div>
       </div>
     </div>
     <p class="mv-hint">&#128257; Drag to rotate the 3D objects &middot; scroll to zoom. Meshes &amp; textures from ObjectFolder-Real.</p>
@@ -435,7 +441,12 @@
     <h2>BibTeX</h2>
     <div class="cite-wrap">
       <button class="copy-btn" id="copyBib">Copy</button>
-      <pre id="bib"> TBD </pre>
+      <pre id="bib">@article{cho2026impactmat,
+  title   = {ImpactMat: Continuous Material Estimation from Impact Sounds for Inverse Sound Rendering},
+  author  = {Cho, Hyebin and Kim, Bumsoo and Chung, Joon Son},
+  journal = {arXiv preprint},
+  year    = {2026}
+}</pre>
     </div>
   </section>
 
