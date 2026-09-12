@@ -114,129 +114,143 @@
     }
   },
   {
-    "id": "real_81_Utensil_Container",
+    "id": "real_gtvar_1_26_28",
     "domain": "real",
-    "pair_type": "rerender",
-    "a": "assets/study/real_81_Utensil_Container_input.wav",
-    "b": "assets/study/real_81_Utensil_Container_rerender.wav",
+    "pair_type": "gtvar",
+    "a": "assets/study/real_gtvar_1_26_28_A.wav",
+    "b": "assets/study/real_gtvar_1_26_28_B.wav",
     "meta": {
-      "object_id": "81",
-      "material": "Wood",
-      "name": "Utensil_Container"
+      "material": "Ceramic",
+      "object_id": "1",
+      "idx_a": "26",
+      "idx_b": "28",
+      "note": "same object, same material, two selected takes"
     }
   },
   {
-    "id": "real_84_Skimmer",
+    "id": "real_gtvar_35_0_1",
     "domain": "real",
-    "pair_type": "rerender",
-    "a": "assets/study/real_84_Skimmer_input.wav",
-    "b": "assets/study/real_84_Skimmer_rerender.wav",
+    "pair_type": "gtvar",
+    "a": "assets/study/real_gtvar_35_0_1_A.wav",
+    "b": "assets/study/real_gtvar_35_0_1_B.wav",
     "meta": {
-      "object_id": "84",
-      "material": "Steel",
-      "name": "Skimmer"
+      "material": "Polycarbonate",
+      "object_id": "35",
+      "idx_a": "0",
+      "idx_b": "1",
+      "note": "same object, same material, two selected takes"
     }
   },
   {
-    "id": "real_91_Glass_Green",
+    "id": "real_gtvar_93_3_21",
     "domain": "real",
-    "pair_type": "rerender",
-    "a": "assets/study/real_91_Glass_Green_input.wav",
-    "b": "assets/study/real_91_Glass_Green_rerender.wav",
+    "pair_type": "gtvar",
+    "a": "assets/study/real_gtvar_93_3_21_A.wav",
+    "b": "assets/study/real_gtvar_93_3_21_B.wav",
     "meta": {
-      "object_id": "91",
       "material": "Glass",
-      "name": "Glass_Green"
+      "object_id": "93",
+      "idx_a": "3",
+      "idx_b": "21",
+      "note": "same object, same material, two selected takes"
     }
   },
   {
-    "id": "real_94_Salad_Bowl",
+    "id": "real_3_5",
     "domain": "real",
     "pair_type": "rerender",
-    "a": "assets/study/real_94_Salad_Bowl_input.wav",
-    "b": "assets/study/real_94_Salad_Bowl_rerender.wav",
+    "a": "assets/study/real_3_5_input.wav",
+    "b": "assets/study/real_3_5_rerender.wav",
+    "meta": {
+      "object_id": "3",
+      "audio_index": "5",
+      "material": "Ceramic",
+      "object_name": "Salad_Plate",
+      "nmae": 0.7025
+    }
+  },
+  {
+    "id": "real_31_37",
+    "domain": "real",
+    "pair_type": "rerender",
+    "a": "assets/study/real_31_37_input.wav",
+    "b": "assets/study/real_31_37_rerender.wav",
+    "meta": {
+      "object_id": "31",
+      "audio_index": "37",
+      "material": "Wood",
+      "object_name": "Cutting_Board_Small",
+      "nmae": 0.8909
+    }
+  },
+  {
+    "id": "real_36_7",
+    "domain": "real",
+    "pair_type": "rerender",
+    "a": "assets/study/real_36_7_input.wav",
+    "b": "assets/study/real_36_7_rerender.wav",
+    "meta": {
+      "object_id": "36",
+      "audio_index": "7",
+      "material": "Polycarbonate",
+      "object_name": "Portion_Cup_White",
+      "nmae": 0.9553
+    }
+  },
+  {
+    "id": "real_94_29",
+    "domain": "real",
+    "pair_type": "rerender",
+    "a": "assets/study/real_94_29_input.wav",
+    "b": "assets/study/real_94_29_rerender.wav",
     "meta": {
       "object_id": "94",
+      "audio_index": "29",
       "material": "Glass",
-      "name": "Salad_Bowl"
+      "object_name": "Salad_Bowl",
+      "nmae": 0.9194
     }
   },
   {
-    "id": "real_95_Scoop",
+    "id": "real_98_0",
     "domain": "real",
     "pair_type": "rerender",
-    "a": "assets/study/real_95_Scoop_input.wav",
-    "b": "assets/study/real_95_Scoop_rerender.wav",
-    "meta": {
-      "object_id": "95",
-      "material": "Polycarbonate",
-      "name": "Scoop"
-    }
-  },
-  {
-    "id": "real_98_Kettlebell",
-    "domain": "real",
-    "pair_type": "rerender",
-    "a": "assets/study/real_98_Kettlebell_input.wav",
-    "b": "assets/study/real_98_Kettlebell_rerender.wav",
+    "a": "assets/study/real_98_0_input.wav",
+    "b": "assets/study/real_98_0_rerender.wav",
     "meta": {
       "object_id": "98",
+      "audio_index": "0",
       "material": "Iron",
-      "name": "Kettlebell"
+      "object_name": "Kettlebell",
+      "nmae": 1.3252
     }
   },
   {
-    "id": "real_97_Stanford_Frisbee",
+    "id": "real_4_27",
     "domain": "real",
     "pair_type": "rerender",
-    "a": "assets/study/real_97_Stanford_Frisbee_input.wav",
-    "b": "assets/study/real_97_Stanford_Frisbee_rerender.wav",
+    "a": "assets/study/real_4_27_input.wav",
+    "b": "assets/study/real_4_27_rerender.wav",
     "meta": {
-      "object_id": "97",
-      "material": "Plastic",
-      "name": "Stanford_Frisbee"
+      "object_id": "4",
+      "audio_index": "27",
+      "material": "Ceramic",
+      "object_name": "Dinner_Plate",
+      "nmae": 0.726
     }
   },
   {
-    "id": "real_gtvar_Steel_83_h0h12",
+    "id": "real_61_44",
     "domain": "real",
-    "pair_type": "gtvar",
-    "a": "assets/study/real_gtvar_Steel_83_h0h12_A.wav",
-    "b": "assets/study/real_gtvar_Steel_83_h0h12_B.wav",
+    "pair_type": "rerender",
+    "a": "assets/study/real_61_44_input.wav",
+    "b": "assets/study/real_61_44_rerender.wav",
     "meta": {
-      "material": "Steel",
-      "object_id": "83",
-      "hit_a": 0,
-      "hit_b": 12,
-      "note": "same object, same material, different real take"
-    }
-  },
-  {
-    "id": "real_gtvar_Glass_82_h0h12",
-    "domain": "real",
-    "pair_type": "gtvar",
-    "a": "assets/study/real_gtvar_Glass_82_h0h12_A.wav",
-    "b": "assets/study/real_gtvar_Glass_82_h0h12_B.wav",
-    "meta": {
-      "material": "Glass",
-      "object_id": "82",
-      "hit_a": 0,
-      "hit_b": 12,
-      "note": "same object, same material, different real take"
-    }
-  },
-  {
-    "id": "real_gtvar_Plastic_99_h0h12",
-    "domain": "real",
-    "pair_type": "gtvar",
-    "a": "assets/study/real_gtvar_Plastic_99_h0h12_A.wav",
-    "b": "assets/study/real_gtvar_Plastic_99_h0h12_B.wav",
-    "meta": {
-      "material": "Plastic",
-      "object_id": "99",
-      "hit_a": 0,
-      "hit_b": 12,
-      "note": "same object, same material, different real take"
+      "object_id": "61",
+      "audio_index": "44",
+      "material": "Ceramic",
+      "object_name": "Container_Large",
+      "nmae": 0.7254
     }
   }
 ]
