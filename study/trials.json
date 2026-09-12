@@ -1,114 +1,114 @@
 [
   {
-    "id": "syn_101_Ceramic",
+    "id": "syn_308_Glass",
     "domain": "synthetic",
     "pair_type": "rerender",
-    "a": "assets/study/syn_101_Ceramic_input.wav",
-    "b": "assets/study/syn_101_Ceramic_rerender.wav",
+    "a": "assets/study/syn_308_Glass_input.wav",
+    "b": "assets/study/syn_308_Glass_rerender.wav",
     "meta": {
-      "object_id": "101",
-      "material": "Ceramic",
-      "nmae": 0.0364
-    }
-  },
-  {
-    "id": "syn_101_Glass",
-    "domain": "synthetic",
-    "pair_type": "rerender",
-    "a": "assets/study/syn_101_Glass_input.wav",
-    "b": "assets/study/syn_101_Glass_rerender.wav",
-    "meta": {
-      "object_id": "101",
+      "object_id": "308",
       "material": "Glass",
-      "nmae": 0.0209
+      "nmae": 0.0529
     }
   },
   {
-    "id": "syn_101_Wood",
+    "id": "syn_155_Steel",
     "domain": "synthetic",
     "pair_type": "rerender",
-    "a": "assets/study/syn_101_Wood_input.wav",
-    "b": "assets/study/syn_101_Wood_rerender.wav",
+    "a": "assets/study/syn_155_Steel_input.wav",
+    "b": "assets/study/syn_155_Steel_rerender.wav",
     "meta": {
-      "object_id": "101",
-      "material": "Wood",
-      "nmae": 0.192
-    }
-  },
-  {
-    "id": "syn_101_Plastic",
-    "domain": "synthetic",
-    "pair_type": "rerender",
-    "a": "assets/study/syn_101_Plastic_input.wav",
-    "b": "assets/study/syn_101_Plastic_rerender.wav",
-    "meta": {
-      "object_id": "101",
-      "material": "Plastic",
-      "nmae": 0.0521
-    }
-  },
-  {
-    "id": "syn_101_Iron",
-    "domain": "synthetic",
-    "pair_type": "rerender",
-    "a": "assets/study/syn_101_Iron_input.wav",
-    "b": "assets/study/syn_101_Iron_rerender.wav",
-    "meta": {
-      "object_id": "101",
-      "material": "Iron",
-      "nmae": 0.0363
-    }
-  },
-  {
-    "id": "syn_101_Polycarbonate",
-    "domain": "synthetic",
-    "pair_type": "rerender",
-    "a": "assets/study/syn_101_Polycarbonate_input.wav",
-    "b": "assets/study/syn_101_Polycarbonate_rerender.wav",
-    "meta": {
-      "object_id": "101",
-      "material": "Polycarbonate",
-      "nmae": 0.0539
-    }
-  },
-  {
-    "id": "syn_101_Steel",
-    "domain": "synthetic",
-    "pair_type": "rerender",
-    "a": "assets/study/syn_101_Steel_input.wav",
-    "b": "assets/study/syn_101_Steel_rerender.wav",
-    "meta": {
-      "object_id": "101",
+      "object_id": "155",
       "material": "Steel",
-      "nmae": 0.0131
+      "nmae": 0.0165
     }
   },
   {
-    "id": "syn_101_Ceramic_CTRL",
+    "id": "syn_860_Wood",
+    "domain": "synthetic",
+    "pair_type": "rerender",
+    "a": "assets/study/syn_860_Wood_input.wav",
+    "b": "assets/study/syn_860_Wood_rerender.wav",
+    "meta": {
+      "object_id": "860",
+      "material": "Wood",
+      "nmae": 0.0314
+    }
+  },
+  {
+    "id": "syn_635_Polycarbonate",
+    "domain": "synthetic",
+    "pair_type": "rerender",
+    "a": "assets/study/syn_635_Polycarbonate_input.wav",
+    "b": "assets/study/syn_635_Polycarbonate_rerender.wav",
+    "meta": {
+      "object_id": "635",
+      "material": "Polycarbonate",
+      "nmae": 0.0548
+    }
+  },
+  {
+    "id": "syn_398_Tin",
+    "domain": "synthetic",
+    "pair_type": "rerender",
+    "a": "assets/study/syn_398_Tin_input.wav",
+    "b": "assets/study/syn_398_Tin_rerender.wav",
+    "meta": {
+      "object_id": "398",
+      "material": "Tin",
+      "nmae": 0.0182
+    }
+  },
+  {
+    "id": "syn_14_Ceramic",
+    "domain": "synthetic",
+    "pair_type": "rerender",
+    "a": "assets/study/syn_14_Ceramic_input.wav",
+    "b": "assets/study/syn_14_Ceramic_rerender.wav",
+    "meta": {
+      "object_id": "14",
+      "material": "Ceramic",
+      "nmae": 0.4791
+    }
+  },
+  {
+    "id": "syn_697_Iron",
+    "domain": "synthetic",
+    "pair_type": "rerender",
+    "a": "assets/study/syn_697_Iron_input.wav",
+    "b": "assets/study/syn_697_Iron_rerender.wav",
+    "meta": {
+      "object_id": "697",
+      "material": "Iron",
+      "nmae": 0.8271
+    }
+  },
+  {
+    "id": "syn_308_Glass_CTRL",
     "domain": "synthetic",
     "pair_type": "identical",
-    "a": "assets/study/syn_101_Ceramic_input.wav",
-    "b": "assets/study/syn_101_Ceramic_input.wav",
+    "a": "assets/study/syn_308_Glass_input.wav",
+    "b": "assets/study/syn_308_Glass_input.wav",
     "meta": {
       "note": "same input twice (upper anchor)"
     }
   },
   {
-    "id": "syn_101_Glass_CTRL",
+    "id": "syn_155_Steel_CTRL",
     "domain": "synthetic",
     "pair_type": "identical",
-    "a": "assets/study/syn_101_Glass_input.wav",
-    "b": "assets/study/syn_101_Glass_input.wav",
+    "a": "assets/study/syn_155_Steel_input.wav",
+    "b": "assets/study/syn_155_Steel_input.wav",
     "meta": {
       "note": "same input twice (upper anchor)"
     }
   },
   {
-    "id": "syn_101_Wood_CTRL",
+    "id": "syn_860_Wood_CTRL",
     "domain": "synthetic",
     "pair_type": "identical",
-    "a": "assets/study/syn_101_Wood_input.wav",
-    "b": "assets/study/syn_101_Wood_input.wav",
+    "a": "assets/study/syn_860_Wood_input.wav",
+    "b": "assets/study/syn_860_Wood_input.wav",
     "meta": {
       "note": "same input twice (upper anchor)"
     }
@@ -198,48 +198,45 @@
     }
   },
   {
-    "id": "real_gtvar_Steel_88_86",
+    "id": "real_gtvar_Steel_83_h0h12",
     "domain": "real",
     "pair_type": "gtvar",
-    "a": "assets/study/real_gtvar_Steel_88_86_A.wav",
-    "b": "assets/study/real_gtvar_Steel_88_86_B.wav",
+    "a": "assets/study/real_gtvar_Steel_83_h0h12_A.wav",
+    "b": "assets/study/real_gtvar_Steel_83_h0h12_B.wav",
     "meta": {
       "material": "Steel",
-      "obj_a": "88",
-      "name_a": "Ladle",
-      "obj_b": "86",
-      "name_b": "Slotted_Spoon",
-      "note": "same material, different real object"
+      "object_id": "83",
+      "hit_a": 0,
+      "hit_b": 12,
+      "note": "same object, same material, different real take"
     }
   },
   {
-    "id": "real_gtvar_Glass_92_91",
+    "id": "real_gtvar_Glass_82_h0h12",
     "domain": "real",
     "pair_type": "gtvar",
-    "a": "assets/study/real_gtvar_Glass_92_91_A.wav",
-    "b": "assets/study/real_gtvar_Glass_92_91_B.wav",
+    "a": "assets/study/real_gtvar_Glass_82_h0h12_A.wav",
+    "b": "assets/study/real_gtvar_Glass_82_h0h12_B.wav",
     "meta": {
       "material": "Glass",
-      "obj_a": "92",
-      "name_a": "Glass_Red",
-      "obj_b": "91",
-      "name_b": "Glass_Green",
-      "note": "same material, different real object"
+      "object_id": "82",
+      "hit_a": 0,
+      "hit_b": 12,
+      "note": "same object, same material, different real take"
     }
   },
   {
-    "id": "real_gtvar_Plastic_99_100",
+    "id": "real_gtvar_Plastic_99_h0h12",
     "domain": "real",
     "pair_type": "gtvar",
-    "a": "assets/study/real_gtvar_Plastic_99_100_A.wav",
-    "b": "assets/study/real_gtvar_Plastic_99_100_B.wav",
+    "a": "assets/study/real_gtvar_Plastic_99_h0h12_A.wav",
+    "b": "assets/study/real_gtvar_Plastic_99_h0h12_B.wav",
     "meta": {
       "material": "Plastic",
-      "obj_a": "99",
-      "name_a": "Trim_Removal_Tool",
-      "obj_b": "100",
-      "name_b": "Trim_Removal_Tool_2",
-      "note": "same material, different real object"
+      "object_id": "99",
+      "hit_a": 0,
+      "hit_b": 12,
+      "note": "same object, same material, different real take"
     }
   }
 ]

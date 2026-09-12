@@ -45,9 +45,13 @@
   input[type=text],select{width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--border);
     background:var(--panel2);color:var(--fg);font:inherit}
   ul.rules{margin:.4em 0;padding-left:1.1em}
-  ul.rules li{margin:.3em 0;color:var(--muted)}
+  ul.rules li{margin:.35em 0;color:var(--muted)}
+  .callout{border:1px solid var(--border);border-left:4px solid var(--accent2);background:var(--panel2);
+    border-radius:10px;padding:13px 15px;margin:14px 0;font-size:.92rem}
+  .callout b{color:var(--fg)}
+  .pill{display:inline-block;font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;
+    color:var(--accent2);font-weight:700;border:1px solid var(--border);border-radius:999px;padding:3px 10px}
 
-  /* two players */
   .opts{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:6px 0 20px}
   @media(max-width:560px){.opts{grid-template-columns:1fr}}
   .opt{border:1px solid var(--border);border-radius:12px;padding:18px;text-align:center;background:var(--panel2)}
@@ -59,7 +63,6 @@
   .play.playing{background:var(--accent2)}
   .play svg{width:15px;height:15px;fill:currentColor}
 
-  /* 3-choice */
   .qtext{text-align:center;font-weight:600;margin:2px 0 14px}
   .choices{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
   .choice{border:2px solid var(--border);border-radius:12px;padding:16px 10px;text-align:center;
@@ -102,13 +105,17 @@
   <!-- ============ INTRO ============ -->
   <section id="intro" class="card">
     <h1>두 타격음, 재질이 비슷한가요?</h1>
-    <p class="muted">총 <b id="nTrialsLabel">20</b>개 문항, 약 5분. <b>헤드폰</b> 권장.</p>
-    <h2>진행 방법</h2>
+    <p class="muted">두 개의 섹션(합성음 / 실제 녹음)으로 진행됩니다. 총 <b id="nTrialsLabel">20</b>문항, 약 5분. <b>헤드폰</b> 권장.</p>
+    <h2>공통 안내</h2>
     <ul class="rules">
       <li>각 문항에서 <b>소리 A</b>와 <b>소리 B</b>를 듣습니다 (둘 다 최소 1회).</li>
-      <li>두 소리의 <b>재질감(음색·타격감)</b>이 서로 얼마나 비슷한지 고릅니다: <b>유사함 / 애매 / 다름</b>.</li>
-      <li>어느 쪽이 원본인지는 표시하지 않습니다. 순서는 무작위입니다.</li>
+      <li>두 소리의 <b>재질감</b>이 서로 얼마나 비슷한지 고릅니다: <b>유사함 / 애매 / 다름</b>.</li>
+      <li>순서는 무작위이며, 어느 쪽이 원본인지는 표시하지 않습니다.</li>
     </ul>
+    <div class="callout">
+      ⚑ <b>판단 기준</b> — <b>피치(음 높이)가 다소 달라도</b>, 재질 특성(음색·감쇠·타격감)이 비슷하면
+      <b>“유사함”</b>으로 판단해 주세요. 음 높이 차이 자체보다 <b>“같은 재질을 두드린 소리로 들리는가”</b>가 핵심입니다.
+    </div>
     <div class="field">
       <label for="pid">참가자 이름 / ID</label>
       <input type="text" id="pid" placeholder="예: hbcho, p01 …" autocomplete="off">
@@ -128,11 +135,23 @@
     </div>
   </section>
 
+  <!-- ============ SECTION INTRO ============ -->
+  <section id="section" class="card" hidden>
+    <div class="pill" id="secPill">SECTION 1 / 2</div>
+    <h1 id="secTitle"></h1>
+    <p class="muted" id="secDesc"></p>
+    <div class="callout" id="secGuide"></div>
+    <div class="actions">
+      <span class="hint" id="secCount"></span>
+      <button class="btn primary" id="secStart">이 섹션 시작 →</button>
+    </div>
+  </section>
+
   <!-- ============ TRIAL ============ -->
   <section id="trial" class="card" hidden>
     <div class="steplabel">
-      <span id="stepText">1 / 20</span>
-      <span id="domText" class="muted"></span>
+      <span id="stepText">1 / 10</span>
+      <span id="domText" class="pill"></span>
     </div>
     <div class="progress"><i id="bar"></i></div>
 
@@ -149,7 +168,7 @@
       </div>
     </div>
 
-    <div class="qtext">두 소리의 재질감이 서로 비슷한가요?</div>
+    <div class="qtext">두 소리의 재질감이 서로 비슷한가요? <span class="muted" style="font-weight:400">(음 높이 차이는 무시)</span></div>
     <div class="choices">
       <div class="choice sim" data-v="similar">유사함<small>같은 재질로 들림</small></div>
       <div class="choice" data-v="tie">애매<small>판단 어려움</small></div>
@@ -175,10 +194,26 @@
 </div>
 
 <script>
-const CONFIG = { JSON_URL:"trials.json", SHUFFLE_TRIALS:true };
+const CONFIG = { JSON_URL:"trials.json", SHUFFLE_TRIALS:true, RANDOMIZE_SECTION_ORDER:true };
+
+const SECTION_INFO = {
+  synthetic:{
+    label:"섹션: 합성음 (Synthetic)",
+    desc:"시뮬레이션으로 만든 타격음과, 그 재질 파라미터를 추정해 다시 렌더링한 소리를 비교합니다.",
+    guide:"이 섹션의 두 소리는 대체로 매우 비슷합니다. 그래도 <b>피치가 조금 달라도 재질 특성이 비슷하면 “유사함”</b>으로 판단해 주세요."
+  },
+  real:{
+    label:"섹션: 실제 녹음 (Real)",
+    desc:"실제 물체를 두드려 녹음한 소리와, 우리 모델이 추정한 재질로 렌더링한 소리를 비교합니다.",
+    guide:"실제 녹음이라 <b>음 높이(피치)가 다를 수 있습니다.</b> 음 높이 차이는 <b>무시</b>하고, <b>재질 특성(음색·감쇠·타격감)이 비슷하면 “유사함”</b>으로 판단해 주세요. 합성음 섹션과 <b>기준을 따로</b> 두고 이 섹션 안에서만 상대적으로 비교하시면 됩니다."
+  }
+};
+const DOMLABEL={synthetic:"SYNTHETIC", real:"REAL"};
+
 const $ = s => document.querySelector(s);
-let TRIALS=[], idx=0, responses=[], session={}, order=null, choice=null;
-let played={A:false,B:false};
+let byDomain={}, sectionOrder=[], secIdx=0, list=[], idx=0;
+let responses=[], session={}, order=null, choice=null, played={A:false,B:false};
+let totalDone=0, totalN=0;
 const audio = new Audio();
 
 function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]];}return a;}
@@ -187,32 +222,54 @@ function checkStart(){$("#startBtn").disabled=!($("#pid").value.trim()&&$("#env"
 $("#pid").oninput=checkStart; $("#env").onchange=checkStart;
 
 async function loadTrials(){
-  try{ TRIALS = await (await fetch(CONFIG.JSON_URL)).json(); }
-  catch(e){ alert("trials.json 로드 실패: "+e); TRIALS=[]; }
-  if(CONFIG.SHUFFLE_TRIALS) shuffle(TRIALS);
-  $("#nTrialsLabel").textContent = TRIALS.length;
-  $("#stepText").textContent = "1 / "+TRIALS.length;
+  let T=[];
+  try{ T = await (await fetch(CONFIG.JSON_URL)).json(); }
+  catch(e){ alert("trials.json 로드 실패: "+e); }
+  byDomain={};
+  T.forEach(t=>{(byDomain[t.domain]=byDomain[t.domain]||[]).push(t);});
+  if(CONFIG.SHUFFLE_TRIALS) Object.values(byDomain).forEach(shuffle);
+  sectionOrder=Object.keys(byDomain);
+  // keep a sensible default order, optionally randomize which section is first
+  sectionOrder.sort();                       // real, synthetic
+  sectionOrder.reverse();                     // synthetic, real
+  if(CONFIG.RANDOMIZE_SECTION_ORDER && sectionOrder.length>1 && Math.random()<.5) sectionOrder.reverse();
+  totalN=T.length;
+  $("#nTrialsLabel").textContent=totalN;
 }
 
 $("#startBtn").onclick=()=>{
   session={pid:$("#pid").value.trim(), env:$("#env").value, ua:navigator.userAgent,
-           started:new Date().toISOString(), n_trials:TRIALS.length};
-  $("#intro").hidden=true; $("#trial").hidden=false; renderTrial();
+           started:new Date().toISOString(), n_trials:totalN, section_order:sectionOrder.slice()};
+  $("#intro").hidden=true; secIdx=0; showSection();
+};
+
+function showSection(){
+  const dom=sectionOrder[secIdx], info=SECTION_INFO[dom]||{label:dom,desc:"",guide:""};
+  $("#secPill").textContent=`SECTION ${secIdx+1} / ${sectionOrder.length}`;
+  $("#secTitle").textContent=info.label;
+  $("#secDesc").textContent=info.desc;
+  $("#secGuide").innerHTML="⚑ "+info.guide;
+  $("#secCount").textContent=`이 섹션 ${byDomain[dom].length}문항`;
+  $("#trial").hidden=true; $("#section").hidden=false;
+}
+$("#secStart").onclick=()=>{
+  list=byDomain[sectionOrder[secIdx]]; idx=0;
+  $("#section").hidden=true; $("#trial").hidden=false; renderTrial();
 };
 
 function renderTrial(){
-  const t=TRIALS[idx];
-  order = Math.random()<.5 ? {A:"a",B:"b"} : {A:"b",B:"a"};   // randomize which clip is A
+  const t=list[idx];
+  order = Math.random()<.5 ? {A:"a",B:"b"} : {A:"b",B:"a"};
   played={A:false,B:false}; choice=null; audio.pause();
-  $("#stepText").textContent=`${idx+1} / ${TRIALS.length}`;
-  $("#domText").textContent=t.domain;
-  $("#bar").style.width=(idx/TRIALS.length*100)+"%";
+  $("#stepText").textContent=`섹션 ${secIdx+1}/${sectionOrder.length} · 문항 ${idx+1} / ${list.length}`;
+  $("#domText").textContent=DOMLABEL[t.domain]||t.domain;
+  $("#bar").style.width=((totalDone)/totalN*100)+"%";
   $("#playedA").textContent="미청취"; $("#playedA").classList.remove("ok");
   $("#playedB").textContent="미청취"; $("#playedB").classList.remove("ok");
   document.querySelectorAll(".choice").forEach(c=>c.classList.remove("sel"));
   $("#nextBtn").disabled=true; $("#hint").textContent="A·B를 모두 들어야 선택할 수 있습니다.";
 }
-function urlFor(side){const t=TRIALS[idx];return "../"+t[order[side]];}   // page is under /study/
+function urlFor(side){const t=list[idx];return "../"+t[order[side]];}
 function play(side,btn){
   audio.pause(); audio.src=urlFor(side); audio.currentTime=0; audio.play();
   document.querySelectorAll(".play").forEach(b=>b.classList.remove("playing"));
@@ -233,30 +290,22 @@ function gate(){
                          : !choice ? "유사함 / 애매 / 다름 중 선택하세요." : "선택됨 — 다음으로.";
 }
 $("#nextBtn").onclick=()=>{
-  const t=TRIALS[idx];
-  responses.push({trial_id:t.id, domain:t.domain, pair_type:t.pair_type,
-                  clip_A:order.A, clip_B:order.B, choice:choice,
-                  meta:t.meta||{}, t:new Date().toISOString()});
-  idx++;
-  if(idx<TRIALS.length) renderTrial(); else finish();
+  const t=list[idx];
+  responses.push({trial_id:t.id, domain:t.domain, pair_type:t.pair_type, section_index:secIdx,
+                  clip_A:order.A, clip_B:order.B, choice:choice, meta:t.meta||{}, t:new Date().toISOString()});
+  idx++; totalDone++;
+  if(idx<list.length){ renderTrial(); }
+  else { secIdx++; if(secIdx<sectionOrder.length) showSection(); else finish(); }
 };
 
-function download(payload){
-  const blob=new Blob([JSON.stringify(payload,null,2)],{type:"application/json"});
-  const a=document.createElement("a");
-  a.href=URL.createObjectURL(blob);
-  a.download=`impactmat_study_${session.pid||"anon"}_${Date.now()}.json`;
-  document.body.appendChild(a); a.click(); a.remove();
-}
 const CHLABEL={similar:"유사함",tie:"애매",different:"다름"};
 const GRPLABEL={
   "synthetic/rerender":["synthetic · rerender","input vs 우리 재렌더"],
   "synthetic/identical":["synthetic · identical","같은 소리 2번 (정답=유사함)"],
   "real/rerender":["real · rerender","real input vs 재렌더(F)"],
-  "real/gtvar":["real · gtvar","같은 재질·다른 물체 (GT 변동)"],
+  "real/gtvar":["real · gtvar","같은 물체·다른 take (GT 변동)"],
 };
 function renderStats(res){
-  // group -> {similar,tie,different}
   const g={};
   res.forEach(r=>{const k=r.domain+"/"+r.pair_type;(g[k]=g[k]||{similar:0,tie:0,different:0})[r.choice]++;});
   const order=["synthetic/rerender","synthetic/identical","real/rerender","real/gtvar"];
@@ -273,9 +322,8 @@ function renderStats(res){
       <td style="min-width:90px"><div class="barmini">
         <i class="b-sim" style="width:${pc(c.similar)}%"></i>
         <i class="b-tie" style="width:${pc(c.tie)}%"></i>
-        <i class="b-dif" style="width:${pc(c.dif||c.different)}%"></i></div></td></tr>`;
+        <i class="b-dif" style="width:${pc(c.different)}%"></i></div></td></tr>`;
   });
-  // identical sanity
   const ic=g["synthetic/identical"], icn=ic?ic.similar+ic.tie+ic.different:0;
   const sane = ic ? `동일-소리 대조군 ${ic.similar}/${icn} 유사함 (${icn?Math.round(ic.similar/icn*100):0}%)` : "";
   return `<div class="statsblock"><h2>내 응답 통계</h2>
@@ -286,14 +334,20 @@ function renderStats(res){
     <div class="note">
       • <b>rerender</b> = 재질 유사도 측정값(높은 유사함 = 재렌더가 재질을 잘 살림).<br>
       • <b>identical</b> = 성실도 체크(거의 유사함이어야 정상). ${sane}<br>
-      • <b>gtvar</b> = 실제 GT끼리도 다르게 들리는 정도 → rerender를 비교할 천장 기준.
+      • <b>gtvar</b> = 같은 물체의 다른 take끼리도 다르게 들리는 정도 → rerender를 비교할 천장 기준.
     </div></div>`;
+}
+function download(payload){
+  const blob=new Blob([JSON.stringify(payload,null,2)],{type:"application/json"});
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download=`impactmat_study_${session.pid||"anon"}_${Date.now()}.json`;
+  document.body.appendChild(a); a.click(); a.remove();
 }
 let PAYLOAD=null;
 function finish(){
-  audio.pause(); $("#trial").hidden=true; $("#done").hidden=false; $("#bar").style.width="100%";
-  PAYLOAD={session, responses, finished:new Date().toISOString(),
-           n:responses.length,
+  audio.pause(); $("#trial").hidden=true; $("#section").hidden=true; $("#done").hidden=false; $("#bar").style.width="100%";
+  PAYLOAD={session, responses, finished:new Date().toISOString(), n:responses.length,
            tally:responses.reduce((o,r)=>{const k=r.domain+"/"+r.pair_type+"/"+r.choice;o[k]=(o[k]||0)+1;return o;},{})};
   console.log("STUDY RESULT",PAYLOAD);
   $("#stats").innerHTML=renderStats(responses);
