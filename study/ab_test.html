@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ImpactMat — Listening Study</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0e1116; --panel:#161b22; --panel2:#1c232d; --border:#2a323d;
+    --fg:#e6edf3; --muted:#8b98a8; --accent:#7c9cff; --accent2:#5ad1c4;
+    --good:#3fb950; --warn:#d29922; --bad:#f85149; --shadow:0 8px 30px rgba(0,0,0,.35);
+    --radius:14px;
+  }
+  :root[data-theme="light"]{
+    --bg:#f6f8fb; --panel:#ffffff; --panel2:#eef2f7; --border:#dce3ec;
+    --fg:#131820; --muted:#5b6675; --accent:#3a5bd9; --accent2:#0fa89a;
+    --shadow:0 8px 30px rgba(20,40,80,.08);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--fg);
+    font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+    line-height:1.55;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:760px;margin:0 auto;padding:28px 20px 90px}
+  h1{font-size:1.5rem;margin:.2em 0 .3em;letter-spacing:-.01em}
+  h2{font-size:1.12rem;margin:1.4em 0 .5em}
+  .muted{color:var(--muted)}
+  .grad{background:linear-gradient(90deg,var(--accent),var(--accent2));
+    -webkit-background-clip:text;background-clip:text;color:transparent}
+  .topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}
+  .brand{font-weight:700;letter-spacing:-.01em}
+  .toggle{border:1px solid var(--border);background:var(--panel);color:var(--muted);
+    border-radius:999px;padding:6px 12px;cursor:pointer;font-size:.85rem}
+
+  .progress{height:6px;background:var(--panel2);border-radius:999px;overflow:hidden;margin:14px 0 4px}
+  .progress > i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .3s}
+  .steplabel{font-size:.82rem;color:var(--muted);display:flex;justify-content:space-between}
+
+  .card{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);
+    padding:22px;box-shadow:var(--shadow)}
+  .field{margin:14px 0}
+  .field label{display:block;font-size:.85rem;color:var(--muted);margin-bottom:6px}
+  input[type=text],select{width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--border);
+    background:var(--panel2);color:var(--fg);font:inherit}
+  ul.rules{margin:.4em 0;padding-left:1.1em}
+  ul.rules li{margin:.3em 0;color:var(--muted)}
+
+  /* two players */
+  .opts{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:6px 0 20px}
+  @media(max-width:560px){.opts{grid-template-columns:1fr}}
+  .opt{border:1px solid var(--border);border-radius:12px;padding:18px;text-align:center;background:var(--panel2)}
+  .opt .lab{font-weight:700;font-size:1.05rem;margin-bottom:4px}
+  .opt .played{font-size:.72rem;color:var(--muted)}
+  .opt .played.ok{color:var(--good)}
+  .play{display:inline-flex;align-items:center;gap:9px;border:none;cursor:pointer;
+    background:var(--accent);color:#fff;border-radius:10px;padding:11px 20px;font:inherit;font-weight:600;margin-top:12px}
+  .play.playing{background:var(--accent2)}
+  .play svg{width:15px;height:15px;fill:currentColor}
+
+  /* 3-choice */
+  .qtext{text-align:center;font-weight:600;margin:2px 0 14px}
+  .choices{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  .choice{border:2px solid var(--border);border-radius:12px;padding:16px 10px;text-align:center;
+    cursor:pointer;transition:border-color .15s,background .15s;font-weight:600}
+  .choice small{display:block;font-weight:400;color:var(--muted);font-size:.72rem;margin-top:4px}
+  .choice:hover{border-color:var(--accent)}
+  .choice.sel{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 14%,var(--panel))}
+  .choice.sim.sel{border-color:var(--good);background:color-mix(in srgb,var(--good) 14%,var(--panel))}
+  .choice.dif.sel{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 14%,var(--panel))}
+
+  .actions{display:flex;justify-content:space-between;align-items:center;margin-top:24px;gap:12px}
+  .btn{border:none;border-radius:10px;padding:11px 22px;font:inherit;font-weight:600;cursor:pointer}
+  .btn.primary{background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff}
+  .btn:disabled{opacity:.45;cursor:not-allowed}
+  .hint{font-size:.8rem;color:var(--muted)}
+  [hidden]{display:none!important}
+  .center{text-align:center}
+  .big{font-size:2.4rem;margin:.2em 0}
+  code{font-family:"JetBrains Mono",monospace;background:var(--panel2);padding:1px 6px;border-radius:6px;font-size:.85em}
+  table.stats{width:100%;border-collapse:collapse;margin-top:10px;font-size:.9rem}
+  table.stats th,table.stats td{padding:9px 8px;border-bottom:1px solid var(--border);text-align:center}
+  table.stats th{color:var(--muted);font-weight:600;font-size:.78rem}
+  table.stats td.grp{text-align:left;font-weight:600}
+  table.stats td .sub{color:var(--muted);font-weight:400;font-size:.76rem}
+  .barmini{height:8px;border-radius:999px;background:var(--panel2);overflow:hidden;display:flex;margin-top:5px}
+  .barmini > i{height:100%}
+  .b-sim{background:var(--good)} .b-tie{background:var(--warn)} .b-dif{background:var(--bad)}
+  .note{font-size:.78rem;color:var(--muted);margin-top:10px;line-height:1.5}
+  .statsblock h2{margin:1.1em 0 .2em}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="topbar">
+    <div class="brand"><span class="grad">ImpactMat</span> · Listening Study <span class="muted" style="font-size:.8rem">(preview)</span></div>
+    <button class="toggle" id="themeBtn">◐ theme</button>
+  </div>
+
+  <!-- ============ INTRO ============ -->
+  <section id="intro" class="card">
+    <h1>두 타격음, 재질이 비슷한가요?</h1>
+    <p class="muted">총 <b id="nTrialsLabel">20</b>개 문항, 약 5분. <b>헤드폰</b> 권장.</p>
+    <h2>진행 방법</h2>
+    <ul class="rules">
+      <li>각 문항에서 <b>소리 A</b>와 <b>소리 B</b>를 듣습니다 (둘 다 최소 1회).</li>
+      <li>두 소리의 <b>재질감(음색·타격감)</b>이 서로 얼마나 비슷한지 고릅니다: <b>유사함 / 애매 / 다름</b>.</li>
+      <li>어느 쪽이 원본인지는 표시하지 않습니다. 순서는 무작위입니다.</li>
+    </ul>
+    <div class="field">
+      <label for="pid">참가자 이름 / ID</label>
+      <input type="text" id="pid" placeholder="예: hbcho, p01 …" autocomplete="off">
+    </div>
+    <div class="field">
+      <label for="env">재생 환경</label>
+      <select id="env">
+        <option value="">선택…</option>
+        <option value="headphone">헤드폰</option>
+        <option value="earphone">이어폰</option>
+        <option value="speaker">스피커</option>
+      </select>
+    </div>
+    <div class="actions">
+      <span class="hint">응답은 종료 시 JSON 파일로 저장됩니다 (로그인 불필요).</span>
+      <button class="btn primary" id="startBtn" disabled>시작하기 →</button>
+    </div>
+  </section>
+
+  <!-- ============ TRIAL ============ -->
+  <section id="trial" class="card" hidden>
+    <div class="steplabel">
+      <span id="stepText">1 / 20</span>
+      <span id="domText" class="muted"></span>
+    </div>
+    <div class="progress"><i id="bar"></i></div>
+
+    <div class="opts">
+      <div class="opt">
+        <div class="lab">소리 A</div>
+        <div class="played" id="playedA">미청취</div>
+        <button class="play" id="playA"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg> A 재생</button>
+      </div>
+      <div class="opt">
+        <div class="lab">소리 B</div>
+        <div class="played" id="playedB">미청취</div>
+        <button class="play" id="playB"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg> B 재생</button>
+      </div>
+    </div>
+
+    <div class="qtext">두 소리의 재질감이 서로 비슷한가요?</div>
+    <div class="choices">
+      <div class="choice sim" data-v="similar">유사함<small>같은 재질로 들림</small></div>
+      <div class="choice" data-v="tie">애매<small>판단 어려움</small></div>
+      <div class="choice dif" data-v="different">다름<small>다른 재질로 들림</small></div>
+    </div>
+
+    <div class="actions">
+      <span class="hint" id="hint">A·B를 모두 들어야 선택할 수 있습니다.</span>
+      <button class="btn primary" id="nextBtn" disabled>다음 →</button>
+    </div>
+  </section>
+
+  <!-- ============ DONE ============ -->
+  <section id="done" class="card" hidden>
+    <div class="center"><div class="big">🎧</div><h1>완료 — 감사합니다!</h1>
+    <p class="muted" id="doneMsg"></p></div>
+    <div id="stats"></div>
+    <div class="center" style="margin-top:18px">
+      <button class="btn primary" id="dlBtn">결과 JSON 저장</button>
+    </div>
+  </section>
+
+</div>
+
+<script>
+const CONFIG = { JSON_URL:"trials.json", SHUFFLE_TRIALS:true };
+const $ = s => document.querySelector(s);
+let TRIALS=[], idx=0, responses=[], session={}, order=null, choice=null;
+let played={A:false,B:false};
+const audio = new Audio();
+
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]];}return a;}
+$("#themeBtn").onclick=()=>{const r=document.documentElement;r.dataset.theme=r.dataset.theme==="dark"?"light":"dark";};
+function checkStart(){$("#startBtn").disabled=!($("#pid").value.trim()&&$("#env").value);}
+$("#pid").oninput=checkStart; $("#env").onchange=checkStart;
+
+async function loadTrials(){
+  try{ TRIALS = await (await fetch(CONFIG.JSON_URL)).json(); }
+  catch(e){ alert("trials.json 로드 실패: "+e); TRIALS=[]; }
+  if(CONFIG.SHUFFLE_TRIALS) shuffle(TRIALS);
+  $("#nTrialsLabel").textContent = TRIALS.length;
+  $("#stepText").textContent = "1 / "+TRIALS.length;
+}
+
+$("#startBtn").onclick=()=>{
+  session={pid:$("#pid").value.trim(), env:$("#env").value, ua:navigator.userAgent,
+           started:new Date().toISOString(), n_trials:TRIALS.length};
+  $("#intro").hidden=true; $("#trial").hidden=false; renderTrial();
+};
+
+function renderTrial(){
+  const t=TRIALS[idx];
+  order = Math.random()<.5 ? {A:"a",B:"b"} : {A:"b",B:"a"};   // randomize which clip is A
+  played={A:false,B:false}; choice=null; audio.pause();
+  $("#stepText").textContent=`${idx+1} / ${TRIALS.length}`;
+  $("#domText").textContent=t.domain;
+  $("#bar").style.width=(idx/TRIALS.length*100)+"%";
+  $("#playedA").textContent="미청취"; $("#playedA").classList.remove("ok");
+  $("#playedB").textContent="미청취"; $("#playedB").classList.remove("ok");
+  document.querySelectorAll(".choice").forEach(c=>c.classList.remove("sel"));
+  $("#nextBtn").disabled=true; $("#hint").textContent="A·B를 모두 들어야 선택할 수 있습니다.";
+}
+function urlFor(side){const t=TRIALS[idx];return "../"+t[order[side]];}   // page is under /study/
+function play(side,btn){
+  audio.pause(); audio.src=urlFor(side); audio.currentTime=0; audio.play();
+  document.querySelectorAll(".play").forEach(b=>b.classList.remove("playing"));
+  btn.classList.add("playing");
+  audio.onended=()=>btn.classList.remove("playing");
+}
+$("#playA").onclick=e=>{play("A",e.currentTarget);played.A=true;$("#playedA").textContent="들음";$("#playedA").classList.add("ok");gate();};
+$("#playB").onclick=e=>{play("B",e.currentTarget);played.B=true;$("#playedB").textContent="들음";$("#playedB").classList.add("ok");gate();};
+document.querySelectorAll(".choice").forEach(c=>c.onclick=()=>{
+  choice=c.dataset.v;
+  document.querySelectorAll(".choice").forEach(x=>x.classList.remove("sel"));
+  c.classList.add("sel"); gate();
+});
+function gate(){
+  const both=played.A&&played.B;
+  $("#nextBtn").disabled=!(both&&choice);
+  $("#hint").textContent = !both ? "A·B를 모두 들어야 합니다."
+                         : !choice ? "유사함 / 애매 / 다름 중 선택하세요." : "선택됨 — 다음으로.";
+}
+$("#nextBtn").onclick=()=>{
+  const t=TRIALS[idx];
+  responses.push({trial_id:t.id, domain:t.domain, pair_type:t.pair_type,
+                  clip_A:order.A, clip_B:order.B, choice:choice,
+                  meta:t.meta||{}, t:new Date().toISOString()});
+  idx++;
+  if(idx<TRIALS.length) renderTrial(); else finish();
+};
+
+function download(payload){
+  const blob=new Blob([JSON.stringify(payload,null,2)],{type:"application/json"});
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download=`impactmat_study_${session.pid||"anon"}_${Date.now()}.json`;
+  document.body.appendChild(a); a.click(); a.remove();
+}
+const CHLABEL={similar:"유사함",tie:"애매",different:"다름"};
+const GRPLABEL={
+  "synthetic/rerender":["synthetic · rerender","input vs 우리 재렌더"],
+  "synthetic/identical":["synthetic · identical","같은 소리 2번 (정답=유사함)"],
+  "real/rerender":["real · rerender","real input vs 재렌더(F)"],
+  "real/gtvar":["real · gtvar","같은 재질·다른 물체 (GT 변동)"],
+};
+function renderStats(res){
+  // group -> {similar,tie,different}
+  const g={};
+  res.forEach(r=>{const k=r.domain+"/"+r.pair_type;(g[k]=g[k]||{similar:0,tie:0,different:0})[r.choice]++;});
+  const order=["synthetic/rerender","synthetic/identical","real/rerender","real/gtvar"];
+  let rows="";
+  order.forEach(k=>{
+    if(!g[k])return;
+    const c=g[k], n=c.similar+c.tie+c.different, pc=x=>n?Math.round(x/n*100):0;
+    const [lab,sub]=GRPLABEL[k]||[k,""];
+    rows+=`<tr>
+      <td class="grp">${lab}<div class="sub">${sub}</div></td>
+      <td>${c.similar} <span class="sub">${pc(c.similar)}%</span></td>
+      <td>${c.tie} <span class="sub">${pc(c.tie)}%</span></td>
+      <td>${c.different} <span class="sub">${pc(c.different)}%</span></td>
+      <td style="min-width:90px"><div class="barmini">
+        <i class="b-sim" style="width:${pc(c.similar)}%"></i>
+        <i class="b-tie" style="width:${pc(c.tie)}%"></i>
+        <i class="b-dif" style="width:${pc(c.dif||c.different)}%"></i></div></td></tr>`;
+  });
+  // identical sanity
+  const ic=g["synthetic/identical"], icn=ic?ic.similar+ic.tie+ic.different:0;
+  const sane = ic ? `동일-소리 대조군 ${ic.similar}/${icn} 유사함 (${icn?Math.round(ic.similar/icn*100):0}%)` : "";
+  return `<div class="statsblock"><h2>내 응답 통계</h2>
+    <table class="stats">
+      <tr><th style="text-align:left">그룹</th><th>유사함</th><th>애매</th><th>다름</th><th></th></tr>
+      ${rows}
+    </table>
+    <div class="note">
+      • <b>rerender</b> = 재질 유사도 측정값(높은 유사함 = 재렌더가 재질을 잘 살림).<br>
+      • <b>identical</b> = 성실도 체크(거의 유사함이어야 정상). ${sane}<br>
+      • <b>gtvar</b> = 실제 GT끼리도 다르게 들리는 정도 → rerender를 비교할 천장 기준.
+    </div></div>`;
+}
+let PAYLOAD=null;
+function finish(){
+  audio.pause(); $("#trial").hidden=true; $("#done").hidden=false; $("#bar").style.width="100%";
+  PAYLOAD={session, responses, finished:new Date().toISOString(),
+           n:responses.length,
+           tally:responses.reduce((o,r)=>{const k=r.domain+"/"+r.pair_type+"/"+r.choice;o[k]=(o[k]||0)+1;return o;},{})};
+  console.log("STUDY RESULT",PAYLOAD);
+  $("#stats").innerHTML=renderStats(responses);
+  download(PAYLOAD);
+  $("#doneMsg").textContent="응답이 저장되었고, 아래에 통계를 표시했습니다.";
+}
+$("#dlBtn").onclick=()=>{ if(PAYLOAD) download(PAYLOAD); };
+
+loadTrials();
+</script>
+</body>
+</html>

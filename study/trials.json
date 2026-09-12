@@ -1,0 +1,245 @@
+[
+  {
+    "id": "syn_101_Ceramic",
+    "domain": "synthetic",
+    "pair_type": "rerender",
+    "a": "assets/study/syn_101_Ceramic_input.wav",
+    "b": "assets/study/syn_101_Ceramic_rerender.wav",
+    "meta": {
+      "object_id": "101",
+      "material": "Ceramic",
+      "nmae": 0.0364
+    }
+  },
+  {
+    "id": "syn_101_Glass",
+    "domain": "synthetic",
+    "pair_type": "rerender",
+    "a": "assets/study/syn_101_Glass_input.wav",
+    "b": "assets/study/syn_101_Glass_rerender.wav",
+    "meta": {
+      "object_id": "101",
+      "material": "Glass",
+      "nmae": 0.0209
+    }
+  },
+  {
+    "id": "syn_101_Wood",
+    "domain": "synthetic",
+    "pair_type": "rerender",
+    "a": "assets/study/syn_101_Wood_input.wav",
+    "b": "assets/study/syn_101_Wood_rerender.wav",
+    "meta": {
+      "object_id": "101",
+      "material": "Wood",
+      "nmae": 0.192
+    }
+  },
+  {
+    "id": "syn_101_Plastic",
+    "domain": "synthetic",
+    "pair_type": "rerender",
+    "a": "assets/study/syn_101_Plastic_input.wav",
+    "b": "assets/study/syn_101_Plastic_rerender.wav",
+    "meta": {
+      "object_id": "101",
+      "material": "Plastic",
+      "nmae": 0.0521
+    }
+  },
+  {
+    "id": "syn_101_Iron",
+    "domain": "synthetic",
+    "pair_type": "rerender",
+    "a": "assets/study/syn_101_Iron_input.wav",
+    "b": "assets/study/syn_101_Iron_rerender.wav",
+    "meta": {
+      "object_id": "101",
+      "material": "Iron",
+      "nmae": 0.0363
+    }
+  },
+  {
+    "id": "syn_101_Polycarbonate",
+    "domain": "synthetic",
+    "pair_type": "rerender",
+    "a": "assets/study/syn_101_Polycarbonate_input.wav",
+    "b": "assets/study/syn_101_Polycarbonate_rerender.wav",
+    "meta": {
+      "object_id": "101",
+      "material": "Polycarbonate",
+      "nmae": 0.0539
+    }
+  },
+  {
+    "id": "syn_101_Steel",
+    "domain": "synthetic",
+    "pair_type": "rerender",
+    "a": "assets/study/syn_101_Steel_input.wav",
+    "b": "assets/study/syn_101_Steel_rerender.wav",
+    "meta": {
+      "object_id": "101",
+      "material": "Steel",
+      "nmae": 0.0131
+    }
+  },
+  {
+    "id": "syn_101_Ceramic_CTRL",
+    "domain": "synthetic",
+    "pair_type": "identical",
+    "a": "assets/study/syn_101_Ceramic_input.wav",
+    "b": "assets/study/syn_101_Ceramic_input.wav",
+    "meta": {
+      "note": "same input twice (upper anchor)"
+    }
+  },
+  {
+    "id": "syn_101_Glass_CTRL",
+    "domain": "synthetic",
+    "pair_type": "identical",
+    "a": "assets/study/syn_101_Glass_input.wav",
+    "b": "assets/study/syn_101_Glass_input.wav",
+    "meta": {
+      "note": "same input twice (upper anchor)"
+    }
+  },
+  {
+    "id": "syn_101_Wood_CTRL",
+    "domain": "synthetic",
+    "pair_type": "identical",
+    "a": "assets/study/syn_101_Wood_input.wav",
+    "b": "assets/study/syn_101_Wood_input.wav",
+    "meta": {
+      "note": "same input twice (upper anchor)"
+    }
+  },
+  {
+    "id": "real_81_Utensil_Container",
+    "domain": "real",
+    "pair_type": "rerender",
+    "a": "assets/study/real_81_Utensil_Container_input.wav",
+    "b": "assets/study/real_81_Utensil_Container_rerender.wav",
+    "meta": {
+      "object_id": "81",
+      "material": "Wood",
+      "name": "Utensil_Container"
+    }
+  },
+  {
+    "id": "real_84_Skimmer",
+    "domain": "real",
+    "pair_type": "rerender",
+    "a": "assets/study/real_84_Skimmer_input.wav",
+    "b": "assets/study/real_84_Skimmer_rerender.wav",
+    "meta": {
+      "object_id": "84",
+      "material": "Steel",
+      "name": "Skimmer"
+    }
+  },
+  {
+    "id": "real_91_Glass_Green",
+    "domain": "real",
+    "pair_type": "rerender",
+    "a": "assets/study/real_91_Glass_Green_input.wav",
+    "b": "assets/study/real_91_Glass_Green_rerender.wav",
+    "meta": {
+      "object_id": "91",
+      "material": "Glass",
+      "name": "Glass_Green"
+    }
+  },
+  {
+    "id": "real_94_Salad_Bowl",
+    "domain": "real",
+    "pair_type": "rerender",
+    "a": "assets/study/real_94_Salad_Bowl_input.wav",
+    "b": "assets/study/real_94_Salad_Bowl_rerender.wav",
+    "meta": {
+      "object_id": "94",
+      "material": "Glass",
+      "name": "Salad_Bowl"
+    }
+  },
+  {
+    "id": "real_95_Scoop",
+    "domain": "real",
+    "pair_type": "rerender",
+    "a": "assets/study/real_95_Scoop_input.wav",
+    "b": "assets/study/real_95_Scoop_rerender.wav",
+    "meta": {
+      "object_id": "95",
+      "material": "Polycarbonate",
+      "name": "Scoop"
+    }
+  },
+  {
+    "id": "real_98_Kettlebell",
+    "domain": "real",
+    "pair_type": "rerender",
+    "a": "assets/study/real_98_Kettlebell_input.wav",
+    "b": "assets/study/real_98_Kettlebell_rerender.wav",
+    "meta": {
+      "object_id": "98",
+      "material": "Iron",
+      "name": "Kettlebell"
+    }
+  },
+  {
+    "id": "real_97_Stanford_Frisbee",
+    "domain": "real",
+    "pair_type": "rerender",
+    "a": "assets/study/real_97_Stanford_Frisbee_input.wav",
+    "b": "assets/study/real_97_Stanford_Frisbee_rerender.wav",
+    "meta": {
+      "object_id": "97",
+      "material": "Plastic",
+      "name": "Stanford_Frisbee"
+    }
+  },
+  {
+    "id": "real_gtvar_Steel_88_86",
+    "domain": "real",
+    "pair_type": "gtvar",
+    "a": "assets/study/real_gtvar_Steel_88_86_A.wav",
+    "b": "assets/study/real_gtvar_Steel_88_86_B.wav",
+    "meta": {
+      "material": "Steel",
+      "obj_a": "88",
+      "name_a": "Ladle",
+      "obj_b": "86",
+      "name_b": "Slotted_Spoon",
+      "note": "same material, different real object"
+    }
+  },
+  {
+    "id": "real_gtvar_Glass_92_91",
+    "domain": "real",
+    "pair_type": "gtvar",
+    "a": "assets/study/real_gtvar_Glass_92_91_A.wav",
+    "b": "assets/study/real_gtvar_Glass_92_91_B.wav",
+    "meta": {
+      "material": "Glass",
+      "obj_a": "92",
+      "name_a": "Glass_Red",
+      "obj_b": "91",
+      "name_b": "Glass_Green",
+      "note": "same material, different real object"
+    }
+  },
+  {
+    "id": "real_gtvar_Plastic_99_100",
+    "domain": "real",
+    "pair_type": "gtvar",
+    "a": "assets/study/real_gtvar_Plastic_99_100_A.wav",
+    "b": "assets/study/real_gtvar_Plastic_99_100_B.wav",
+    "meta": {
+      "material": "Plastic",
+      "obj_a": "99",
+      "name_a": "Trim_Removal_Tool",
+      "obj_b": "100",
+      "name_b": "Trim_Removal_Tool_2",
+      "note": "same material, different real object"
+    }
+  }
+]
