@@ -114,6 +114,62 @@
     }
   },
   {
+    "id": "syn_foil_13Steel_48Wood",
+    "domain": "synthetic",
+    "pair_type": "foil",
+    "a": "assets/study/syn_foil_13Steel_48Wood_A.wav",
+    "b": "assets/study/syn_foil_13Steel_48Wood_B.wav",
+    "meta": {
+      "obj_a": "13",
+      "mat_a": "Steel",
+      "obj_b": "48",
+      "mat_b": "Wood",
+      "note": "different object & material (contrast)"
+    }
+  },
+  {
+    "id": "syn_foil_60Glass_77Plastic",
+    "domain": "synthetic",
+    "pair_type": "foil",
+    "a": "assets/study/syn_foil_60Glass_77Plastic_A.wav",
+    "b": "assets/study/syn_foil_60Glass_77Plastic_B.wav",
+    "meta": {
+      "obj_a": "60",
+      "mat_a": "Glass",
+      "obj_b": "77",
+      "mat_b": "Plastic",
+      "note": "different object & material (contrast)"
+    }
+  },
+  {
+    "id": "syn_foil_120Ceramic_200Polycarbonate",
+    "domain": "synthetic",
+    "pair_type": "foil",
+    "a": "assets/study/syn_foil_120Ceramic_200Polycarbonate_A.wav",
+    "b": "assets/study/syn_foil_120Ceramic_200Polycarbonate_B.wav",
+    "meta": {
+      "obj_a": "120",
+      "mat_a": "Ceramic",
+      "obj_b": "200",
+      "mat_b": "Polycarbonate",
+      "note": "different object & material (contrast)"
+    }
+  },
+  {
+    "id": "syn_foil_300Tin_450Wood",
+    "domain": "synthetic",
+    "pair_type": "foil",
+    "a": "assets/study/syn_foil_300Tin_450Wood_A.wav",
+    "b": "assets/study/syn_foil_300Tin_450Wood_B.wav",
+    "meta": {
+      "obj_a": "300",
+      "mat_a": "Tin",
+      "obj_b": "450",
+      "mat_b": "Wood",
+      "note": "different object & material (contrast)"
+    }
+  },
+  {
     "id": "real_1_26",
     "domain": "real",
     "pair_type": "rerender",
@@ -265,6 +321,62 @@
       "idx_a": "28",
       "idx_b": "29",
       "note": "same object, same material, different real take"
+    }
+  },
+  {
+    "id": "real_foil_84Steel_31Wood",
+    "domain": "real",
+    "pair_type": "foil",
+    "a": "assets/study/real_foil_84Steel_31Wood_A.wav",
+    "b": "assets/study/real_foil_84Steel_31Wood_B.wav",
+    "meta": {
+      "obj_a": "84",
+      "mat_a": "Steel",
+      "obj_b": "31",
+      "mat_b": "Wood",
+      "note": "different object & material (contrast)"
+    }
+  },
+  {
+    "id": "real_foil_94Glass_97Plastic",
+    "domain": "real",
+    "pair_type": "foil",
+    "a": "assets/study/real_foil_94Glass_97Plastic_A.wav",
+    "b": "assets/study/real_foil_94Glass_97Plastic_B.wav",
+    "meta": {
+      "obj_a": "94",
+      "mat_a": "Glass",
+      "obj_b": "97",
+      "mat_b": "Plastic",
+      "note": "different object & material (contrast)"
+    }
+  },
+  {
+    "id": "real_foil_1Ceramic_35Polycarbonate",
+    "domain": "real",
+    "pair_type": "foil",
+    "a": "assets/study/real_foil_1Ceramic_35Polycarbonate_A.wav",
+    "b": "assets/study/real_foil_1Ceramic_35Polycarbonate_B.wav",
+    "meta": {
+      "obj_a": "1",
+      "mat_a": "Ceramic",
+      "obj_b": "35",
+      "mat_b": "Polycarbonate",
+      "note": "different object & material (contrast)"
+    }
+  },
+  {
+    "id": "real_foil_98Iron_81Wood",
+    "domain": "real",
+    "pair_type": "foil",
+    "a": "assets/study/real_foil_98Iron_81Wood_A.wav",
+    "b": "assets/study/real_foil_98Iron_81Wood_B.wav",
+    "meta": {
+      "obj_a": "98",
+      "mat_a": "Iron",
+      "obj_b": "81",
+      "mat_b": "Wood",
+      "note": "different object & material (contrast)"
     }
   }
 ]

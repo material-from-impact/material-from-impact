@@ -92,6 +92,9 @@
   .b-sim{background:var(--good)} .b-tie{background:var(--warn)} .b-dif{background:var(--bad)}
   .note{font-size:.78rem;color:var(--muted);margin-top:10px;line-height:1.5}
   .statsblock h2{margin:1.1em 0 .2em}
+  table.stats tr.foilrow{background:color-mix(in srgb,var(--warn) 8%,transparent)}
+  .oktag{display:inline-block;font-size:.68rem;color:var(--good);border:1px solid var(--good);
+    border-radius:999px;padding:0 6px;margin-left:4px;font-weight:600}
   /* familiarization gallery */
   .famgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:14px;margin:16px 0}
   .famcard{border:1px solid var(--border);border-radius:12px;background:var(--panel2);padding:12px;text-align:center}
@@ -283,6 +286,7 @@ function renderFamiliarize(){
   FAM.forEach(card=>{
     const el=document.createElement("div"); el.className="famcard";
     const mv=`<model-viewer src="../${card.glb}" camera-controls disable-zoom
+      auto-rotate auto-rotate-delay="0" rotation-per-second="30deg"
       interaction-prompt="none" shadow-intensity="0.6" exposure="1.0" loading="eager"></model-viewer>`;
     const plays=card.audios.map((a,i)=>`<button class="pbtn" data-src="../${a}">${PLAYSVG}${card.audios.length>1?('예시 '+(i+1)):'재생'}</button>`).join("");
     el.innerHTML=`${mv}<div class="m">${card.material}</div><div class="plays">${plays}</div>`;
@@ -353,42 +357,55 @@ $("#nextBtn").onclick=()=>{
 };
 
 const CHLABEL={similar:"유사함",tie:"애매",different:"다름"};
+// [label, sub, expected]  expected: "sim"|"dif"|null  (anchor's correct answer)
 const GRPLABEL={
-  "synthetic/rerender":["synthetic · rerender","input vs 우리 재렌더"],
-  "synthetic/identical":["synthetic · identical","같은 소리 2번 (정답=유사함)"],
-  "real/rerender":["real · rerender","real input vs 재렌더(F)"],
-  "real/gtvar":["real · gtvar","같은 물체·다른 take (GT 변동)"],
+  "synthetic/rerender":["synthetic · rerender","input vs 우리 재렌더 (측정)",null],
+  "synthetic/identical":["synthetic · identical ↑","같은 소리 2번 (상한, 정답=유사함)","sim"],
+  "synthetic/foil":["synthetic · foil ↓","다른 물체·다른 재질 (대비, 정답=다름)","dif"],
+  "real/rerender":["real · rerender","real input vs 재렌더 (측정)",null],
+  "real/gtvar":["real · gtvar","같은 물체·다른 take (GT 천장)","sim"],
+  "real/foil":["real · foil ↓","다른 물체·다른 재질 (대비, 정답=다름)","dif"],
 };
 function renderStats(res){
   const g={};
   res.forEach(r=>{const k=r.domain+"/"+r.pair_type;(g[k]=g[k]||{similar:0,tie:0,different:0})[r.choice]++;});
-  const order=["synthetic/rerender","synthetic/identical","real/rerender","real/gtvar"];
+  // measures first, then anchors (identical ↑ / gtvar) and foils (↓) grouped per domain
+  const order=["synthetic/rerender","synthetic/identical","synthetic/foil",
+               "real/rerender","real/gtvar","real/foil"];
   let rows="";
   order.forEach(k=>{
     if(!g[k])return;
     const c=g[k], n=c.similar+c.tie+c.different, pc=x=>n?Math.round(x/n*100):0;
-    const [lab,sub]=GRPLABEL[k]||[k,""];
-    rows+=`<tr>
-      <td class="grp">${lab}<div class="sub">${sub}</div></td>
-      <td>${c.similar} <span class="sub">${pc(c.similar)}%</span></td>
+    const [lab,sub,exp]=GRPLABEL[k]||[k,"",null];
+    const isFoil=k.endsWith("/foil"), isAnchor=exp!=null;
+    // highlight the cell that SHOULD dominate for an anchor (green=as-expected)
+    const mark=(who)=> exp===who ? ' style="font-weight:700;color:var(--good)"' : '';
+    const okTag = isAnchor
+        ? `<span class="oktag">${exp==='sim'?'기대 유사함':'기대 다름'} · ${exp==='sim'?pc(c.similar):pc(c.different)}%</span>` : '';
+    rows+=`<tr${isFoil?' class="foilrow"':''}>
+      <td class="grp">${lab}<div class="sub">${sub} ${okTag}</div></td>
+      <td${mark('sim')}>${c.similar} <span class="sub">${pc(c.similar)}%</span></td>
       <td>${c.tie} <span class="sub">${pc(c.tie)}%</span></td>
-      <td>${c.different} <span class="sub">${pc(c.different)}%</span></td>
+      <td${mark('dif')}>${c.different} <span class="sub">${pc(c.different)}%</span></td>
       <td style="min-width:90px"><div class="barmini">
         <i class="b-sim" style="width:${pc(c.similar)}%"></i>
         <i class="b-tie" style="width:${pc(c.tie)}%"></i>
         <i class="b-dif" style="width:${pc(c.different)}%"></i></div></td></tr>`;
   });
   const ic=g["synthetic/identical"], icn=ic?ic.similar+ic.tie+ic.different:0;
-  const sane = ic ? `동일-소리 대조군 ${ic.similar}/${icn} 유사함 (${icn?Math.round(ic.similar/icn*100):0}%)` : "";
+  const fo=["synthetic/foil","real/foil"].reduce((o,k)=>{const c=g[k];if(c){o.d+=c.different;o.n+=c.similar+c.tie+c.different;}return o;},{d:0,n:0});
+  const sane = ic ? `동일-소리 ${ic.similar}/${icn} 유사함` : "";
+  const foChk = fo.n ? `대비(foil) ${fo.d}/${fo.n} 다름 (${Math.round(fo.d/fo.n*100)}%)` : "";
   return `<div class="statsblock"><h2>내 응답 통계</h2>
     <table class="stats">
       <tr><th style="text-align:left">그룹</th><th>유사함</th><th>애매</th><th>다름</th><th></th></tr>
       ${rows}
     </table>
     <div class="note">
-      • <b>rerender</b> = 재질 유사도 측정값(높은 유사함 = 재렌더가 재질을 잘 살림).<br>
-      • <b>identical</b> = 성실도 체크(거의 유사함이어야 정상). ${sane}<br>
-      • <b>gtvar</b> = 같은 물체의 다른 take끼리도 다르게 들리는 정도 → rerender를 비교할 천장 기준.
+      • <b>rerender</b> = 실제 측정값(높은 유사함 = 재렌더가 재질을 잘 살림).<br>
+      • <b>anchor</b> — <b>identical/gtvar</b>는 유사함이 정상(상한·천장), <b>foil</b>은
+        <b>의도적으로 다른 물체·재질</b>이라 <b>다름이 정답</b>입니다(문제 아님). 초록으로 표시된 값이 기대 방향.<br>
+      • 성실도: ${sane}${sane&&foChk?' · ':''}${foChk} → 이 값들이 높으면 정상적으로 응답한 것.
     </div></div>`;
 }
 function download(payload){
