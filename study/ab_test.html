@@ -22,36 +22,37 @@
   *{box-sizing:border-box}
   body{margin:0;background:var(--bg);color:var(--fg);
     font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
-    line-height:1.55;-webkit-font-smoothing:antialiased}
-  .wrap{max-width:760px;margin:0 auto;padding:28px 20px 90px}
+    line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:780px;margin:0 auto;padding:28px 20px 90px}
   h1{font-size:1.5rem;margin:.2em 0 .3em;letter-spacing:-.01em}
-  h2{font-size:1.12rem;margin:1.4em 0 .5em}
+  h2{font-size:1.06rem;margin:1.4em 0 .5em}
   .muted{color:var(--muted)}
   .grad{background:linear-gradient(90deg,var(--accent),var(--accent2));
     -webkit-background-clip:text;background-clip:text;color:transparent}
   .topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}
   .brand{font-weight:700;letter-spacing:-.01em}
-  .toggle{border:1px solid var(--border);background:var(--panel);color:var(--muted);
-    border-radius:999px;padding:6px 12px;cursor:pointer;font-size:.85rem}
-
+  .tools{display:flex;gap:8px}
+  .chipbtn{border:1px solid var(--border);background:var(--panel);color:var(--muted);
+    border-radius:999px;padding:6px 12px;cursor:pointer;font-size:.82rem}
   .progress{height:6px;background:var(--panel2);border-radius:999px;overflow:hidden;margin:14px 0 4px}
   .progress > i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .3s}
   .steplabel{font-size:.82rem;color:var(--muted);display:flex;justify-content:space-between}
-
   .card{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);
-    padding:22px;box-shadow:var(--shadow)}
+    padding:24px;box-shadow:var(--shadow)}
+  .papertitle{font-size:.92rem;color:var(--fg);font-weight:600;line-height:1.5}
+  .venue{font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--accent2);font-weight:700}
   .field{margin:14px 0}
   .field label{display:block;font-size:.85rem;color:var(--muted);margin-bottom:6px}
   input[type=text],select{width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--border);
     background:var(--panel2);color:var(--fg);font:inherit}
-  ul.rules{margin:.4em 0;padding-left:1.1em}
-  ul.rules li{margin:.35em 0;color:var(--muted)}
+  ul.rules{margin:.4em 0;padding-left:1.15em}
+  ul.rules li{margin:.4em 0;color:var(--muted)}
   .callout{border:1px solid var(--border);border-left:4px solid var(--accent2);background:var(--panel2);
     border-radius:10px;padding:13px 15px;margin:14px 0;font-size:.92rem}
   .callout b{color:var(--fg)}
+  .consent{font-size:.83rem;color:var(--muted);border-top:1px solid var(--border);padding-top:12px;margin-top:16px}
   .pill{display:inline-block;font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;
     color:var(--accent2);font-weight:700;border:1px solid var(--border);border-radius:999px;padding:3px 10px}
-
   .opts{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:6px 0 20px}
   @media(max-width:560px){.opts{grid-template-columns:1fr}}
   .opt{border:1px solid var(--border);border-radius:12px;padding:18px;text-align:center;background:var(--panel2)}
@@ -62,7 +63,6 @@
     background:var(--accent);color:#fff;border-radius:10px;padding:11px 20px;font:inherit;font-weight:600;margin-top:12px}
   .play.playing{background:var(--accent2)}
   .play svg{width:15px;height:15px;fill:currentColor}
-
   .qtext{text-align:center;font-weight:600;margin:2px 0 14px}
   .choices{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
   .choice{border:2px solid var(--border);border-radius:12px;padding:16px 10px;text-align:center;
@@ -72,7 +72,6 @@
   .choice.sel{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 14%,var(--panel))}
   .choice.sim.sel{border-color:var(--good);background:color-mix(in srgb,var(--good) 14%,var(--panel))}
   .choice.dif.sel{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 14%,var(--panel))}
-
   .actions{display:flex;justify-content:space-between;align-items:center;margin-top:24px;gap:12px}
   .btn{border:none;border-radius:10px;padding:11px 22px;font:inherit;font-weight:600;cursor:pointer}
   .btn.primary{background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff}
@@ -82,144 +81,147 @@
   .center{text-align:center}
   .big{font-size:2.4rem;margin:.2em 0}
   code{font-family:"JetBrains Mono",monospace;background:var(--panel2);padding:1px 6px;border-radius:6px;font-size:.85em}
-  table.stats{width:100%;border-collapse:collapse;margin-top:10px;font-size:.9rem}
-  table.stats th,table.stats td{padding:9px 8px;border-bottom:1px solid var(--border);text-align:center}
-  table.stats th{color:var(--muted);font-weight:600;font-size:.78rem}
-  table.stats td.grp{text-align:left;font-weight:600}
-  table.stats td .sub{color:var(--muted);font-weight:400;font-size:.76rem}
-  .barmini{height:8px;border-radius:999px;background:var(--panel2);overflow:hidden;display:flex;margin-top:5px}
-  .barmini > i{height:100%}
-  .b-sim{background:var(--good)} .b-tie{background:var(--warn)} .b-dif{background:var(--bad)}
-  .note{font-size:.78rem;color:var(--muted);margin-top:10px;line-height:1.5}
-  .statsblock h2{margin:1.1em 0 .2em}
-  table.stats tr.foilrow{background:color-mix(in srgb,var(--warn) 8%,transparent)}
-  .oktag{display:inline-block;font-size:.68rem;color:var(--good);border:1px solid var(--good);
-    border-radius:999px;padding:0 6px;margin-left:4px;font-weight:600}
-  /* familiarization gallery */
   .famgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:14px;margin:16px 0}
   .famcard{border:1px solid var(--border);border-radius:12px;background:var(--panel2);padding:12px;text-align:center}
   .famcard model-viewer{width:100%;height:130px;background:transparent;--poster-color:transparent}
   .famcard .m{font-weight:700;margin:8px 0 6px}
   .famcard .plays{display:flex;gap:6px;justify-content:center;flex-wrap:wrap}
   .famcard .pbtn{border:1px solid var(--border);background:var(--panel);color:var(--fg);border-radius:8px;
-    padding:6px 10px;font:inherit;font-size:.8rem;cursor:pointer;display:inline-flex;align-items:center;gap:5px}
+    padding:6px 9px;font:inherit;font-size:.78rem;cursor:pointer;display:inline-flex;align-items:center;gap:5px}
   .famcard .pbtn.playing{background:var(--accent2);color:#fff;border-color:transparent}
-  .famcard .pbtn svg{width:11px;height:11px;fill:currentColor}
+  .famcard .pbtn svg{width:10px;height:10px;fill:currentColor}
+  table.stats{width:100%;border-collapse:collapse;margin-top:10px;font-size:.9rem}
+  table.stats th,table.stats td{padding:9px 8px;border-bottom:1px solid var(--border);text-align:center}
+  table.stats th{color:var(--muted);font-weight:600;font-size:.78rem}
+  table.stats td.grp{text-align:left;font-weight:600}
+  table.stats td .sub{color:var(--muted);font-weight:400;font-size:.76rem}
+  table.stats tr.foilrow{background:color-mix(in srgb,var(--warn) 8%,transparent)}
+  .oktag{display:inline-block;font-size:.68rem;color:var(--good);border:1px solid var(--good);
+    border-radius:999px;padding:0 6px;margin-left:4px;font-weight:600}
+  .barmini{height:8px;border-radius:999px;background:var(--panel2);overflow:hidden;display:flex;margin-top:5px}
+  .barmini > i{height:100%}
+  .b-sim{background:var(--good)} .b-tie{background:var(--warn)} .b-dif{background:var(--bad)}
+  .note{font-size:.78rem;color:var(--muted);margin-top:10px;line-height:1.55}
+  .statsblock h2{margin:1.1em 0 .2em}
+  .resetlink{font-size:.75rem;color:var(--muted);text-decoration:underline;cursor:pointer;background:none;border:none}
 </style>
 </head>
 <body>
 <div class="wrap">
 
   <div class="topbar">
-    <div class="brand"><span class="grad">ImpactMat</span> · Listening Study <span class="muted" style="font-size:.8rem">(preview)</span></div>
-    <button class="toggle" id="themeBtn">◐ theme</button>
+    <div class="brand"><span class="grad">ImpactMat</span> · <span data-t="brand">Listening Study</span></div>
+    <div class="tools">
+      <button class="chipbtn" id="langBtn">KO / EN</button>
+      <button class="chipbtn" id="themeBtn">◐</button>
+    </div>
   </div>
 
   <!-- ============ INTRO ============ -->
   <section id="intro" class="card">
-    <h1>두 타격음, 재질이 비슷한가요?</h1>
-    <p class="muted">두 개의 섹션(합성음 / 실제 녹음)으로 진행됩니다. 총 <b id="nTrialsLabel">20</b>문항, 약 5분. <b>헤드폰</b> 권장.</p>
-    <h2>공통 안내</h2>
+    <div class="venue" data-t="venue"></div>
+    <div class="papertitle">ImpactMat: Continuous Material Estimation from Impact Sounds for Inverse Sound Rendering</div>
+    <h1 style="margin-top:14px" data-t="introTitle"></h1>
+    <p class="muted" data-t="introLead"></p>
+
+    <h2 data-t="procHead"></h2>
     <ul class="rules">
-      <li>각 문항에서 <b>소리 A</b>와 <b>소리 B</b>를 듣습니다 (둘 다 최소 1회).</li>
-      <li>두 소리의 <b>재질감</b>이 서로 얼마나 비슷한지 고릅니다: <b>유사함 / 애매 / 다름</b>.</li>
-      <li>순서는 무작위이며, 어느 쪽이 원본인지는 표시하지 않습니다.</li>
+      <li data-t="proc1"></li>
+      <li data-t="proc2"></li>
+      <li data-t="proc3"></li>
     </ul>
-    <div class="callout">
-      ⚑ <b>판단 기준</b> — <b>피치(음 높이)가 다소 달라도</b>, 재질 특성(음색·감쇠·타격감)이 비슷하면
-      <b>“유사함”</b>으로 판단해 주세요. 음 높이 차이 자체보다 <b>“같은 재질을 두드린 소리로 들리는가”</b>가 핵심입니다.
-    </div>
-    <p class="muted" style="font-size:.85rem;border-top:1px solid var(--border);padding-top:12px;margin-top:16px">
-      본 실험은 <b>ImpactMat</b> (impact-sound 기반 재질 추정 연구)의 청취 실험입니다. 참여는 자발적이며 언제든
-      중단할 수 있고, 응답은 <b>익명</b>으로 수집·분석되어 연구 외 목적으로 사용되지 않습니다.<br>
-      Hyebin Cho<sup>1</sup>, Bumsoo Kim<sup>2</sup>, Joon Son Chung<sup>1</sup>
-      &nbsp;·&nbsp; <sup>1</sup>KAIST &nbsp; <sup>2</sup>Chung-Ang University
-    </p>
+    <div class="callout" data-t="criterion"></div>
+
     <div class="field">
-      <label for="pid">참가자 이름 / ID</label>
-      <input type="text" id="pid" placeholder="예: hbcho, p01 …" autocomplete="off">
+      <label for="pid" data-t="nameLabel"></label>
+      <input type="text" id="pid" autocomplete="off">
+      <div class="hint" style="margin-top:5px" data-t="nameHint"></div>
     </div>
     <div class="field">
-      <label for="env">재생 환경</label>
+      <label for="env" data-t="envLabel"></label>
       <select id="env">
-        <option value="">선택…</option>
-        <option value="headphone">헤드폰</option>
-        <option value="earphone">이어폰</option>
-        <option value="speaker">스피커</option>
+        <option value="" data-t="envChoose"></option>
+        <option value="headphone" data-t="envHead"></option>
+        <option value="earphone" data-t="envEar"></option>
+        <option value="speaker" data-t="envSpk"></option>
       </select>
     </div>
+
+    <p class="consent" id="consentBlock"></p>
+
     <div class="actions">
-      <span class="hint">응답은 종료 시 JSON 파일로 저장됩니다 (로그인 불필요).</span>
-      <button class="btn primary" id="startBtn" disabled>시작하기 →</button>
+      <span class="hint" id="startHint"></span>
+      <button class="btn primary" id="startBtn" disabled data-t="startBtn"></button>
     </div>
+  </section>
+
+  <!-- ============ ALREADY PARTICIPATED ============ -->
+  <section id="blocked" class="card center" hidden>
+    <div class="big">✓</div>
+    <h1 data-t="blockedTitle"></h1>
+    <p class="muted" data-t="blockedBody"></p>
+    <button class="resetlink" id="resetLink"></button>
   </section>
 
   <!-- ============ FAMILIARIZATION ============ -->
   <section id="familiarize" class="card" hidden>
-    <div class="pill">먼저 듣기</div>
-    <h1>재질별 타격음 익히기</h1>
-    <p class="muted">각 재질의 물체(3D)와 실제 타격음입니다. 재생해 보며 <b>“이 재질은 이런 소리”</b>를
-      감으로 익힌 뒤 시작하세요. 본 설문의 기준이 됩니다.</p>
+    <div class="pill" data-t="famPill"></div>
+    <h1 data-t="famTitle"></h1>
+    <p class="muted" data-t="famLead"></p>
     <div class="famgrid" id="famGrid"></div>
     <div class="actions">
-      <span class="hint">각 재질을 한 번씩 들어보는 걸 권장합니다.</span>
-      <button class="btn primary" id="famStart">이해했어요, 시작 →</button>
+      <span class="hint" data-t="famHint"></span>
+      <button class="btn primary" id="famStart" data-t="famStart"></button>
     </div>
   </section>
 
   <!-- ============ SECTION INTRO ============ -->
   <section id="section" class="card" hidden>
-    <div class="pill" id="secPill">SECTION 1 / 2</div>
+    <div class="pill" id="secPill"></div>
     <h1 id="secTitle"></h1>
     <p class="muted" id="secDesc"></p>
     <div class="callout" id="secGuide"></div>
     <div class="actions">
       <span class="hint" id="secCount"></span>
-      <button class="btn primary" id="secStart">이 섹션 시작 →</button>
+      <button class="btn primary" id="secStart" data-t="secStart"></button>
     </div>
   </section>
 
   <!-- ============ TRIAL ============ -->
   <section id="trial" class="card" hidden>
-    <div class="steplabel">
-      <span id="stepText">1 / 10</span>
-      <span id="domText" class="pill"></span>
-    </div>
+    <div class="steplabel"><span id="stepText"></span><span id="domText" class="pill"></span></div>
     <div class="progress"><i id="bar"></i></div>
-
     <div class="opts">
       <div class="opt">
-        <div class="lab">소리 A</div>
-        <div class="played" id="playedA">미청취</div>
-        <button class="play" id="playA"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg> A 재생</button>
+        <div class="lab" data-t="soundA"></div>
+        <div class="played" id="playedA"></div>
+        <button class="play" id="playA"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg><span data-t="playA"></span></button>
       </div>
       <div class="opt">
-        <div class="lab">소리 B</div>
-        <div class="played" id="playedB">미청취</div>
-        <button class="play" id="playB"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg> B 재생</button>
+        <div class="lab" data-t="soundB"></div>
+        <div class="played" id="playedB"></div>
+        <button class="play" id="playB"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg><span data-t="playB"></span></button>
       </div>
     </div>
-
-    <div class="qtext">두 소리의 재질감이 서로 비슷한가요? <span class="muted" style="font-weight:400">(음 높이 차이는 무시)</span></div>
+    <div class="qtext" data-t="question"></div>
     <div class="choices">
-      <div class="choice sim" data-v="similar">유사함<small>같은 재질로 들림</small></div>
-      <div class="choice" data-v="tie">애매<small>판단 어려움</small></div>
-      <div class="choice dif" data-v="different">다름<small>다른 재질로 들림</small></div>
+      <div class="choice sim" data-v="similar"><span data-t="cSim"></span><small data-t="cSimS"></small></div>
+      <div class="choice" data-v="tie"><span data-t="cTie"></span><small data-t="cTieS"></small></div>
+      <div class="choice dif" data-v="different"><span data-t="cDif"></span><small data-t="cDifS"></small></div>
     </div>
-
     <div class="actions">
-      <span class="hint" id="hint">A·B를 모두 들어야 선택할 수 있습니다.</span>
-      <button class="btn primary" id="nextBtn" disabled>다음 →</button>
+      <span class="hint" id="hint"></span>
+      <button class="btn primary" id="nextBtn" disabled data-t="nextBtn"></button>
     </div>
   </section>
 
   <!-- ============ DONE ============ -->
   <section id="done" class="card" hidden>
-    <div class="center"><div class="big">🎧</div><h1>완료 — 감사합니다!</h1>
+    <div class="center"><div class="big">🎧</div><h1 data-t="doneTitle"></h1>
     <p class="muted" id="doneMsg"></p></div>
     <div id="stats"></div>
     <div class="center" style="margin-top:18px">
-      <button class="btn primary" id="dlBtn">결과 JSON 저장</button>
+      <button class="btn primary" id="dlBtn" data-t="dlBtn"></button>
     </div>
   </section>
 
@@ -227,57 +229,226 @@
 
 <script type="module" src="../assets/js/model-viewer.min.js"></script>
 <script>
-const CONFIG = { JSON_URL:"trials.json", FAM_URL:"familiarize.json", SHUFFLE_TRIALS:true, RANDOMIZE_SECTION_ORDER:true };
+/* ============================ CONFIG ============================ */
+const CONFIG = {
+  JSON_URL:"trials.json", FAM_URL:"familiarize.json",
+  SHUFFLE_TRIALS:true, RANDOMIZE_SECTION_ORDER:true,
+  // Google Apps Script web-app URL (deploy: run as me / access anyone).
+  // Empty -> results are only downloaded as JSON (no server save, no ID pre-check).
+  GAS_URL:"https://script.google.com/macros/s/AKfycbz7EuS0R-MhJUBiGdylCdnZ-0-vz9GZfWV_9I-WOm8FFpMJGjR6I1ZsL_N8wueHvvA4/exec",
+  LS_KEY:"impactmat_study_done_v1",
+};
 
-const SECTION_INFO = {
-  synthetic:{
-    label:"섹션: 합성음 (Synthetic)",
-    desc:"시뮬레이션으로 만든 타격음과, 그 재질 파라미터를 추정해 다시 렌더링한 소리를 비교합니다.",
-    guide:"이 섹션의 두 소리는 대체로 매우 비슷합니다. 그래도 <b>피치가 조금 달라도 재질 특성이 비슷하면 “유사함”</b>으로 판단해 주세요."
+/* ============================ i18n ============================ */
+const T = {
+  ko:{
+    brand:"청취 실험", venue:"학술 연구용 청취 실험 · 논문 부속 자료",
+    introTitle:"임팩트 사운드 재질 유사도 청취 평가",
+    introLead:"본 실험은 물체를 두드릴 때 나는 소리(impact sound)로부터 재질을 추정하는 연구의 지각 평가입니다. 두 개의 섹션(합성음 · 실제 녹음)으로 구성되며, 약 2–4분이 소요됩니다. 정숙한 환경에서 헤드폰 착용을 권장합니다.",
+    procHead:"진행 방법",
+    proc1:"각 문항에서 두 개의 소리(A, B)를 제시합니다. 두 소리를 모두 최소 한 번 이상 청취해 주십시오.",
+    proc2:"두 소리의 <b>재질감(음색·감쇠·타격 특성)</b>이 서로 얼마나 유사한지 <b>유사함 / 애매 / 다름</b> 중에서 선택합니다.",
+    proc3:"소리의 제시 순서는 무작위이며, 어느 쪽이 원본인지는 표시되지 않습니다.",
+    criterion:"⚑ <b>평가 기준</b> — 절대적 음높이(피치)의 차이는 무시하고, <b>동일한 재질을 두드린 소리로 지각되는지</b>를 기준으로 판단해 주십시오. 음높이가 다소 다르더라도 재질 특성이 유사하면 <b>“유사함”</b>으로 응답하시면 됩니다.",
+    nameLabel:"성함 (실명)",
+    nameHint:"중복 참여 방지 및 데이터 검증 목적으로만 사용되며, 분석 시 익명 처리됩니다. 신분증에 기재된 성명 그대로 입력해 주십시오.",
+    envLabel:"청취 환경", envChoose:"선택…", envHead:"헤드폰", envEar:"이어폰", envSpk:"스피커",
+    startBtn:"참여 시작 →", startHintNeed:"성함과 청취 환경을 입력해 주십시오.",
+    consent:(a)=>`본 청취 실험은 <b>학술 연구</b> 목적으로 수행되며, 참여는 전적으로 자발적이고 언제든 중단할 수 있습니다. 수집된 응답은 <b>익명으로</b> 처리되어 통계적 분석에만 사용되며 그 외의 목적으로 이용되지 않습니다.<br><br>${a}`,
+    authors:"<b>저자</b>: Hyebin Cho<sup>1,*</sup>, Bumsoo Kim<sup>2,*</sup>, Joon Son Chung<sup>1</sup><br><sup>1</sup>KAIST &nbsp; <sup>2</sup>Chung-Ang University &nbsp;·&nbsp; <sup>*</sup>공동 제1저자 (equal contribution)",
+    blockedTitle:"이미 참여하셨습니다", blockedBody:"이 브라우저에서 이미 응답이 완료되었습니다. 참여해 주셔서 감사합니다.",
+    reset:"(연구자용) 이 기기의 참여 기록 초기화",
+    dupBlock:"입력하신 성함으로 이미 응답이 제출되었습니다. 1인 1회만 참여 가능합니다.",
+    famPill:"사전 청취", famTitle:"재질별 타격음 익히기",
+    famLead:"각 재질의 대표 물체(3D)와 실제 타격음 예시입니다. 예시는 같은 물체를 서로 다르게 타격한 소리입니다. 재생하여 “이 재질은 이러한 소리”라는 기준을 익힌 뒤 시작해 주십시오.",
+    famHint:"각 재질을 한 번씩 청취하시기를 권장합니다.", famStart:"확인했습니다, 시작 →", ex:"예시",
+    secStart:"이 섹션 시작 →", sectionOf:(i,n)=>`섹션 ${i} / ${n}`, secCount:(n)=>`총 ${n}개 문항`,
+    stepText:(si,sn,i,n)=>`섹션 ${si}/${sn} · 문항 ${i} / ${n}`,
+    soundA:"소리 A", soundB:"소리 B", playA:"A 재생", playB:"B 재생",
+    notPlayed:"미청취", playedOk:"청취함",
+    question:"두 소리의 재질감이 서로 유사합니까? <span class='muted' style='font-weight:400'>(음높이 차이는 무시)</span>",
+    cSim:"유사함", cSimS:"같은 재질로 지각됨", cTie:"애매", cTieS:"판단하기 어려움", cDif:"다름", cDifS:"다른 재질로 지각됨",
+    hintNeedPlay:"A와 B를 모두 청취해야 합니다.", hintNeedChoice:"유사함 / 애매 / 다름 중 하나를 선택해 주십시오.", hintReady:"선택됨 — 다음으로.",
+    nextBtn:"다음 →", doneTitle:"응답이 완료되었습니다. 감사합니다.",
+    dlBtn:"응답 결과(JSON) 저장",
+    savedGas:"응답이 정상적으로 제출되었습니다. 감사합니다.", savedLocal:"응답이 JSON 파일로 저장되었습니다. 담당 연구자에게 전달해 주십시오.",
+    saveErr:"제출 중 오류가 발생했습니다. 새로고침하지 마시고 담당 연구자에게 알려 주십시오.",
+    statsHead:"응답 통계 (참여자 본인)",
+    thGroup:"조건", thSim:"유사함", thTie:"애매", thDif:"다름",
+    expSim:"기대 유사함", expDif:"기대 다름",
+    noteMeas:"<b>rerender</b>: 재렌더 재질 유사도 측정값 (유사함이 높을수록 재질을 잘 재현).",
+    noteAnchor:"<b>대조 조건</b> — identical/gtvar는 유사함이, foil은 <b>다름</b>이 정상입니다. foil은 <b>의도적으로 다른 물체·재질</b>을 제시한 항목으로, 다름 응답이 오답이 아닙니다. 초록 표시가 기대 방향입니다.",
+    noteSanity:(a,b)=>`응답 성실도: ${a}${a&&b?" · ":""}${b}`,
   },
-  real:{
-    label:"섹션: 실제 녹음 (Real)",
-    desc:"실제 물체를 두드려 녹음한 소리와, 우리 모델이 추정한 재질로 렌더링한 소리를 비교합니다.",
-    guide:"실제 녹음이라 <b>음 높이(피치)가 다를 수 있습니다.</b> 음 높이 차이는 <b>무시</b>하고, <b>재질 특성(음색·감쇠·타격감)이 비슷하면 “유사함”</b>으로 판단해 주세요. 합성음 섹션과 <b>기준을 따로</b> 두고 이 섹션 안에서만 상대적으로 비교하시면 됩니다."
+  en:{
+    brand:"Listening Study", venue:"Academic listening experiment · supplementary to the paper",
+    introTitle:"Perceptual evaluation of material similarity from impact sounds",
+    introLead:"This experiment is the perceptual evaluation for a study that estimates material from the sound of striking an object (impact sound). It has two sections (synthetic · real recordings) and takes about 2–4 minutes. Please use headphones in a quiet environment.",
+    procHead:"Procedure",
+    proc1:"Each trial presents two sounds (A, B). Please listen to both at least once.",
+    proc2:"Judge how similar the two sounds are in <b>material character (timbre, damping, attack)</b> and choose <b>Similar / Unsure / Different</b>.",
+    proc3:"Presentation order is randomized and the source (original) is not indicated.",
+    criterion:"⚑ <b>Judgement criterion</b> — Ignore absolute pitch differences and judge whether the two sounds are perceived as striking the <b>same material</b>. If the material character is similar despite a pitch offset, please answer <b>“Similar”</b>.",
+    nameLabel:"Full name (legal name)",
+    nameHint:"Used only to prevent duplicate participation and to verify data; anonymized in analysis. Please enter your name exactly as on your ID.",
+    envLabel:"Listening device", envChoose:"Select…", envHead:"Headphones", envEar:"Earphones", envSpk:"Speakers",
+    startBtn:"Start →", startHintNeed:"Please enter your name and listening device.",
+    consent:(a)=>`This listening experiment is conducted for <b>academic research</b>. Participation is entirely voluntary and may be stopped at any time. Responses are collected <b>anonymously</b>, used only for statistical analysis, and for no other purpose.<br><br>${a}`,
+    authors:"<b>Authors</b>: Hyebin Cho<sup>1,*</sup>, Bumsoo Kim<sup>2,*</sup>, Joon Son Chung<sup>1</sup><br><sup>1</sup>KAIST &nbsp; <sup>2</sup>Chung-Ang University &nbsp;·&nbsp; <sup>*</sup>equal contribution",
+    blockedTitle:"You have already participated", blockedBody:"A completed response already exists in this browser. Thank you for your participation.",
+    reset:"(researcher) reset this device’s participation record",
+    dupBlock:"A response has already been submitted under this name. Only one response per person is allowed.",
+    famPill:"Familiarization", famTitle:"Learn each material’s impact sound",
+    famLead:"A representative object (3D) and example impact sounds for each material. The examples are different strikes of the same object. Please listen to build a sense of “this material sounds like this” before you begin.",
+    famHint:"We recommend listening to each material once.", famStart:"Got it, start →", ex:"Ex.",
+    secStart:"Start this section →", sectionOf:(i,n)=>`Section ${i} / ${n}`, secCount:(n)=>`${n} trials`,
+    stepText:(si,sn,i,n)=>`Section ${si}/${sn} · Trial ${i} / ${n}`,
+    soundA:"Sound A", soundB:"Sound B", playA:"Play A", playB:"Play B",
+    notPlayed:"not played", playedOk:"played",
+    question:"Are the two sounds similar in material? <span class='muted' style='font-weight:400'>(ignore pitch)</span>",
+    cSim:"Similar", cSimS:"same material", cTie:"Unsure", cTieS:"hard to tell", cDif:"Different", cDifS:"different material",
+    hintNeedPlay:"You must listen to both A and B.", hintNeedChoice:"Please choose Similar / Unsure / Different.", hintReady:"Selected — continue.",
+    nextBtn:"Next →", doneTitle:"Your responses are complete. Thank you.",
+    dlBtn:"Save responses (JSON)",
+    savedGas:"Your responses were submitted successfully. Thank you.", savedLocal:"Responses saved as a JSON file. Please send it to the researcher.",
+    saveErr:"An error occurred while submitting. Please do not refresh and notify the researcher.",
+    statsHead:"Your response summary",
+    thGroup:"Condition", thSim:"Similar", thTie:"Unsure", thDif:"Different",
+    expSim:"expect Similar", expDif:"expect Different",
+    noteMeas:"<b>rerender</b>: the material-similarity measure (higher Similar = better material reproduction).",
+    noteAnchor:"<b>Control conditions</b> — identical/gtvar should be Similar; foil should be <b>Different</b>. Foils intentionally pair <b>different objects and materials</b>, so a Different response is correct, not an error. Green marks the expected direction.",
+    noteSanity:(a,b)=>`Response reliability: ${a}${a&&b?" · ":""}${b}`,
   }
 };
+let lang = (navigator.language||"en").toLowerCase().startsWith("ko") ? "ko" : "en";
+const t = k => (T[lang][k] ?? T.en[k] ?? k);
+
+/* section + condition labels (per language) */
+function sectionInfo(dom){
+  const ko = {
+    synthetic:{label:"섹션: 합성음 (Synthetic)",
+      desc:"물리 시뮬레이션으로 합성한 타격음과, 그로부터 추정한 재질 파라미터로 재렌더링한 소리를 비교합니다.",
+      guide:"이 섹션의 두 소리는 대체로 매우 유사합니다. 그럼에도 피치 차이보다 재질 특성을 기준으로 판단해 주십시오."},
+    real:{label:"섹션: 실제 녹음 (Real)",
+      desc:"실제 물체를 두드려 녹음한 소리와, 추정된 재질로 재렌더링한 소리를 비교합니다.",
+      guide:"실제 녹음이므로 음높이(피치)가 다를 수 있습니다. <b>음높이 차이는 무시</b>하고 <b>재질 특성이 유사하면 “유사함”</b>으로 판단하십시오. 합성음 섹션과는 <b>기준을 분리</b>하여 이 섹션 안에서 상대적으로 평가해 주십시오."}
+  };
+  const en = {
+    synthetic:{label:"Section: Synthetic",
+      desc:"Compare a physically-simulated impact sound with a re-rendering from the estimated material parameters.",
+      guide:"The two sounds here are generally very similar. Still, judge by material character rather than pitch."},
+    real:{label:"Section: Real recordings",
+      desc:"Compare a real recorded impact with a re-rendering from the estimated material.",
+      guide:"These are real recordings, so pitch may differ. <b>Ignore pitch</b> and answer <b>“Similar” when the material character matches</b>. Keep this section’s criterion separate from the synthetic one and judge relatively within this section."}
+  };
+  return (lang==="ko"?ko:en)[dom] || {label:dom,desc:"",guide:""};
+}
+// [label, sub, expected]
+function grpLabel(k){
+  const ko={
+    "synthetic/rerender":["synthetic · rerender","입력 vs 재렌더 (측정)",null],
+    "synthetic/identical":["synthetic · identical ↑","동일 소리 2회 (상한, 정답=유사함)","sim"],
+    "synthetic/foil":["synthetic · foil ↓","다른 물체·다른 재질 (대비, 정답=다름)","dif"],
+    "real/rerender":["real · rerender","입력 vs 재렌더 (측정)",null],
+    "real/gtvar":["real · gtvar","동일 물체·다른 녹음 (GT 천장)","sim"],
+    "real/foil":["real · foil ↓","다른 물체·다른 재질 (대비, 정답=다름)","dif"],
+  };
+  const en={
+    "synthetic/rerender":["synthetic · rerender","input vs re-render (measure)",null],
+    "synthetic/identical":["synthetic · identical ↑","same clip twice (upper bound, expect Similar)","sim"],
+    "synthetic/foil":["synthetic · foil ↓","different object & material (contrast, expect Different)","dif"],
+    "real/rerender":["real · rerender","input vs re-render (measure)",null],
+    "real/gtvar":["real · gtvar","same object, different take (GT ceiling)","sim"],
+    "real/foil":["real · foil ↓","different object & material (contrast, expect Different)","dif"],
+  };
+  return (lang==="ko"?ko:en)[k] || [k,"",null];
+}
 const DOMLABEL={synthetic:"SYNTHETIC", real:"REAL"};
 
+/* ============================ STATE ============================ */
 const $ = s => document.querySelector(s);
 let byDomain={}, sectionOrder=[], secIdx=0, list=[], idx=0, FAM=[];
 let responses=[], session={}, order=null, choice=null, played={A:false,B:false};
 let totalDone=0, totalN=0;
-const audio = new Audio();
-const famAudio = new Audio();
+const audio = new Audio(), famAudio = new Audio();
 
 function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+/* apply static translations */
+function applyLang(){
+  document.documentElement.lang = lang;
+  document.querySelectorAll("[data-t]").forEach(el=>{ el.innerHTML = t(el.getAttribute("data-t")); });
+  $("#consentBlock").innerHTML = t("consent")(t("authors"));
+  $("#resetLink").textContent = t("reset");
+  $("#pid").placeholder = lang==="ko" ? "예: 홍길동" : "e.g., Jane Doe";
+  checkStart();
+}
+function updateTrialTexts(){
+  if(!list.length) return;
+  $("#stepText").textContent=t("stepText")(secIdx+1,sectionOrder.length,idx+1,list.length);
+  $("#playedA").textContent = played.A ? t("playedOk") : t("notPlayed");
+  $("#playedB").textContent = played.B ? t("playedOk") : t("notPlayed");
+  gate();
+}
+function refreshDynamic(){
+  if(!$("#familiarize").hidden) renderFamiliarize();
+  if(!$("#section").hidden) showSection();
+  if(!$("#trial").hidden) updateTrialTexts();
+  if(!$("#done").hidden) $("#stats").innerHTML=renderStats(responses);
+}
+$("#langBtn").onclick=()=>{ lang = lang==="ko"?"en":"ko"; applyLang(); refreshDynamic(); };
 $("#themeBtn").onclick=()=>{const r=document.documentElement;r.dataset.theme=r.dataset.theme==="dark"?"light":"dark";};
-function checkStart(){$("#startBtn").disabled=!($("#pid").value.trim()&&$("#env").value);}
+
+function checkStart(){
+  const ok = $("#pid").value.trim().length>=2 && $("#env").value;
+  $("#startBtn").disabled=!ok;
+  $("#startHint").textContent = ok ? "" : t("startHintNeed");
+}
 $("#pid").oninput=checkStart; $("#env").onchange=checkStart;
 
+/* ============================ LOAD ============================ */
 async function loadTrials(){
-  let T=[];
-  try{ T = await (await fetch(CONFIG.JSON_URL)).json(); }
-  catch(e){ alert("trials.json 로드 실패: "+e); }
+  let all=[];
+  try{ all = await (await fetch(CONFIG.JSON_URL)).json(); }catch(e){ alert("trials.json load failed: "+e); }
   try{ FAM = await (await fetch(CONFIG.FAM_URL)).json(); }catch(e){ FAM=[]; }
-  byDomain={};
-  T.forEach(t=>{(byDomain[t.domain]=byDomain[t.domain]||[]).push(t);});
+  byDomain={}; all.forEach(x=>{(byDomain[x.domain]=byDomain[x.domain]||[]).push(x);});
   if(CONFIG.SHUFFLE_TRIALS) Object.values(byDomain).forEach(shuffle);
-  sectionOrder=Object.keys(byDomain);
-  // keep a sensible default order, optionally randomize which section is first
-  sectionOrder.sort();                       // real, synthetic
-  sectionOrder.reverse();                     // synthetic, real
+  sectionOrder=Object.keys(byDomain).sort().reverse();          // synthetic, real
   if(CONFIG.RANDOMIZE_SECTION_ORDER && sectionOrder.length>1 && Math.random()<.5) sectionOrder.reverse();
-  totalN=T.length;
-  $("#nTrialsLabel").textContent=totalN;
+  totalN=all.length;
+  applyLang();
+  // per-browser completion block
+  try{ if(localStorage.getItem(CONFIG.LS_KEY)){ $("#intro").hidden=true; $("#blocked").hidden=false; } }catch(e){}
+}
+$("#resetLink").onclick=()=>{ try{localStorage.removeItem(CONFIG.LS_KEY);}catch(e){} location.reload(); };
+
+/* JSONP duplicate pre-check against GAS (optional) */
+function jsonp(url){
+  return new Promise((res,rej)=>{
+    const cb="__imcb"+Date.now(); const s=document.createElement("script");
+    const to=setTimeout(()=>{cleanup();rej("timeout");},6000);
+    function cleanup(){clearTimeout(to);delete window[cb];s.remove();}
+    window[cb]=d=>{cleanup();res(d);};
+    s.src=url+(url.includes("?")?"&":"?")+"callback="+cb;
+    s.onerror=()=>{cleanup();rej("error");};
+    document.body.appendChild(s);
+  });
 }
 
-$("#startBtn").onclick=()=>{
-  session={pid:$("#pid").value.trim(), env:$("#env").value, ua:navigator.userAgent,
+/* ============================ FLOW ============================ */
+$("#startBtn").onclick=async ()=>{
+  const name=$("#pid").value.trim();
+  // optional server-side duplicate check
+  if(CONFIG.GAS_URL){
+    try{
+      const r=await jsonp(`${CONFIG.GAS_URL}?action=check&name=${encodeURIComponent(name.toLowerCase())}`);
+      if(r && r.used){ alert(t("dupBlock")); return; }
+    }catch(e){ /* network issue -> allow, localStorage still guards */ }
+  }
+  session={pid:name, env:$("#env").value, lang, ua:navigator.userAgent,
            started:new Date().toISOString(), n_trials:totalN, section_order:sectionOrder.slice()};
   $("#intro").hidden=true; secIdx=0;
-  if(FAM && FAM.length){ renderFamiliarize(); $("#familiarize").hidden=false; }
-  else showSection();
+  if(FAM && FAM.length){ renderFamiliarize(); $("#familiarize").hidden=false; } else showSection();
 };
 
 const PLAYSVG='<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
@@ -285,145 +456,120 @@ function renderFamiliarize(){
   const g=$("#famGrid"); g.innerHTML="";
   FAM.forEach(card=>{
     const el=document.createElement("div"); el.className="famcard";
-    const mv=`<model-viewer src="../${card.glb}" camera-controls disable-zoom
-      auto-rotate auto-rotate-delay="0" rotation-per-second="30deg"
-      interaction-prompt="none" shadow-intensity="0.6" exposure="1.0" loading="eager"></model-viewer>`;
-    const plays=card.audios.map((a,i)=>`<button class="pbtn" data-src="../${a}">${PLAYSVG}${card.audios.length>1?('예시 '+(i+1)):'재생'}</button>`).join("");
+    const mv=`<model-viewer src="../${card.glb}" camera-controls disable-zoom auto-rotate
+      auto-rotate-delay="0" rotation-per-second="30deg" interaction-prompt="none"
+      shadow-intensity="0.6" exposure="1.0" loading="eager"></model-viewer>`;
+    const plays=card.audios.map((a,i)=>`<button class="pbtn" data-src="../${a}">${PLAYSVG}${t("ex")} ${i+1}</button>`).join("");
     el.innerHTML=`${mv}<div class="m">${card.material}</div><div class="plays">${plays}</div>`;
     g.appendChild(el);
   });
   g.querySelectorAll(".pbtn").forEach(b=>b.onclick=()=>{
     famAudio.pause(); famAudio.src=b.dataset.src; famAudio.currentTime=0; famAudio.play();
     g.querySelectorAll(".pbtn").forEach(x=>x.classList.remove("playing"));
-    b.classList.add("playing");
-    famAudio.onended=()=>b.classList.remove("playing");
+    b.classList.add("playing"); famAudio.onended=()=>b.classList.remove("playing");
   });
 }
 $("#famStart").onclick=()=>{ famAudio.pause(); $("#familiarize").hidden=true; secIdx=0; showSection(); };
 
 function showSection(){
-  const dom=sectionOrder[secIdx], info=SECTION_INFO[dom]||{label:dom,desc:"",guide:""};
-  $("#secPill").textContent=`SECTION ${secIdx+1} / ${sectionOrder.length}`;
-  $("#secTitle").textContent=info.label;
-  $("#secDesc").textContent=info.desc;
+  const dom=sectionOrder[secIdx], info=sectionInfo(dom);
+  $("#secPill").textContent=t("sectionOf")(secIdx+1,sectionOrder.length);
+  $("#secTitle").textContent=info.label; $("#secDesc").textContent=info.desc;
   $("#secGuide").innerHTML="⚑ "+info.guide;
-  $("#secCount").textContent=`이 섹션 ${byDomain[dom].length}문항`;
+  $("#secCount").textContent=t("secCount")(byDomain[dom].length);
   $("#trial").hidden=true; $("#section").hidden=false;
 }
-$("#secStart").onclick=()=>{
-  list=byDomain[sectionOrder[secIdx]]; idx=0;
-  $("#section").hidden=true; $("#trial").hidden=false; renderTrial();
-};
+$("#secStart").onclick=()=>{ list=byDomain[sectionOrder[secIdx]]; idx=0; $("#section").hidden=true; $("#trial").hidden=false; renderTrial(); };
 
 function renderTrial(){
-  const t=list[idx];
+  const tr=list[idx];
   order = Math.random()<.5 ? {A:"a",B:"b"} : {A:"b",B:"a"};
   played={A:false,B:false}; choice=null; audio.pause();
-  $("#stepText").textContent=`섹션 ${secIdx+1}/${sectionOrder.length} · 문항 ${idx+1} / ${list.length}`;
-  $("#domText").textContent=DOMLABEL[t.domain]||t.domain;
-  $("#bar").style.width=((totalDone)/totalN*100)+"%";
-  $("#playedA").textContent="미청취"; $("#playedA").classList.remove("ok");
-  $("#playedB").textContent="미청취"; $("#playedB").classList.remove("ok");
+  $("#stepText").textContent=t("stepText")(secIdx+1,sectionOrder.length,idx+1,list.length);
+  $("#domText").textContent=DOMLABEL[tr.domain]||tr.domain;
+  $("#bar").style.width=(totalDone/totalN*100)+"%";
+  $("#playedA").textContent=t("notPlayed"); $("#playedA").classList.remove("ok");
+  $("#playedB").textContent=t("notPlayed"); $("#playedB").classList.remove("ok");
   document.querySelectorAll(".choice").forEach(c=>c.classList.remove("sel"));
-  $("#nextBtn").disabled=true; $("#hint").textContent="A·B를 모두 들어야 선택할 수 있습니다.";
+  $("#nextBtn").disabled=true; $("#hint").textContent=t("hintNeedPlay");
 }
-function urlFor(side){const t=list[idx];return "../"+t[order[side]];}
+function urlFor(side){const tr=list[idx];return "../"+tr[order[side]];}
 function play(side,btn){
   audio.pause(); audio.src=urlFor(side); audio.currentTime=0; audio.play();
   document.querySelectorAll(".play").forEach(b=>b.classList.remove("playing"));
-  btn.classList.add("playing");
-  audio.onended=()=>btn.classList.remove("playing");
+  btn.classList.add("playing"); audio.onended=()=>btn.classList.remove("playing");
 }
-$("#playA").onclick=e=>{play("A",e.currentTarget);played.A=true;$("#playedA").textContent="들음";$("#playedA").classList.add("ok");gate();};
-$("#playB").onclick=e=>{play("B",e.currentTarget);played.B=true;$("#playedB").textContent="들음";$("#playedB").classList.add("ok");gate();};
+$("#playA").onclick=e=>{play("A",e.currentTarget);played.A=true;$("#playedA").textContent=t("playedOk");$("#playedA").classList.add("ok");gate();};
+$("#playB").onclick=e=>{play("B",e.currentTarget);played.B=true;$("#playedB").textContent=t("playedOk");$("#playedB").classList.add("ok");gate();};
 document.querySelectorAll(".choice").forEach(c=>c.onclick=()=>{
-  choice=c.dataset.v;
-  document.querySelectorAll(".choice").forEach(x=>x.classList.remove("sel"));
-  c.classList.add("sel"); gate();
+  choice=c.dataset.v; document.querySelectorAll(".choice").forEach(x=>x.classList.remove("sel")); c.classList.add("sel"); gate();
 });
 function gate(){
   const both=played.A&&played.B;
   $("#nextBtn").disabled=!(both&&choice);
-  $("#hint").textContent = !both ? "A·B를 모두 들어야 합니다."
-                         : !choice ? "유사함 / 애매 / 다름 중 선택하세요." : "선택됨 — 다음으로.";
+  $("#hint").textContent = !both ? t("hintNeedPlay") : !choice ? t("hintNeedChoice") : t("hintReady");
 }
 $("#nextBtn").onclick=()=>{
-  const t=list[idx];
-  responses.push({trial_id:t.id, domain:t.domain, pair_type:t.pair_type, section_index:secIdx,
-                  clip_A:order.A, clip_B:order.B, choice:choice, meta:t.meta||{}, t:new Date().toISOString()});
+  const tr=list[idx];
+  responses.push({trial_id:tr.id, domain:tr.domain, pair_type:tr.pair_type, section_index:secIdx,
+                  clip_A:order.A, clip_B:order.B, choice, meta:tr.meta||{}, t:new Date().toISOString()});
   idx++; totalDone++;
-  if(idx<list.length){ renderTrial(); }
-  else { secIdx++; if(secIdx<sectionOrder.length) showSection(); else finish(); }
+  if(idx<list.length) renderTrial(); else { secIdx++; if(secIdx<sectionOrder.length) showSection(); else finish(); }
 };
 
-const CHLABEL={similar:"유사함",tie:"애매",different:"다름"};
-// [label, sub, expected]  expected: "sim"|"dif"|null  (anchor's correct answer)
-const GRPLABEL={
-  "synthetic/rerender":["synthetic · rerender","input vs 우리 재렌더 (측정)",null],
-  "synthetic/identical":["synthetic · identical ↑","같은 소리 2번 (상한, 정답=유사함)","sim"],
-  "synthetic/foil":["synthetic · foil ↓","다른 물체·다른 재질 (대비, 정답=다름)","dif"],
-  "real/rerender":["real · rerender","real input vs 재렌더 (측정)",null],
-  "real/gtvar":["real · gtvar","같은 물체·다른 take (GT 천장)","sim"],
-  "real/foil":["real · foil ↓","다른 물체·다른 재질 (대비, 정답=다름)","dif"],
-};
+/* ============================ STATS + SAVE ============================ */
 function renderStats(res){
   const g={};
   res.forEach(r=>{const k=r.domain+"/"+r.pair_type;(g[k]=g[k]||{similar:0,tie:0,different:0})[r.choice]++;});
-  // measures first, then anchors (identical ↑ / gtvar) and foils (↓) grouped per domain
-  const order=["synthetic/rerender","synthetic/identical","synthetic/foil",
-               "real/rerender","real/gtvar","real/foil"];
+  const order=["synthetic/rerender","synthetic/identical","synthetic/foil","real/rerender","real/gtvar","real/foil"];
   let rows="";
   order.forEach(k=>{
     if(!g[k])return;
     const c=g[k], n=c.similar+c.tie+c.different, pc=x=>n?Math.round(x/n*100):0;
-    const [lab,sub,exp]=GRPLABEL[k]||[k,"",null];
-    const isFoil=k.endsWith("/foil"), isAnchor=exp!=null;
-    // highlight the cell that SHOULD dominate for an anchor (green=as-expected)
-    const mark=(who)=> exp===who ? ' style="font-weight:700;color:var(--good)"' : '';
-    const okTag = isAnchor
-        ? `<span class="oktag">${exp==='sim'?'기대 유사함':'기대 다름'} · ${exp==='sim'?pc(c.similar):pc(c.different)}%</span>` : '';
+    const [lab,sub,exp]=grpLabel(k); const isFoil=k.endsWith("/foil");
+    const mark=w=> exp===w?' style="font-weight:700;color:var(--good)"':'';
+    const okTag = exp!=null ? `<span class="oktag">${exp==="sim"?t("expSim"):t("expDif")} · ${exp==="sim"?pc(c.similar):pc(c.different)}%</span>`:'';
     rows+=`<tr${isFoil?' class="foilrow"':''}>
       <td class="grp">${lab}<div class="sub">${sub} ${okTag}</div></td>
-      <td${mark('sim')}>${c.similar} <span class="sub">${pc(c.similar)}%</span></td>
+      <td${mark("sim")}>${c.similar} <span class="sub">${pc(c.similar)}%</span></td>
       <td>${c.tie} <span class="sub">${pc(c.tie)}%</span></td>
-      <td${mark('dif')}>${c.different} <span class="sub">${pc(c.different)}%</span></td>
-      <td style="min-width:90px"><div class="barmini">
+      <td${mark("dif")}>${c.different} <span class="sub">${pc(c.different)}%</span></td>
+      <td style="min-width:88px"><div class="barmini">
         <i class="b-sim" style="width:${pc(c.similar)}%"></i>
         <i class="b-tie" style="width:${pc(c.tie)}%"></i>
         <i class="b-dif" style="width:${pc(c.different)}%"></i></div></td></tr>`;
   });
   const ic=g["synthetic/identical"], icn=ic?ic.similar+ic.tie+ic.different:0;
   const fo=["synthetic/foil","real/foil"].reduce((o,k)=>{const c=g[k];if(c){o.d+=c.different;o.n+=c.similar+c.tie+c.different;}return o;},{d:0,n:0});
-  const sane = ic ? `동일-소리 ${ic.similar}/${icn} 유사함` : "";
-  const foChk = fo.n ? `대비(foil) ${fo.d}/${fo.n} 다름 (${Math.round(fo.d/fo.n*100)}%)` : "";
-  return `<div class="statsblock"><h2>내 응답 통계</h2>
+  const sane = ic ? (lang==="ko"?`동일-소리 ${ic.similar}/${icn} 유사함`:`identical ${ic.similar}/${icn} Similar`) : "";
+  const foChk = fo.n ? (lang==="ko"?`대비(foil) ${fo.d}/${fo.n} 다름`:`foil ${fo.d}/${fo.n} Different`) : "";
+  return `<div class="statsblock"><h2>${t("statsHead")}</h2>
     <table class="stats">
-      <tr><th style="text-align:left">그룹</th><th>유사함</th><th>애매</th><th>다름</th><th></th></tr>
+      <tr><th style="text-align:left">${t("thGroup")}</th><th>${t("thSim")}</th><th>${t("thTie")}</th><th>${t("thDif")}</th><th></th></tr>
       ${rows}
     </table>
-    <div class="note">
-      • <b>rerender</b> = 실제 측정값(높은 유사함 = 재렌더가 재질을 잘 살림).<br>
-      • <b>anchor</b> — <b>identical/gtvar</b>는 유사함이 정상(상한·천장), <b>foil</b>은
-        <b>의도적으로 다른 물체·재질</b>이라 <b>다름이 정답</b>입니다(문제 아님). 초록으로 표시된 값이 기대 방향.<br>
-      • 성실도: ${sane}${sane&&foChk?' · ':''}${foChk} → 이 값들이 높으면 정상적으로 응답한 것.
-    </div></div>`;
+    <div class="note">• ${t("noteMeas")}<br>• ${t("noteAnchor")}<br>• ${t("noteSanity")(sane,foChk)}</div></div>`;
 }
 function download(payload){
   const blob=new Blob([JSON.stringify(payload,null,2)],{type:"application/json"});
-  const a=document.createElement("a");
-  a.href=URL.createObjectURL(blob);
-  a.download=`impactmat_study_${session.pid||"anon"}_${Date.now()}.json`;
+  const a=document.createElement("a"); a.href=URL.createObjectURL(blob);
+  a.download=`impactmat_study_${(session.pid||"anon").replace(/\s+/g,"_")}_${Date.now()}.json`;
   document.body.appendChild(a); a.click(); a.remove();
 }
 let PAYLOAD=null;
-function finish(){
+async function finish(){
   audio.pause(); $("#trial").hidden=true; $("#section").hidden=true; $("#done").hidden=false; $("#bar").style.width="100%";
   PAYLOAD={session, responses, finished:new Date().toISOString(), n:responses.length,
            tally:responses.reduce((o,r)=>{const k=r.domain+"/"+r.pair_type+"/"+r.choice;o[k]=(o[k]||0)+1;return o;},{})};
   console.log("STUDY RESULT",PAYLOAD);
   $("#stats").innerHTML=renderStats(responses);
-  download(PAYLOAD);
-  $("#doneMsg").textContent="응답이 저장되었고, 아래에 통계를 표시했습니다.";
+  try{ localStorage.setItem(CONFIG.LS_KEY, new Date().toISOString()); }catch(e){}
+  if(CONFIG.GAS_URL){
+    try{
+      await fetch(CONFIG.GAS_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(PAYLOAD)});
+      $("#doneMsg").textContent=t("savedGas");
+    }catch(e){ console.error(e); download(PAYLOAD); $("#doneMsg").textContent=t("saveErr"); }
+  } else { download(PAYLOAD); $("#doneMsg").textContent=t("savedLocal"); }
 }
 $("#dlBtn").onclick=()=>{ if(PAYLOAD) download(PAYLOAD); };
 

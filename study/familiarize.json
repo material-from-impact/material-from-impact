@@ -5,7 +5,13 @@
     "glb": "assets/models/obj_35.glb",
     "audios": [
       "assets/study/fam/fam_Polycarbonate_0.wav",
-      "assets/study/fam/fam_Polycarbonate_1.wav"
+      "assets/study/fam/fam_Polycarbonate_1.wav",
+      "assets/study/fam/fam_Polycarbonate_2.wav"
+    ],
+    "audio_objs": [
+      "35",
+      "35",
+      "35"
     ]
   },
   {
@@ -14,7 +20,13 @@
     "glb": "assets/models/obj_89.glb",
     "audios": [
       "assets/study/fam/fam_Steel_0.wav",
-      "assets/study/fam/fam_Steel_1.wav"
+      "assets/study/fam/fam_Steel_1.wav",
+      "assets/study/fam/fam_Steel_2.wav"
+    ],
+    "audio_objs": [
+      "89",
+      "89",
+      "89"
     ]
   },
   {
@@ -23,7 +35,13 @@
     "glb": "assets/models/obj_1.glb",
     "audios": [
       "assets/study/fam/fam_Ceramic_0.wav",
-      "assets/study/fam/fam_Ceramic_1.wav"
+      "assets/study/fam/fam_Ceramic_1.wav",
+      "assets/study/fam/fam_Ceramic_2.wav"
+    ],
+    "audio_objs": [
+      "1",
+      "1",
+      "1"
     ]
   },
   {
@@ -32,7 +50,13 @@
     "glb": "assets/models/obj_94.glb",
     "audios": [
       "assets/study/fam/fam_Glass_0.wav",
-      "assets/study/fam/fam_Glass_1.wav"
+      "assets/study/fam/fam_Glass_1.wav",
+      "assets/study/fam/fam_Glass_2.wav"
+    ],
+    "audio_objs": [
+      "94",
+      "94",
+      "94"
     ]
   },
   {
@@ -41,7 +65,13 @@
     "glb": "assets/models/obj_31.glb",
     "audios": [
       "assets/study/fam/fam_Wood_0.wav",
-      "assets/study/fam/fam_Wood_1.wav"
+      "assets/study/fam/fam_Wood_1.wav",
+      "assets/study/fam/fam_Wood_2.wav"
+    ],
+    "audio_objs": [
+      "31",
+      "31",
+      "31"
     ]
   }
 ]
