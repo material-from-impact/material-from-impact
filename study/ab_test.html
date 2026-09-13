@@ -469,7 +469,7 @@ $("#secBack").onclick=()=>{
 };
 $("#trialBack").onclick=()=>{
   audio.pause();
-  if(idx>0){ idx--; totalDone--; responses.pop(); renderTrial(); }   // undo last, redo previous
+  if(idx>0){ idx--; totalDone--; const saved=responses.pop(); renderTrial(saved); }   // restore prior answer
   else { $("#trial").hidden=true; showSection(); }                    // first trial -> section intro
 };
 
@@ -504,17 +504,21 @@ function showSection(){
 }
 $("#secStart").onclick=()=>{ list=byDomain[sectionOrder[secIdx]]; idx=0; $("#section").hidden=true; $("#trial").hidden=false; renderTrial(); };
 
-function renderTrial(){
+function renderTrial(saved){
   const tr=list[idx];
-  order = Math.random()<.5 ? {A:"a",B:"b"} : {A:"b",B:"a"};
-  played={A:false,B:false}; choice=null; audio.pause();
+  audio.pause();
+  if(saved){                                   // going back: restore prior A/B order, plays, choice
+    order={A:saved.clip_A, B:saved.clip_B}; played={A:true,B:true}; choice=saved.choice;
+  } else {
+    order = Math.random()<.5 ? {A:"a",B:"b"} : {A:"b",B:"a"}; played={A:false,B:false}; choice=null;
+  }
   $("#stepText").textContent=t("stepText")(secIdx+1,sectionOrder.length,idx+1,list.length);
   $("#domText").textContent=DOMLABEL[tr.domain]||tr.domain;
   $("#bar").style.width=(totalDone/totalN*100)+"%";
-  $("#playedA").textContent=t("notPlayed"); $("#playedA").classList.remove("ok");
-  $("#playedB").textContent=t("notPlayed"); $("#playedB").classList.remove("ok");
-  document.querySelectorAll(".choice").forEach(c=>c.classList.remove("sel"));
-  $("#nextBtn").disabled=true; $("#hint").textContent=t("hintNeedPlay");
+  $("#playedA").textContent = played.A ? t("playedOk") : t("notPlayed"); $("#playedA").classList.toggle("ok", played.A);
+  $("#playedB").textContent = played.B ? t("playedOk") : t("notPlayed"); $("#playedB").classList.toggle("ok", played.B);
+  document.querySelectorAll(".choice").forEach(c=>c.classList.toggle("sel", !!choice && c.dataset.v===choice));
+  gate();
 }
 function urlFor(side){const tr=list[idx];return "../"+tr[order[side]];}
 function play(side,btn){
