@@ -377,10 +377,14 @@ const DOMLABEL={synthetic:"SYNTHETIC", real:"REAL"};
 const $ = s => document.querySelector(s);
 let byDomain={}, sectionOrder=[], secIdx=0, list=[], idx=0, FAM=[];
 let responses=[], session={}, order=null, choice=null, played={A:false,B:false};
-let totalDone=0, totalN=0, maxReached=0;
+let totalN=0, maxReached=0;
+const ans={};                                    // saved answers by "secIdx:idx" (survive back & forward)
+function gbase(){let s=0;for(let j=0;j<secIdx;j++)s+=(byDomain[sectionOrder[j]]||[]).length;return s;}
+function gpos(){return gbase()+idx;}             // 0-based global trial position
 function updateBar(){
-  $("#bar").style.width=(totalN?totalDone/totalN*100:0)+"%";
-  $("#barMax").style.width=(totalN?Math.max(maxReached,totalDone)/totalN*100:0)+"%";
+  const cur=gpos();
+  $("#bar").style.width=(totalN?cur/totalN*100:0)+"%";
+  $("#barMax").style.width=(totalN?Math.max(maxReached,cur)/totalN*100:0)+"%";
 }
 const audio = new Audio(), famAudio = new Audio();
 
@@ -475,7 +479,7 @@ $("#secBack").onclick=()=>{
 };
 $("#trialBack").onclick=()=>{
   audio.pause();
-  if(idx>0){ idx--; totalDone--; const saved=responses.pop(); renderTrial(saved); }   // restore prior answer
+  if(idx>0){ idx--; renderTrial(); }                                 // answers are kept in `ans`
   else { $("#trial").hidden=true; showSection(); }                    // first trial -> section intro
 };
 
@@ -510,14 +514,16 @@ function showSection(){
 }
 $("#secStart").onclick=()=>{ list=byDomain[sectionOrder[secIdx]]; idx=0; $("#section").hidden=true; $("#trial").hidden=false; renderTrial(); };
 
-function renderTrial(saved){
+function renderTrial(){
   const tr=list[idx];
   audio.pause();
-  if(saved){                                   // going back: restore prior A/B order, plays, choice
+  const saved=ans[secIdx+":"+idx];             // restore if this trial was already answered
+  if(saved){
     order={A:saved.clip_A, B:saved.clip_B}; played={A:true,B:true}; choice=saved.choice;
   } else {
     order = Math.random()<.5 ? {A:"a",B:"b"} : {A:"b",B:"a"}; played={A:false,B:false}; choice=null;
   }
+  maxReached=Math.max(maxReached,gpos());
   $("#stepText").textContent=t("stepText")(secIdx+1,sectionOrder.length,idx+1,list.length);
   $("#domText").textContent=DOMLABEL[tr.domain]||tr.domain;
   updateBar();
@@ -544,9 +550,9 @@ function gate(){
 }
 $("#nextBtn").onclick=()=>{
   const tr=list[idx];
-  responses.push({trial_id:tr.id, domain:tr.domain, pair_type:tr.pair_type, section_index:secIdx,
-                  clip_A:order.A, clip_B:order.B, choice, meta:tr.meta||{}, t:new Date().toISOString()});
-  idx++; totalDone++; maxReached=Math.max(maxReached,totalDone);
+  ans[secIdx+":"+idx]={trial_id:tr.id, domain:tr.domain, pair_type:tr.pair_type, section_index:secIdx,
+                  clip_A:order.A, clip_B:order.B, choice, meta:tr.meta||{}, t:new Date().toISOString()};
+  idx++;
   if(idx<list.length) renderTrial(); else { secIdx++; if(secIdx<sectionOrder.length) showSection(); else finish(); }
 };
 
@@ -592,7 +598,13 @@ function download(payload){
 let PAYLOAD=null;
 async function finish(){
   audio.pause(); $("#trial").hidden=true; $("#section").hidden=true; $("#done").hidden=false;
-  maxReached=totalN; totalDone=totalN; updateBar();
+  maxReached=totalN; $("#bar").style.width="100%"; $("#barMax").style.width="100%";
+  // compile responses in presentation order from the saved answers
+  responses=[];
+  for(let j=0;j<sectionOrder.length;j++){
+    const L=(byDomain[sectionOrder[j]]||[]).length;
+    for(let i=0;i<L;i++){ const a=ans[j+":"+i]; if(a) responses.push(a); }
+  }
   PAYLOAD={session, responses, finished:new Date().toISOString(), n:responses.length,
            tally:responses.reduce((o,r)=>{const k=r.domain+"/"+r.pair_type+"/"+r.choice;o[k]=(o[k]||0)+1;return o;},{})};
   console.log("STUDY RESULT",PAYLOAD);
