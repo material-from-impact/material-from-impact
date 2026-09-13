@@ -1,20 +1,5 @@
 [
   {
-    "material": "Polycarbonate",
-    "object_id": "35",
-    "glb": "assets/models/obj_35.glb",
-    "audios": [
-      "assets/study/fam/fam_Polycarbonate_0.wav",
-      "assets/study/fam/fam_Polycarbonate_1.wav",
-      "assets/study/fam/fam_Polycarbonate_2.wav"
-    ],
-    "audio_objs": [
-      "35",
-      "35",
-      "35"
-    ]
-  },
-  {
     "material": "Steel",
     "object_id": "89",
     "glb": "assets/models/obj_89.glb",
