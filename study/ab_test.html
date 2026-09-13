@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="light">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -92,6 +92,16 @@
   .b-sim{background:var(--good)} .b-tie{background:var(--warn)} .b-dif{background:var(--bad)}
   .note{font-size:.78rem;color:var(--muted);margin-top:10px;line-height:1.5}
   .statsblock h2{margin:1.1em 0 .2em}
+  /* familiarization gallery */
+  .famgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:14px;margin:16px 0}
+  .famcard{border:1px solid var(--border);border-radius:12px;background:var(--panel2);padding:12px;text-align:center}
+  .famcard model-viewer{width:100%;height:130px;background:transparent;--poster-color:transparent}
+  .famcard .m{font-weight:700;margin:8px 0 6px}
+  .famcard .plays{display:flex;gap:6px;justify-content:center;flex-wrap:wrap}
+  .famcard .pbtn{border:1px solid var(--border);background:var(--panel);color:var(--fg);border-radius:8px;
+    padding:6px 10px;font:inherit;font-size:.8rem;cursor:pointer;display:inline-flex;align-items:center;gap:5px}
+  .famcard .pbtn.playing{background:var(--accent2);color:#fff;border-color:transparent}
+  .famcard .pbtn svg{width:11px;height:11px;fill:currentColor}
 </style>
 </head>
 <body>
@@ -116,6 +126,12 @@
       ⚑ <b>판단 기준</b> — <b>피치(음 높이)가 다소 달라도</b>, 재질 특성(음색·감쇠·타격감)이 비슷하면
       <b>“유사함”</b>으로 판단해 주세요. 음 높이 차이 자체보다 <b>“같은 재질을 두드린 소리로 들리는가”</b>가 핵심입니다.
     </div>
+    <p class="muted" style="font-size:.85rem;border-top:1px solid var(--border);padding-top:12px;margin-top:16px">
+      본 실험은 <b>ImpactMat</b> (impact-sound 기반 재질 추정 연구)의 청취 실험입니다. 참여는 자발적이며 언제든
+      중단할 수 있고, 응답은 <b>익명</b>으로 수집·분석되어 연구 외 목적으로 사용되지 않습니다.<br>
+      Hyebin Cho<sup>1</sup>, Bumsoo Kim<sup>2</sup>, Joon Son Chung<sup>1</sup>
+      &nbsp;·&nbsp; <sup>1</sup>KAIST &nbsp; <sup>2</sup>Chung-Ang University
+    </p>
     <div class="field">
       <label for="pid">참가자 이름 / ID</label>
       <input type="text" id="pid" placeholder="예: hbcho, p01 …" autocomplete="off">
@@ -132,6 +148,19 @@
     <div class="actions">
       <span class="hint">응답은 종료 시 JSON 파일로 저장됩니다 (로그인 불필요).</span>
       <button class="btn primary" id="startBtn" disabled>시작하기 →</button>
+    </div>
+  </section>
+
+  <!-- ============ FAMILIARIZATION ============ -->
+  <section id="familiarize" class="card" hidden>
+    <div class="pill">먼저 듣기</div>
+    <h1>재질별 타격음 익히기</h1>
+    <p class="muted">각 재질의 물체(3D)와 실제 타격음입니다. 재생해 보며 <b>“이 재질은 이런 소리”</b>를
+      감으로 익힌 뒤 시작하세요. 본 설문의 기준이 됩니다.</p>
+    <div class="famgrid" id="famGrid"></div>
+    <div class="actions">
+      <span class="hint">각 재질을 한 번씩 들어보는 걸 권장합니다.</span>
+      <button class="btn primary" id="famStart">이해했어요, 시작 →</button>
     </div>
   </section>
 
@@ -193,8 +222,9 @@
 
 </div>
 
+<script type="module" src="../assets/js/model-viewer.min.js"></script>
 <script>
-const CONFIG = { JSON_URL:"trials.json", SHUFFLE_TRIALS:true, RANDOMIZE_SECTION_ORDER:true };
+const CONFIG = { JSON_URL:"trials.json", FAM_URL:"familiarize.json", SHUFFLE_TRIALS:true, RANDOMIZE_SECTION_ORDER:true };
 
 const SECTION_INFO = {
   synthetic:{
@@ -211,10 +241,11 @@ const SECTION_INFO = {
 const DOMLABEL={synthetic:"SYNTHETIC", real:"REAL"};
 
 const $ = s => document.querySelector(s);
-let byDomain={}, sectionOrder=[], secIdx=0, list=[], idx=0;
+let byDomain={}, sectionOrder=[], secIdx=0, list=[], idx=0, FAM=[];
 let responses=[], session={}, order=null, choice=null, played={A:false,B:false};
 let totalDone=0, totalN=0;
 const audio = new Audio();
+const famAudio = new Audio();
 
 function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]];}return a;}
 $("#themeBtn").onclick=()=>{const r=document.documentElement;r.dataset.theme=r.dataset.theme==="dark"?"light":"dark";};
@@ -225,6 +256,7 @@ async function loadTrials(){
   let T=[];
   try{ T = await (await fetch(CONFIG.JSON_URL)).json(); }
   catch(e){ alert("trials.json 로드 실패: "+e); }
+  try{ FAM = await (await fetch(CONFIG.FAM_URL)).json(); }catch(e){ FAM=[]; }
   byDomain={};
   T.forEach(t=>{(byDomain[t.domain]=byDomain[t.domain]||[]).push(t);});
   if(CONFIG.SHUFFLE_TRIALS) Object.values(byDomain).forEach(shuffle);
@@ -240,8 +272,30 @@ async function loadTrials(){
 $("#startBtn").onclick=()=>{
   session={pid:$("#pid").value.trim(), env:$("#env").value, ua:navigator.userAgent,
            started:new Date().toISOString(), n_trials:totalN, section_order:sectionOrder.slice()};
-  $("#intro").hidden=true; secIdx=0; showSection();
+  $("#intro").hidden=true; secIdx=0;
+  if(FAM && FAM.length){ renderFamiliarize(); $("#familiarize").hidden=false; }
+  else showSection();
 };
+
+const PLAYSVG='<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
+function renderFamiliarize(){
+  const g=$("#famGrid"); g.innerHTML="";
+  FAM.forEach(card=>{
+    const el=document.createElement("div"); el.className="famcard";
+    const mv=`<model-viewer src="../${card.glb}" camera-controls disable-zoom
+      interaction-prompt="none" shadow-intensity="0.6" exposure="1.0" loading="eager"></model-viewer>`;
+    const plays=card.audios.map((a,i)=>`<button class="pbtn" data-src="../${a}">${PLAYSVG}${card.audios.length>1?('예시 '+(i+1)):'재생'}</button>`).join("");
+    el.innerHTML=`${mv}<div class="m">${card.material}</div><div class="plays">${plays}</div>`;
+    g.appendChild(el);
+  });
+  g.querySelectorAll(".pbtn").forEach(b=>b.onclick=()=>{
+    famAudio.pause(); famAudio.src=b.dataset.src; famAudio.currentTime=0; famAudio.play();
+    g.querySelectorAll(".pbtn").forEach(x=>x.classList.remove("playing"));
+    b.classList.add("playing");
+    famAudio.onended=()=>b.classList.remove("playing");
+  });
+}
+$("#famStart").onclick=()=>{ famAudio.pause(); $("#familiarize").hidden=true; secIdx=0; showSection(); };
 
 function showSection(){
   const dom=sectionOrder[secIdx], info=SECTION_INFO[dom]||{label:dom,desc:"",guide:""};

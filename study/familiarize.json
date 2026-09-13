@@ -1,0 +1,47 @@
+[
+  {
+    "material": "Polycarbonate",
+    "object_id": "35",
+    "glb": "assets/models/obj_35.glb",
+    "audios": [
+      "assets/study/fam/fam_Polycarbonate_0.wav",
+      "assets/study/fam/fam_Polycarbonate_1.wav"
+    ]
+  },
+  {
+    "material": "Steel",
+    "object_id": "89",
+    "glb": "assets/models/obj_89.glb",
+    "audios": [
+      "assets/study/fam/fam_Steel_0.wav",
+      "assets/study/fam/fam_Steel_1.wav"
+    ]
+  },
+  {
+    "material": "Ceramic",
+    "object_id": "1",
+    "glb": "assets/models/obj_1.glb",
+    "audios": [
+      "assets/study/fam/fam_Ceramic_0.wav",
+      "assets/study/fam/fam_Ceramic_1.wav"
+    ]
+  },
+  {
+    "material": "Glass",
+    "object_id": "94",
+    "glb": "assets/models/obj_94.glb",
+    "audios": [
+      "assets/study/fam/fam_Glass_0.wav",
+      "assets/study/fam/fam_Glass_1.wav"
+    ]
+  },
+  {
+    "material": "Wood",
+    "object_id": "31",
+    "glb": "assets/models/obj_31.glb",
+    "audios": [
+      "assets/study/fam/fam_Wood_0.wav",
+      "assets/study/fam/fam_Wood_1.wav"
+    ]
+  }
+]
