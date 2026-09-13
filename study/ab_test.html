@@ -75,6 +75,7 @@
   .actions{display:flex;justify-content:space-between;align-items:center;margin-top:24px;gap:12px}
   .btn{border:none;border-radius:10px;padding:11px 22px;font:inherit;font-weight:600;cursor:pointer}
   .btn.primary{background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff}
+  .btn.ghost{background:transparent;color:var(--muted);border:1px solid var(--border)}
   .btn:disabled{opacity:.45;cursor:not-allowed}
   .hint{font-size:.8rem;color:var(--muted)}
   [hidden]{display:none!important}
@@ -170,7 +171,8 @@
     <p class="muted" data-t="famLead"></p>
     <div class="famgrid" id="famGrid"></div>
     <div class="actions">
-      <span class="hint" data-t="famHint"></span>
+      <button class="btn ghost" id="famBack" data-t="backBtn"></button>
+      <span class="hint" data-t="famHint" style="flex:1;text-align:center"></span>
       <button class="btn primary" id="famStart" data-t="famStart"></button>
     </div>
   </section>
@@ -182,7 +184,8 @@
     <p class="muted" id="secDesc"></p>
     <div class="callout" id="secGuide"></div>
     <div class="actions">
-      <span class="hint" id="secCount"></span>
+      <button class="btn ghost" id="secBack" data-t="backBtn"></button>
+      <span class="hint" id="secCount" style="flex:1;text-align:center"></span>
       <button class="btn primary" id="secStart" data-t="secStart"></button>
     </div>
   </section>
@@ -210,7 +213,8 @@
       <div class="choice dif" data-v="different"><span data-t="cDif"></span><small data-t="cDifS"></small></div>
     </div>
     <div class="actions">
-      <span class="hint" id="hint"></span>
+      <button class="btn ghost" id="trialBack" data-t="backBtn"></button>
+      <span class="hint" id="hint" style="flex:1;text-align:center"></span>
       <button class="btn primary" id="nextBtn" disabled data-t="nextBtn"></button>
     </div>
   </section>
@@ -262,6 +266,7 @@ const T = {
     famPill:"사전 청취", famTitle:"재질별 타격음 익히기",
     famLead:"각 재질의 대표 물체(3D)와 실제 타격음 예시입니다. 예시는 같은 물체를 서로 다르게 타격한 소리입니다. 재생하여 “이 재질은 이러한 소리”라는 기준을 익힌 뒤 시작해 주십시오.",
     famHint:"각 재질을 한 번씩 청취하시기를 권장합니다.", famStart:"확인했습니다, 시작 →", ex:"예시",
+    backBtn:"← 이전", checking:"확인 중…",
     secStart:"이 섹션 시작 →", sectionOf:(i,n)=>`섹션 ${i} / ${n}`, secCount:(n)=>`총 ${n}개 문항`,
     stepText:(si,sn,i,n)=>`섹션 ${si}/${sn} · 문항 ${i} / ${n}`,
     soundA:"소리 A", soundB:"소리 B", playA:"A 재생", playB:"B 재생",
@@ -301,6 +306,7 @@ const T = {
     famPill:"Familiarization", famTitle:"Learn each material’s impact sound",
     famLead:"A representative object (3D) and example impact sounds for each material. The examples are different strikes of the same object. Please listen to build a sense of “this material sounds like this” before you begin.",
     famHint:"We recommend listening to each material once.", famStart:"Got it, start →", ex:"Ex.",
+    backBtn:"← Back", checking:"Checking…",
     secStart:"Start this section →", sectionOf:(i,n)=>`Section ${i} / ${n}`, secCount:(n)=>`${n} trials`,
     stepText:(si,sn,i,n)=>`Section ${si}/${sn} · Trial ${i} / ${n}`,
     soundA:"Sound A", soundB:"Sound B", playA:"Play A", playB:"Play B",
@@ -438,17 +444,33 @@ function jsonp(url){
 /* ============================ FLOW ============================ */
 $("#startBtn").onclick=async ()=>{
   const name=$("#pid").value.trim();
-  // optional server-side duplicate check
+  // loading state (prevents double-click while the duplicate check runs)
+  $("#startBtn").disabled=true; $("#startBtn").textContent=t("checking");
   if(CONFIG.GAS_URL){
     try{
       const r=await jsonp(`${CONFIG.GAS_URL}?action=check&name=${encodeURIComponent(name.toLowerCase())}`);
-      if(r && r.used){ alert(t("dupBlock")); return; }
+      if(r && r.used){ alert(t("dupBlock")); $("#startBtn").disabled=false; $("#startBtn").textContent=t("startBtn"); return; }
     }catch(e){ /* network issue -> allow, localStorage still guards */ }
   }
+  $("#startBtn").textContent=t("startBtn");
   session={pid:name, env:$("#env").value, lang, ua:navigator.userAgent,
            started:new Date().toISOString(), n_trials:totalN, section_order:sectionOrder.slice()};
   $("#intro").hidden=true; secIdx=0;
   if(FAM && FAM.length){ renderFamiliarize(); $("#familiarize").hidden=false; } else showSection();
+};
+
+/* back navigation (only where safe; not on intro/done/blocked) */
+$("#famBack").onclick=()=>{ famAudio.pause(); $("#familiarize").hidden=true; $("#startBtn").disabled=false; $("#startBtn").textContent=t("startBtn"); $("#intro").hidden=false; };
+$("#secBack").onclick=()=>{
+  if(secIdx>0) return;                       // shown only for the first section anyway
+  $("#section").hidden=true;
+  if(FAM && FAM.length){ renderFamiliarize(); $("#familiarize").hidden=false; }
+  else { $("#startBtn").disabled=false; $("#startBtn").textContent=t("startBtn"); $("#intro").hidden=false; }
+};
+$("#trialBack").onclick=()=>{
+  audio.pause();
+  if(idx>0){ idx--; totalDone--; responses.pop(); renderTrial(); }   // undo last, redo previous
+  else { $("#trial").hidden=true; showSection(); }                    // first trial -> section intro
 };
 
 const PLAYSVG='<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
@@ -477,6 +499,7 @@ function showSection(){
   $("#secTitle").textContent=info.label; $("#secDesc").textContent=info.desc;
   $("#secGuide").innerHTML="⚑ "+info.guide;
   $("#secCount").textContent=t("secCount")(byDomain[dom].length);
+  $("#secBack").hidden = secIdx!==0;         // back only from the first section
   $("#trial").hidden=true; $("#section").hidden=false;
 }
 $("#secStart").onclick=()=>{ list=byDomain[sectionOrder[secIdx]]; idx=0; $("#section").hidden=true; $("#trial").hidden=false; renderTrial(); };
