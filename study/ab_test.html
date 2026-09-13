@@ -379,6 +379,7 @@ let byDomain={}, sectionOrder=[], secIdx=0, list=[], idx=0, FAM=[];
 let responses=[], session={}, order=null, choice=null, played={A:false,B:false};
 let totalN=0, maxReached=0;
 const ans={};                                    // saved answers by "secIdx:idx" (survive back & forward)
+function isAdmin(name){ return /^_admin/i.test((name ?? session.pid ?? "").trim()); }
 function gbase(){let s=0;for(let j=0;j<secIdx;j++)s+=(byDomain[sectionOrder[j]]||[]).length;return s;}
 function gpos(){return gbase()+idx;}             // 0-based global trial position
 function updateBar(){
@@ -410,7 +411,7 @@ function refreshDynamic(){
   if(!$("#familiarize").hidden) renderFamiliarize();
   if(!$("#section").hidden) showSection();
   if(!$("#trial").hidden) updateTrialTexts();
-  if(!$("#done").hidden) $("#stats").innerHTML=renderStats(responses);
+  if(!$("#done").hidden && isAdmin()) $("#stats").innerHTML=renderStats(responses);
 }
 $("#langBtn").onclick=()=>{ lang = lang==="ko"?"en":"ko"; applyLang(); refreshDynamic(); };
 $("#themeBtn").onclick=()=>{const r=document.documentElement;r.dataset.theme=r.dataset.theme==="dark"?"light":"dark";};
@@ -456,7 +457,7 @@ $("#startBtn").onclick=async ()=>{
   const name=$("#pid").value.trim();
   // loading state (prevents double-click while the duplicate check runs)
   $("#startBtn").disabled=true; $("#startBtn").textContent=t("checking");
-  if(CONFIG.GAS_URL){
+  if(CONFIG.GAS_URL && !isAdmin(name)){       // _admin = test account, bypass duplicate guard
     try{
       const r=await jsonp(`${CONFIG.GAS_URL}?action=check&name=${encodeURIComponent(name.toLowerCase())}`);
       if(r && r.used){ alert(t("dupBlock")); $("#startBtn").disabled=false; $("#startBtn").textContent=t("startBtn"); return; }
@@ -608,8 +609,11 @@ async function finish(){
   PAYLOAD={session, responses, finished:new Date().toISOString(), n:responses.length,
            tally:responses.reduce((o,r)=>{const k=r.domain+"/"+r.pair_type+"/"+r.choice;o[k]=(o[k]||0)+1;return o;},{})};
   console.log("STUDY RESULT",PAYLOAD);
-  $("#stats").innerHTML=renderStats(responses);
-  try{ localStorage.setItem(CONFIG.LS_KEY, new Date().toISOString()); }catch(e){}
+  const admin=isAdmin();
+  // stats + download button are for the researcher (_admin) only
+  $("#stats").innerHTML = admin ? renderStats(responses) : "";
+  $("#dlBtn").hidden = !admin;
+  if(!admin){ try{ localStorage.setItem(CONFIG.LS_KEY, new Date().toISOString()); }catch(e){} }
   if(CONFIG.GAS_URL){
     try{
       await fetch(CONFIG.GAS_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(PAYLOAD)});
