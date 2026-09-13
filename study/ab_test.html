@@ -34,8 +34,10 @@
   .tools{display:flex;gap:8px}
   .chipbtn{border:1px solid var(--border);background:var(--panel);color:var(--muted);
     border-radius:999px;padding:6px 12px;cursor:pointer;font-size:.82rem}
-  .progress{height:6px;background:var(--panel2);border-radius:999px;overflow:hidden;margin:14px 0 4px}
-  .progress > i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .3s}
+  .progress{position:relative;height:8px;background:var(--panel2);border-radius:999px;overflow:hidden;margin:14px 0 4px}
+  .progress > i{position:absolute;left:0;top:0;height:100%;width:0;transition:width .3s;border-radius:999px}
+  #barMax{background:color-mix(in srgb,var(--accent) 28%,transparent)}   /* furthest reached (faint) */
+  #bar{background:linear-gradient(90deg,var(--accent),var(--accent2))}    /* current position (solid) */
   .steplabel{font-size:.82rem;color:var(--muted);display:flex;justify-content:space-between}
   .card{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);
     padding:24px;box-shadow:var(--shadow)}
@@ -193,7 +195,7 @@
   <!-- ============ TRIAL ============ -->
   <section id="trial" class="card" hidden>
     <div class="steplabel"><span id="stepText"></span><span id="domText" class="pill"></span></div>
-    <div class="progress"><i id="bar"></i></div>
+    <div class="progress"><i id="barMax"></i><i id="bar"></i></div>
     <div class="opts">
       <div class="opt">
         <div class="lab" data-t="soundA"></div>
@@ -375,7 +377,11 @@ const DOMLABEL={synthetic:"SYNTHETIC", real:"REAL"};
 const $ = s => document.querySelector(s);
 let byDomain={}, sectionOrder=[], secIdx=0, list=[], idx=0, FAM=[];
 let responses=[], session={}, order=null, choice=null, played={A:false,B:false};
-let totalDone=0, totalN=0;
+let totalDone=0, totalN=0, maxReached=0;
+function updateBar(){
+  $("#bar").style.width=(totalN?totalDone/totalN*100:0)+"%";
+  $("#barMax").style.width=(totalN?Math.max(maxReached,totalDone)/totalN*100:0)+"%";
+}
 const audio = new Audio(), famAudio = new Audio();
 
 function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]];}return a;}
@@ -514,7 +520,7 @@ function renderTrial(saved){
   }
   $("#stepText").textContent=t("stepText")(secIdx+1,sectionOrder.length,idx+1,list.length);
   $("#domText").textContent=DOMLABEL[tr.domain]||tr.domain;
-  $("#bar").style.width=(totalDone/totalN*100)+"%";
+  updateBar();
   $("#playedA").textContent = played.A ? t("playedOk") : t("notPlayed"); $("#playedA").classList.toggle("ok", played.A);
   $("#playedB").textContent = played.B ? t("playedOk") : t("notPlayed"); $("#playedB").classList.toggle("ok", played.B);
   document.querySelectorAll(".choice").forEach(c=>c.classList.toggle("sel", !!choice && c.dataset.v===choice));
@@ -540,7 +546,7 @@ $("#nextBtn").onclick=()=>{
   const tr=list[idx];
   responses.push({trial_id:tr.id, domain:tr.domain, pair_type:tr.pair_type, section_index:secIdx,
                   clip_A:order.A, clip_B:order.B, choice, meta:tr.meta||{}, t:new Date().toISOString()});
-  idx++; totalDone++;
+  idx++; totalDone++; maxReached=Math.max(maxReached,totalDone);
   if(idx<list.length) renderTrial(); else { secIdx++; if(secIdx<sectionOrder.length) showSection(); else finish(); }
 };
 
@@ -585,7 +591,8 @@ function download(payload){
 }
 let PAYLOAD=null;
 async function finish(){
-  audio.pause(); $("#trial").hidden=true; $("#section").hidden=true; $("#done").hidden=false; $("#bar").style.width="100%";
+  audio.pause(); $("#trial").hidden=true; $("#section").hidden=true; $("#done").hidden=false;
+  maxReached=totalN; totalDone=totalN; updateBar();
   PAYLOAD={session, responses, finished:new Date().toISOString(), n:responses.length,
            tally:responses.reduce((o,r)=>{const k=r.domain+"/"+r.pair_type+"/"+r.choice;o[k]=(o[k]||0)+1;return o;},{})};
   console.log("STUDY RESULT",PAYLOAD);
