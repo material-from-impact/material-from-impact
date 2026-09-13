@@ -254,7 +254,7 @@
     <div class="kfacts">
       <div class="fact"><b>5</b><span>continuous physical parameters &nbsp;(E, &rho;, &nu;, &alpha;, &beta;)</span></div>
       <div class="fact"><b>88k</b><span>impact clips &middot; 1,100 objects &middot; 8 base materials + blends</span></div>
-      <div class="fact"><b>0.078</b><span>Avg. NMAE (Ours) vs 0.17+ for the strongest baseline</span></div>
+      <div class="fact"><b>0.078</b><span>single-material Avg. NMAE (Ours) &mdash; best baseline 0.891 &middot; 6.1&nbsp;ms, 1.3&nbsp;GB</span></div>
     </div>
   </section>
 
@@ -371,17 +371,8 @@
       Hit point is arbitrary and hit time is estimated (no metadata used).</p>
     <div class="demos">
       <div class="card demo">
-        <span class="tag">Wood</span><h3>Cutting Board</h3>
-        <model-viewer src="assets/models/obj_31.glb" camera-controls touch-action="pan-y" reveal="auto"
-          shadow-intensity="0.8" exposure="1.05" interaction-prompt="none"
-          camera-orbit="25deg 72deg 1.7m" field-of-view="28deg" loading="eager"></model-viewer>
-        <div class="row pred"><span>Re-rendered (ours)</span><audio controls preload="none" src="assets/audio/sel_31_37.wav"></audio></div>
-        <div class="spec"><div class="lbls"><span>Real input</span><span class="p">Re-render</span></div>
-          <img loading="lazy" src="assets/spec/sel_31_37.png" alt="log-mel: real vs re-render"></div>
-      </div>
-      <div class="card demo">
         <span class="tag">Ceramic</span><h3>Vase (green)</h3>
-        <model-viewer src="assets/models/obj_75.glb" camera-controls touch-action="pan-y" reveal="auto"
+        <model-viewer src="assets/models/obj_75.glb" camera-controls touch-action="pan-y" auto-rotate auto-rotate-delay="0" rotation-per-second="30deg" reveal="auto"
           shadow-intensity="0.8" exposure="1.05" interaction-prompt="none"
           camera-orbit="25deg 72deg 1.7m" field-of-view="28deg" loading="eager"></model-viewer>
         <div class="row pred"><span>Re-rendered (ours)</span><audio controls preload="none" src="assets/audio/sel_75_9.wav"></audio></div>
@@ -390,7 +381,7 @@
       </div>
       <div class="card demo">
         <span class="tag">Glass</span><h3>Salad Bowl</h3>
-        <model-viewer src="assets/models/obj_94.glb" camera-controls touch-action="pan-y" reveal="auto"
+        <model-viewer src="assets/models/obj_94.glb" camera-controls touch-action="pan-y" auto-rotate auto-rotate-delay="0" rotation-per-second="30deg" reveal="auto"
           shadow-intensity="0.8" exposure="1.05" interaction-prompt="none"
           camera-orbit="25deg 72deg 1.7m" field-of-view="28deg" loading="eager"></model-viewer>
         <div class="row pred"><span>Re-rendered (ours)</span><audio controls preload="none" src="assets/audio/sel_94_36.wav"></audio></div>
@@ -399,7 +390,7 @@
       </div>
       <div class="card demo">
         <span class="tag">Iron</span><h3>Kettlebell</h3>
-        <model-viewer src="assets/models/obj_98.glb" camera-controls touch-action="pan-y" reveal="auto"
+        <model-viewer src="assets/models/obj_98.glb" camera-controls touch-action="pan-y" auto-rotate auto-rotate-delay="0" rotation-per-second="30deg" reveal="auto"
           shadow-intensity="0.8" exposure="1.05" interaction-prompt="none"
           camera-orbit="25deg 72deg 1.7m" field-of-view="28deg" loading="eager"></model-viewer>
         <div class="row pred"><span>Re-rendered (ours)</span><audio controls preload="none" src="assets/audio/sel_98_24.wav"></audio></div>
@@ -414,19 +405,26 @@
   <section id="results">
     <h2>Results</h2>
     <p class="lead">Physical-parameter estimation error (MAE, lower is better). &rho; and E in log-space;
-      &nu; linear; &alpha;, &beta; in physical units. Our supervised regressor is far below conventional
-      DSP regression and in-context learning with general audio&ndash;language models.</p>
+      &nu; linear; &alpha;, &beta; in physical units; Avg.&nbsp;NMAE is averaged over the normalized targets.
+      Our feed-forward regressor is far below conventional DSP regression, in-context learning with general
+      audio&ndash;language models, and per-sound differentiable optimization &mdash; while running in
+      <b>6.1&nbsp;ms on 1.3&nbsp;GB</b> (vs. 19&nbsp;min for optimization).</p>
     <div class="tablewrap">
       <table>
         <thead><tr><th>Method</th><th>Subset</th><th>&rho;</th><th>E</th><th>&nu;</th><th>&alpha;</th><th>&beta;</th><th>Avg. NMAE</th></tr></thead>
         <tbody>
-          <tr class="grp"><td colspan="8">Conventional regression</td></tr>
-          <tr><td>DSP + reg.</td><td>Single</td><td>0.190</td><td>0.443</td><td>0.047</td><td>9.93</td><td>3.26&times;10<sup>-7</sup></td><td>&ndash;</td></tr>
-          <tr><td>DSP + reg.</td><td>Blend</td><td>0.131</td><td>0.321</td><td>0.032</td><td>5.19</td><td>1.83&times;10<sup>-7</sup></td><td>&ndash;</td></tr>
           <tr class="grp"><td colspan="8">In-context learning (audio&ndash;language models)</td></tr>
-          <tr><td>Qwen2.5-Omni-7B</td><td>Single</td><td>0.338</td><td>0.614</td><td>0.071</td><td>13.38</td><td>1.61&times;10<sup>-1</sup></td><td>&ndash;</td></tr>
-          <tr><td>Audio Flamingo 3</td><td>Single</td><td>14.1</td><td>2.14</td><td>0.130</td><td>21.7</td><td>1.8&times;10<sup>-2</sup></td><td>&ndash;</td></tr>
-          <tr class="grp"><td colspan="8">Supervised (ours)</td></tr>
+          <tr><td>Qwen2.5-Omni-7B</td><td>Single</td><td>0.338</td><td>0.614</td><td>0.071</td><td>13.38</td><td>1.61&times;10<sup>-1</sup></td><td>1.270</td></tr>
+          <tr><td>Qwen2.5-Omni-7B</td><td>Blend</td><td>0.257</td><td>0.495</td><td>0.067</td><td>8.23</td><td>1.73&times;10<sup>-1</sup></td><td>1.162</td></tr>
+          <tr><td>Audio Flamingo 3</td><td>Single</td><td>14.1</td><td>2.14</td><td>0.130</td><td>21.7</td><td>1.8&times;10<sup>-2</sup></td><td>12.42</td></tr>
+          <tr><td>Audio Flamingo 3</td><td>Blend</td><td>13.4</td><td>2.33</td><td>0.123</td><td>11.3</td><td>4.4&times;10<sup>-2</sup></td><td>10.92</td></tr>
+          <tr class="grp"><td colspan="8">Conventional regression</td></tr>
+          <tr><td>DSP + reg.</td><td>Single</td><td>0.190</td><td>0.443</td><td>0.047</td><td>9.93</td><td>3.26&times;10<sup>-7</sup></td><td>1.405</td></tr>
+          <tr><td>DSP + reg.</td><td>Blend</td><td>0.131</td><td>0.321</td><td>0.032</td><td>5.19</td><td>1.83&times;10<sup>-7</sup></td><td>0.961</td></tr>
+          <tr class="grp"><td colspan="8">Differentiable optimization</td></tr>
+          <tr><td>DiffSound</td><td>Single</td><td>&ndash;</td><td>0.893</td><td>0.890</td><td>&ndash;</td><td>&ndash;</td><td>0.891</td></tr>
+          <tr><td>DiffSound</td><td>Blend</td><td>&ndash;</td><td>0.487</td><td>0.696</td><td>&ndash;</td><td>&ndash;</td><td>0.592</td></tr>
+          <tr class="grp"><td colspan="8">Supervised, feed-forward (ours)</td></tr>
           <tr class="ours"><td>Ours</td><td>Single</td><td>0.081</td><td>0.140</td><td>0.008</td><td>0.59</td><td>2.39&times;10<sup>-8</sup></td><td>0.078</td></tr>
           <tr class="ours"><td>Ours</td><td>Blend</td><td>0.119</td><td>0.206</td><td>0.012</td><td>1.08</td><td>1.32&times;10<sup>-8</sup></td><td>0.116</td></tr>
         </tbody>
