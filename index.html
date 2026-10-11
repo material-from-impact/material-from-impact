@@ -13,16 +13,19 @@
     --bg:#f6f7fb; --panel:#ffffff; --ink:#171a21; --muted:#5c6472; --line:#e5e8f0;
     --accent:#4f46e5; --accent2:#0ea5a4; --accent-soft:#eef0fe; --shadow:0 1px 2px rgba(20,24,40,.05),0 8px 30px rgba(20,24,40,.06);
     --mono:'JetBrains Mono',ui-monospace,Menlo,Consolas,monospace;
+    --pE:#c2410c; --pR:#1d4ed8; --pN:#047857; --pA:#be185d; --pB:#6d28d9;
   }
   @media (prefers-color-scheme:dark){
     :root:not([data-theme="light"]){
       --bg:#0d0f15; --panel:#151823; --ink:#e9ecf5; --muted:#9aa3b6; --line:#252a38;
       --accent:#8b8cf6; --accent2:#2dd4bf; --accent-soft:#1b1f30; --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 34px rgba(0,0,0,.45);
+      --pE:#fb923c; --pR:#60a5fa; --pN:#34d399; --pA:#f472b6; --pB:#a78bfa;
     }
   }
   :root[data-theme="dark"]{
     --bg:#0d0f15; --panel:#151823; --ink:#e9ecf5; --muted:#9aa3b6; --line:#252a38;
     --accent:#8b8cf6; --accent2:#2dd4bf; --accent-soft:#1b1f30; --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 34px rgba(0,0,0,.45);
+    --pE:#fb923c; --pR:#60a5fa; --pN:#34d399; --pA:#f472b6; --pB:#a78bfa;
   }
   *{box-sizing:border-box}
   html{scroll-behavior:smooth}
@@ -35,7 +38,7 @@
   /* ---- hero ---- */
   header.hero{padding:64px 0 26px;text-align:center;
     background:radial-gradient(1100px 380px at 50% -80px,var(--accent-soft),transparent 70%);}
-  .venue{display:inline-block;font-weight:600;font-size:.8rem;letter-spacing:.14em;text-transform:uppercase;
+  .venue{display:inline-block;font-weight:600;font-size:.8rem;letter-spacing:.08em;
     color:var(--accent);background:var(--accent-soft);border:1px solid var(--line);
     padding:5px 12px;border-radius:999px;margin-bottom:18px}
   h1{font-size:clamp(1.7rem,4.4vw,2.7rem);line-height:1.15;font-weight:800;margin:.1em 0 .35em;letter-spacing:-.02em}
@@ -60,12 +63,7 @@
   video{width:100%;display:block;border-radius:16px;background:#000}
   .cap{color:var(--muted);font-size:.9rem;margin-top:10px;text-align:center}
   .abstract{padding:22px 24px;font-size:1.02rem}
-  /* ---- pipeline chips ---- */
-  .flow{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:6px 0 4px}
-  .chip{background:var(--accent-soft);border:1px solid var(--line);border-radius:12px;
-    padding:10px 14px;font-weight:600;font-size:.92rem}
-  .chip small{display:block;font-weight:400;color:var(--muted);font-size:.78rem}
-  .arrow{color:var(--accent);font-weight:700}
+  /* ---- parameter pills ---- */
   .params{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
   .pill{font-family:var(--mono);font-size:.85rem;background:var(--panel);border:1px solid var(--line);
     border-radius:9px;padding:6px 11px}
@@ -81,6 +79,8 @@
   .demo audio{width:100%;height:38px}
   .demo .row.pred span{color:var(--accent2)}
   /* ---- table ---- */
+  table.res th,table.res td{padding:8px 9px;font-size:.86rem}
+  table.res td.mid{vertical-align:middle}
   .tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow)}
   table{border-collapse:collapse;width:100%;font-size:.92rem;background:var(--panel)}
   th,td{padding:10px 12px;text-align:center;border-bottom:1px solid var(--line);white-space:nowrap}
@@ -121,7 +121,7 @@
   .btn-sm{font-weight:600;font-size:.86rem;padding:7px 12px;border-radius:9px;
     border:1px solid var(--line);background:var(--panel);color:var(--ink)}
   .btn-sm:hover{border-color:var(--accent);text-decoration:none}
-  section{scroll-margin-top:72px}
+  section,#listen{scroll-margin-top:72px}
   @media (max-width:820px){.nav-cta{display:none}}
   @media (max-width:560px){.brand .txt{display:none}}
   /* scroll progress + theme toggle */
@@ -151,6 +151,7 @@
   .blend-params .pill{transition:background .12s}
   .blend-params .pill b{color:var(--accent)}
   .blend-params .pill .v{font-variant-numeric:tabular-nums}
+  .pill b.pE{color:var(--pE)}.pill b.pR{color:var(--pR)}.pill b.pN{color:var(--pN)}.pill b.pA{color:var(--pA)}.pill b.pB{color:var(--pB)}
   /* copy button */
   .cite-wrap{position:relative}
   .copy-btn{position:absolute;top:12px;right:12px;font-weight:600;font-size:.8rem;padding:6px 12px;
@@ -158,9 +159,37 @@
   .copy-btn:hover{border-color:var(--accent)}
   .copy-btn.ok{border-color:var(--accent2);color:var(--accent2)}
   /* ---- modal-analysis gallery ---- */
-  .modal-gal{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-top:4px}
+  .modal-gal{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin-top:4px}
+  @media (max-width:640px){.modal-gal{grid-template-columns:repeat(2,minmax(0,1fr))}}
   .modal-gal figure{background:var(--accent-soft);border:1px solid var(--line);border-radius:12px;
     padding:8px 8px 6px;text-align:center}
+  /* ---- paper figures ---- */
+  .fig{padding:14px 14px 12px;margin:0 0 16px}
+  .fig img{display:block;width:100%;height:auto;background:#fff;border-radius:10px}
+  .fig.narrow img{max-width:660px;margin:0 auto}
+  .fig figcaption{color:var(--muted);font-size:.88rem;line-height:1.5;margin-top:10px}
+  .fig figcaption b{color:var(--ink)}
+  .figs2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-bottom:10px}
+  .figs2 .fig{margin:0}
+  @media (max-width:760px){.figs2{grid-template-columns:1fr}}
+  /* ---- equations (KaTeX) ---- */
+  .eqlist{padding:4px 22px}
+  .eqrow{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);gap:6px 26px;align-items:center;
+    padding:16px 0;border-bottom:1px solid var(--line)}
+  .eqrow:last-child{border-bottom:none}
+  .eqtag{display:inline-block;font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+    padding:3px 9px;border-radius:999px;background:var(--accent-soft);color:var(--accent)}
+  .eqtag.ours{background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff}
+  .eqref{font-size:.74rem;color:var(--muted);margin-left:8px}
+  .eqrow .why{margin:0;color:var(--muted);font-size:.92rem}
+  .eqrow .why b{color:var(--ink)}
+  .pE{color:var(--pE)}.pR{color:var(--pR)}.pN{color:var(--pN)}.pA{color:var(--pA)}.pB{color:var(--pB)}
+  .pE,.pR,.pN,.pA,.pB{font-weight:700}
+  .katex .pE,.katex .pR,.katex .pN,.katex .pA,.katex .pB{font-weight:inherit}
+  .tex{overflow-x:auto;overflow-y:hidden;max-width:100%}
+  .tex .katex-display{margin:.3em 0}
+  .why .tex{display:inline;overflow:visible}
+  @media (max-width:760px){.eqrow{grid-template-columns:minmax(0,1fr)}}
   .modal-gal img{width:100%;height:auto;display:block}
   .modal-gal figcaption{font-family:var(--mono);font-size:.72rem;color:var(--muted);margin-top:2px}
   /* ---- spectrogram inside demo card ---- */
@@ -174,9 +203,12 @@
   model-viewer{width:100%;height:240px;border-radius:12px;border:1px solid var(--line);
     background:radial-gradient(130% 130% at 50% 0%,var(--accent-soft),transparent 75%);
     --poster-color:transparent}
-  .mv-hint{font-size:.74rem;color:var(--muted);text-align:center;margin-top:6px}
+  .btn.soon,.btn-sm.soon{opacity:.55;cursor:default;pointer-events:none;box-shadow:none}
+  .soon small{font-size:.78em;font-weight:500;opacity:.85}
 </style>
 <script type="module" src="assets/js/model-viewer.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
 </head>
 <body>
 
@@ -184,19 +216,18 @@
 
 <nav class="nav" id="nav">
   <div class="nav-in wrap">
-    <a class="brand" href="#top"><span class="dot"></span><span class="txt">Material&nbsp;from&nbsp;Impact</span></a>
+    <a class="brand" href="#top"><span class="dot"></span><span class="txt">ImpactMat</span></a>
     <div class="nav-links">
       <a href="#abstract">Abstract</a>
       <a href="#method">Method</a>
-      <a href="#listen-syn">Synthetic</a>
       <a href="#blend">Blend</a>
-      <a href="#listen-real">Real</a>
+      <a href="#listen">Listen</a>
       <a href="#results">Results</a>
       <a href="#cite">BibTeX</a>
     </div>
     <div class="nav-cta">
-      <a class="btn-sm" href="#">Paper</a>
-      <a class="btn-sm" href="#">&#60;/&#62; Code</a>
+      <a class="btn-sm" href="https://arxiv.org/abs/2610.07061" target="_blank" rel="noopener">Paper</a>
+      <span class="btn-sm soon" aria-disabled="true">&#60;/&#62; Code <small>(Soon)</small></span>
       <button class="icon-btn" id="themeToggle" title="Toggle dark / light" aria-label="Toggle theme">&#9789;</button>
     </div>
   </div>
@@ -204,7 +235,7 @@
 
 <header class="hero" id="top">
   <div class="wrap">
-    <span class="venue">arXiv 2026</span>
+    <!-- <a class="venue" href="https://arxiv.org/abs/2610.07061" target="_blank" rel="noopener">arXiv:2610.07061</a> -->
     <h1><span class="grad">ImpactMat</span>: Continuous Material Estimation<br>for Inverse Impact Sound Rendering</h1>
     <div class="authors">
       <a href="#">Hyebin Cho</a><sup>1,&#42;</sup>&nbsp;&nbsp;
@@ -214,10 +245,10 @@
     <div class="aff"><sup>1</sup>Korea Advanced Institute of Science and Technology (KAIST) &nbsp;·&nbsp; <sup>2</sup>Chung-Ang University</div>
     <div class="eq">&#42; Equal contribution</div>
     <div class="links">
-      <a class="btn pri" href="#">&#128196; Paper</a>
-      <a class="btn" href="#">arXiv</a>
-      <a class="btn" href="#">&#60;/&#62; Code</a>
-      <a class="btn" href="#">&#128190; ImpactMat Dataset</a>
+      <a class="btn pri" href="https://arxiv.org/pdf/2610.07061" target="_blank" rel="noopener">&#128196; Paper</a>
+      <a class="btn" href="https://arxiv.org/abs/2610.07061" target="_blank" rel="noopener">arXiv</a>
+      <span class="btn soon" aria-disabled="true">&#60;/&#62; Code <small>(Soon)</small></span>
+      <span class="btn soon" aria-disabled="true">&#128190; ImpactMat Dataset <small>(Soon)</small></span>
     </div>
   </div>
 </header>
@@ -227,63 +258,64 @@
   <!-- TEASER VIDEO -->
   <section id="teaser" style="padding-top:10px">
     <figure class="card" style="overflow:hidden">
-      <video src="assets/video/teaser.mp4" autoplay muted loop playsinline controls></video>
+      <video id="teaserVid" src="assets/video/teaser.mp4" loop playsinline controls preload="auto"></video>
     </figure>
     <p class="cap">Four bunnies of different materials (Ceramic, Plastic, Steel, Glass) dropped in a
       physics sim &mdash; the impact sounds are <b>procedurally rendered from each material's estimated
       parameters</b> at the simulated contacts (FEM modal synthesis, stereo-panned to match the screen).
-      &#128266; Unmute to listen.</p>
+      &#128266; Sound is on &mdash; if your browser blocks autoplay audio, click anywhere to unmute.</p>
   </section>
 
   <!-- ABSTRACT -->
   <section id="abstract">
     <h2>Abstract</h2>
     <div class="card abstract">
-      Impact sound rendering synthesizes the sound produced when a 3D object is struck, reflecting its
-      material properties. However, it often relies on fixed presets such as wood, plastic, and steel, which
-      cannot capture the full range of material variations. Therefore, we study <b>inverse sound rendering</b>
-      by estimating <b>continuous material parameters</b> from reference impact sounds. These estimates enable
-      synthesis of impact sounds that acoustically resemble the reference without manual material-parameter
-      tuning. To support this task, we introduce <b>ImpactMat</b>, a dataset and benchmark containing single-
-      and blended-material impact sounds paired with physical parameters. We further propose a framework that
-      supports continuous parameter prediction from one or more reference impact sounds. Our method outperforms
-      conventional audio-feature regression and audio&ndash;language-model baselines and supports re-rendering
-      from real-world impact recordings, providing a practical bridge from recorded sounds to controllable
-      physics-based synthesis.
+      Impact sound rendering synthesizes the sound produced when a 3D object is struck, but practical renderers
+      often rely on fixed material presets such as wood, plastic, or steel. These presets limit the range of impact
+      sounds a renderer can express, while manually adjusting the underlying material parameters remains difficult
+      without expertise in material acoustics. We therefore study <b>inverse impact sound rendering</b>: predicting
+      material parameters from a reference impact sound so that a simulator can recreate a similar material
+      response. To support this task, we introduce <b>ImpactMat</b>, a dataset and benchmark of single and blended
+      material impact sounds paired with ground-truth material parameters. We further propose a feed-forward model
+      that predicts these parameters from one or more recordings, using blended materials to learn smooth
+      transitions between material types. Experiments show that our method outperforms competitive baselines and
+      enables re-rendering from real recordings without manual parameter tuning.
     </div>
-    <div class="kfacts">
+    <!-- <div class="kfacts">
       <div class="fact"><b>5</b><span>continuous physical parameters &nbsp;(E, &rho;, &nu;, &alpha;, &beta;)</span></div>
       <div class="fact"><b>88k</b><span>impact clips &middot; 1,100 objects &middot; 8 base materials + blends</span></div>
-      <div class="fact"><b>0.078</b><span>single-material Avg. NMAE (Ours) &mdash; best baseline 0.891 &middot; 6.1&nbsp;ms, 1.3&nbsp;GB</span></div>
-    </div>
+      <div class="fact"><b>0.078</b><span>single-material Avg. NMAE (Ours) &mdash; best baseline 1.270 &middot; 6.1&nbsp;ms, 1.33&nbsp;GB</span></div>
+    </div> -->
   </section>
 
   <!-- METHOD -->
   <section id="method">
     <h2>Method</h2>
-    <p class="lead">A set of <i>K</i> impact recordings from the same object is encoded, pooled as an
-      unordered set, and mapped to continuous, renderer-compatible material parameters. Blend supervision
-      regularizes both the prediction and the latent representation.</p>
-    <div class="card" style="padding:22px 22px 18px">
-      <div class="flow">
-        <div class="chip">K impact sounds<small>same object</small></div>
-        <span class="arrow">&rarr;</span>
-        <div class="chip">Audio Encoder<small>PANN CNN14</small></div>
-        <span class="arrow">&rarr;</span>
-        <div class="chip">Set Pooling<small>mean &amp; std over hits</small></div>
-        <span class="arrow">&rarr;</span>
-        <div class="chip">Regression Head<small>+ aux. material class</small></div>
-        <span class="arrow">&rarr;</span>
-        <div class="chip" style="background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;border:none">
-          Parameters<small style="color:#eef">&theta; = [logE, log&rho;, &nu;, log&alpha;, log&beta;]</small></div>
-      </div>
+    <p class="lead">A set of <i>K</i> impact recordings from the same object is encoded, pooled as an unordered
+      set, and mapped to continuous, renderer-compatible material parameters that drive physics-based sound synthesis.</p>
+    <figure class="card fig narrow">
+      <img src="assets/fig/fig1_overview.png" alt="Fig. 1: inverse impact sound rendering from reference audio" loading="lazy">
+      <figcaption><b>Fig. 1: Inverse impact sound rendering from reference audio.</b> Given a reference impact sound
+        from an object with unknown material, our continuous material estimator predicts five renderer-compatible
+        parameters, which are then used with a target mesh for physics-based sound synthesis. This enables
+        re-rendering with a similar material response on a new object.</figcaption>
+    </figure>
+    <figure class="card fig">
+      <img src="assets/fig/fig2_estimator.png" alt="Fig. 2: the proposed continuous material estimator" loading="lazy">
+      <figcaption><b>Fig. 2: Overview of the proposed continuous material estimator.</b> Multiple impact recordings are
+        encoded, pooled as an unordered set, and mapped to continuous material parameters. Auxiliary classification and
+        blend-consistency losses guide training, while inference uses the direct regression head.</figcaption>
+    </figure>
+    <div class="card" style="padding:18px 22px">
       <div class="params">
-        <div class="pill"><b>E</b>&nbsp; Young's modulus</div>
-        <div class="pill"><b>&rho;</b>&nbsp; density</div>
-        <div class="pill"><b>&nu;</b>&nbsp; Poisson's ratio</div>
-        <div class="pill"><b>&alpha;,&beta;</b>&nbsp; Rayleigh damping</div>
+        <div class="pill"><b class="pE">E</b>&nbsp; Young's modulus</div>
+        <div class="pill"><b class="pR">&rho;</b>&nbsp; density</div>
+        <div class="pill"><b class="pN">&nu;</b>&nbsp; Poisson's ratio</div>
+        <div class="pill"><b><span class="pA">&alpha;</span>,<span class="pB">&beta;</span></b>&nbsp; Rayleigh damping</div>
       </div>
-      <p class="cap" style="text-align:left;margin-top:16px">
+      <p class="cap" style="text-align:left;margin-top:14px">
+        Each recording goes through a shared audio network (a PANN CNN14 encoder with a projection MLP, giving a 512-D
+        hit embedding); the mean and standard deviation over the <i>K</i> embeddings feed a direct regression head.
         Training combines a target-weighted regression loss, a soft-label material classification head,
         a blend regression term, and a <b>latent blend consistency</b> loss that aligns a blend's audio
         latent with the interpolation of its two base-material latents &mdash; teaching a continuous
@@ -298,15 +330,93 @@
     <div class="card" style="padding:18px 18px 14px">
       <div class="modal-gal">
         <figure><img src="assets/modes/bunny_voxel.png" alt="voxelized mesh"><figcaption>voxelized mesh</figcaption></figure>
-        <figure><img src="assets/modes/bunny_mode_2.png" alt="FEM mode 3"><figcaption>mode 3</figcaption></figure>
-        <figure><img src="assets/modes/bunny_mode_5.png" alt="FEM mode 6"><figcaption>mode 6</figcaption></figure>
-        <figure><img src="assets/modes/bunny_mode_9.png" alt="FEM mode 10"><figcaption>mode 10</figcaption></figure>
-        <figure><img src="assets/modes/bunny_mode_14.png" alt="FEM mode 15"><figcaption>mode 15</figcaption></figure>
+        <figure><img loading="lazy" src="assets/modes/bunny_mode_0.png" alt="FEM mode 1"><figcaption>mode 1</figcaption></figure>
+        <figure><img loading="lazy" src="assets/modes/bunny_mode_4.png" alt="FEM mode 5"><figcaption>mode 5</figcaption></figure>
+        <figure><img loading="lazy" src="assets/modes/bunny_mode_5.png" alt="FEM mode 6"><figcaption>mode 6</figcaption></figure>
+        <figure><img loading="lazy" src="assets/modes/bunny_mode_6.png" alt="FEM mode 7"><figcaption>mode 7</figcaption></figure>
+        <figure><img loading="lazy" src="assets/modes/bunny_mode_7.png" alt="FEM mode 8"><figcaption>mode 8</figcaption></figure>
+        <figure><img loading="lazy" src="assets/modes/bunny_mode_10.png" alt="FEM mode 11"><figcaption>mode 11</figcaption></figure>
+        <figure><img loading="lazy" src="assets/modes/bunny_mode_12.png" alt="FEM mode 13"><figcaption>mode 13</figcaption></figure>
+        <figure><img loading="lazy" src="assets/modes/bunny_mode_14.png" alt="FEM mode 15"><figcaption>mode 15</figcaption></figure>
+        <figure><img loading="lazy" src="assets/modes/bunny_mode_18.png" alt="FEM mode 19"><figcaption>mode 19</figcaption></figure>
+      </div>
+    </div>
+
+    <h3 style="font-size:1.12rem;margin:26px 0 4px">Where the parameters enter the sound</h3>
+    <p class="lead" style="margin-bottom:12px">Each of the five targets is a coefficient of a classical
+      modal sound synthesis equation, so predicting <b>&theta;&nbsp;=&nbsp;[<span class="pE">E</span>,&nbsp;<span class="pR">&rho;</span>,&nbsp;<span class="pN">&nu;</span>,&nbsp;<span class="pA">&alpha;</span>,&nbsp;<span class="pB">&beta;</span>]</b>
+      is the same as predicting <i>how the object rings</i>. Each parameter is color-coded wherever it enters the equations.</p>
+    <div class="card eqlist">
+      <div class="eqrow">
+        <div>
+          <span class="eqtag">Modal analysis (FEM)</span><span class="eqref">O&rsquo;Brien et al. 2002 &middot; Ren et al. 2013</span>
+          <div class="tex" data-display="1">K(\htmlClass{pE}{E},\htmlClass{pN}{\nu})\,\boldsymbol{\phi}_i=\omega_i^{2}\,M(\htmlClass{pR}{\rho})\,\boldsymbol{\phi}_i\;\;\Rightarrow\;\;\omega_i=\sqrt{\htmlClass{pE}{E}/\htmlClass{pR}{\rho}}\;\tilde{\omega}_i(\htmlClass{pN}{\nu})</div>
+        </div>
+        <p class="why"><b>Pitch.</b> A stiffer object (higher <i class="pE">E</i>) rings higher and a heavier one
+          (higher <i class="pR">&rho;</i>) rings lower: every partial scales with
+          <span class="tex">\sqrt{\htmlClass{pE}{E}/\htmlClass{pR}{\rho}}</span>. <i class="pN">&nu;</i> only nudges the ratios between partials.</p>
+      </div>
+      <div class="eqrow">
+        <div>
+          <span class="eqtag">Rayleigh damping</span><span class="eqref">Rayleigh 1877 &middot; Ren et al. 2013</span>
+          <div class="tex" data-display="1">C=\htmlClass{pA}{\alpha}M+\htmlClass{pB}{\beta}K\;\;\Rightarrow\;\;d_i=\tfrac{1}{2}\big(\htmlClass{pA}{\alpha}+\htmlClass{pB}{\beta}\,\omega_i^{2}\big)</div>
+        </div>
+        <p class="why"><b>Decay.</b> <i class="pA">&alpha;</i> adds the same damping to every mode (it dominates the low ones);
+          <i class="pB">&beta;</i> grows with <span class="tex">\omega_i^{2}</span>, so it kills the high modes first. Each partial fades as
+          <span class="tex">e^{-d_i t}</span>.</p>
       </div>
     </div>
   </section>
 
-  <!-- INTERACTIVE AUDIO: SYNTHETIC -->
+  <!-- BLEND INTERPOLATION -->
+  <section id="blend">
+    <h2>Continuous material blends</h2>
+    <p class="lead">Because the targets are <b>continuous</b>, a material can be <i>interpolated</i>.
+      Drag the slider to morph one object from <b>Plastic</b> to <b>Ceramic</b>: the impact sound and the
+      underlying physical parameters move smoothly together (&rho;,&nbsp;E,&nbsp;&alpha;,&nbsp;&beta; by
+      geometric mean, &nu; arithmetic) &mdash; the continuity our latent blend-consistency objective is built for.</p>
+    <div class="card" style="padding:24px 22px 22px">
+      <div class="blend-head">
+        <span class="mat-l">Plastic</span>
+        <input id="blendSlider" type="range" min="0" max="4" step="1" value="2" aria-label="material blend">
+        <span class="mat-r">Ceramic</span>
+      </div>
+      <div class="blend-mix" id="blendMix">&mdash;</div>
+      <div class="blend-body">
+        <button id="blendPlay" class="btn-play">&#9654;&nbsp; Play impact</button>
+        <div class="blend-params" id="blendParams"></div>
+      </div>
+      <audio id="blendAudio" preload="auto"></audio>
+    </div>
+    <p class="cap">Same object &amp; strike throughout &mdash; only the material changes. Each step is a full
+      FEM modal re-solve at the interpolated parameters.</p>
+    <div class="card eqlist" style="margin-top:14px">
+      <div class="eqrow">
+        <div>
+          <span class="eqtag">Blend rule</span>
+          <div class="tex" data-display="1">\log p_{\text{blend}}=w\log p_1+(1-w)\log p_2,\qquad p\in\{\htmlClass{pR}{\rho},\htmlClass{pE}{E},\htmlClass{pA}{\alpha},\htmlClass{pB}{\beta}\}</div>
+          <div class="tex" data-display="1">\htmlClass{pN}{\nu}_{\text{blend}}=w\,\htmlClass{pN}{\nu}_1+(1-w)\,\htmlClass{pN}{\nu}_2</div>
+        </div>
+        <p class="why"><b>Geometric mean</b> for the quantities that span orders of magnitude, arithmetic for &nu;
+          &mdash; exactly what the slider does at every step.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- LISTEN: SYNTHETIC then REAL -->
+  <div id="listen">
+  <div class="figs2">
+    <figure class="card fig">
+      <img src="assets/fig/fig3_rerender.png" alt="Fig. 3: spectrogram comparison for re-rendering validation" loading="lazy">
+      <figcaption><b>Fig. 3: Spectrogram comparison for re-rendering validation.</b> Each column compares an input
+        reference with the sound synthesized after feeding the estimated parameters back into the simulator.</figcaption>
+    </figure>
+    <figure class="card fig">
+      <img src="assets/fig/fig4_transfer.png" alt="Fig. 4: material transfer from reference audio to new geometry" loading="lazy">
+      <figcaption><b>Fig. 4: Material transfer from reference audio to new geometry.</b> Estimated material parameters
+        are transferred to the same target mesh to synthesize ceramic-, plastic-, steel-, and glass-like impact responses.</figcaption>
+    </figure>
+  </div>
   <section id="listen-syn">
     <h2>Listen &middot; Synthetic re-rendering</h2>
     <p class="lead">For each object we play the <b>input impact</b> and the sound <b>re-rendered from our
@@ -338,34 +448,9 @@
       structure and decay from the predicted parameters alone.</p>
   </section>
 
-  <!-- BLEND INTERPOLATION -->
-  <section id="blend">
-    <h2>Continuous material blends</h2>
-    <p class="lead">Because the targets are <b>continuous</b>, a material can be <i>interpolated</i>.
-      Drag the slider to morph one object from <b>Plastic</b> to <b>Ceramic</b>: the impact sound and the
-      underlying physical parameters move smoothly together (&rho;,&nbsp;E,&nbsp;&alpha;,&nbsp;&beta; by
-      geometric mean, &nu; arithmetic) &mdash; the continuity our latent blend-consistency objective is built for.</p>
-    <div class="card" style="padding:24px 22px 22px">
-      <div class="blend-head">
-        <span class="mat-l">Plastic</span>
-        <input id="blendSlider" type="range" min="0" max="4" step="1" value="2" aria-label="material blend">
-        <span class="mat-r">Ceramic</span>
-      </div>
-      <div class="blend-mix" id="blendMix">&mdash;</div>
-      <div class="blend-body">
-        <button id="blendPlay" class="btn-play">&#9654;&nbsp; Play impact</button>
-        <div class="blend-params" id="blendParams"></div>
-      </div>
-      <audio id="blendAudio" preload="auto"></audio>
-    </div>
-    <p class="cap">Same object &amp; strike throughout &mdash; only the material changes. Each step is a full
-      FEM modal re-solve at the interpolated parameters.</p>
-  </section>
-
-  <!-- INTERACTIVE AUDIO: REAL -->
   <section id="listen-real">
     <h2>Listen &middot; Real-world objects</h2>
-    <p class="lead">Real recordings from <a href="https://objectfolder.stanford.edu/" target="_blank" rel="noopener">ObjectFolder-Real</a>:
+    <p class="lead">Real recordings and 3D models from <a href="https://objectfolder.stanford.edu/" target="_blank" rel="noopener">ObjectFolder-Real</a>:
       each panel shows the <b>log-mel of the real recording</b> (left) next to the sound
       <b>re-rendered from the material parameters our model predicted from that recording</b> (right, playable).
       Hit point is arbitrary and hit time is estimated (no metadata used).</p>
@@ -373,7 +458,7 @@
       <div class="card demo">
         <span class="tag">Ceramic</span><h3>Vase (green)</h3>
         <model-viewer src="assets/models/obj_75.glb" camera-controls touch-action="pan-y" auto-rotate auto-rotate-delay="0" rotation-per-second="30deg" reveal="auto"
-          shadow-intensity="0.8" exposure="1.05" interaction-prompt="none"
+          shadow-intensity="0.8" exposure="1.05" interaction-prompt="auto" interaction-prompt-style="wiggle" interaction-prompt-threshold="1500"
           camera-orbit="25deg 72deg auto" field-of-view="28deg" loading="eager"></model-viewer>
         <div class="row pred"><span>Re-rendered (ours)</span><audio controls preload="none" src="assets/audio/sel_75_9.wav"></audio></div>
         <div class="spec"><div class="lbls"><span>Real input</span><span class="p">Re-render</span></div>
@@ -382,7 +467,7 @@
       <div class="card demo">
         <span class="tag">Glass</span><h3>Salad Bowl</h3>
         <model-viewer src="assets/models/obj_94.glb" camera-controls touch-action="pan-y" auto-rotate auto-rotate-delay="0" rotation-per-second="30deg" reveal="auto"
-          shadow-intensity="0.8" exposure="1.05" interaction-prompt="none"
+          shadow-intensity="0.8" exposure="1.05" interaction-prompt="auto" interaction-prompt-style="wiggle" interaction-prompt-threshold="1500"
           camera-orbit="25deg 72deg auto" field-of-view="28deg" loading="eager"></model-viewer>
         <div class="row pred"><span>Re-rendered (ours)</span><audio controls preload="none" src="assets/audio/sel_94_36.wav"></audio></div>
         <div class="spec"><div class="lbls"><span>Real input</span><span class="p">Re-render</span></div>
@@ -391,47 +476,45 @@
       <div class="card demo">
         <span class="tag">Iron</span><h3>Kettlebell</h3>
         <model-viewer src="assets/models/obj_98.glb" camera-controls touch-action="pan-y" auto-rotate auto-rotate-delay="0" rotation-per-second="30deg" reveal="auto"
-          shadow-intensity="0.8" exposure="1.05" interaction-prompt="none"
+          shadow-intensity="0.8" exposure="1.05" interaction-prompt="auto" interaction-prompt-style="wiggle" interaction-prompt-threshold="1500"
           camera-orbit="25deg 72deg auto" field-of-view="28deg" loading="eager"></model-viewer>
         <div class="row pred"><span>Re-rendered (ours)</span><audio controls preload="none" src="assets/audio/sel_98_24.wav"></audio></div>
         <div class="spec"><div class="lbls"><span>Real input</span><span class="p">Re-render</span></div>
           <img loading="lazy" src="assets/spec/sel_98_24.png" alt="log-mel: real vs re-render"></div>
       </div>
-    </div>
-    <p class="mv-hint">&#128257; Drag to rotate the 3D objects &middot; scroll to zoom. Meshes &amp; textures from ObjectFolder-Real.</p>
-  </section>
+    </div>  </section>
+  </div>
 
   <!-- RESULTS -->
   <section id="results">
     <h2>Results</h2>
-    <p class="lead">Physical-parameter estimation error (MAE, lower is better). &rho; and E in log-space;
-      &nu; linear; &alpha;, &beta; in physical units; Avg.&nbsp;NMAE is averaged over the normalized targets.
-      Our feed-forward regressor is far below conventional DSP regression, in-context learning with general
-      audio&ndash;language models, and per-sound differentiable optimization &mdash; while running in
-      <b>6.1&nbsp;ms on 1.3&nbsp;GB</b> (vs. 19&nbsp;min for optimization).</p>
+    <p class="lead">Our model achieves lower MAE than each baseline across all jointly evaluated parameters, with
+      Avg.&nbsp;NMAE of <b>0.078</b> on single-material impacts and <b>0.116</b> on blends. It runs in
+      <b>6.1&nbsp;ms</b> per query, compared with seconds for the audio&ndash;language baselines and 190&nbsp;ms for
+      optimization-based estimation.</p>
     <div class="tablewrap">
-      <table>
-        <thead><tr><th>Method</th><th>Subset</th><th>&rho;</th><th>E</th><th>&nu;</th><th>&alpha;</th><th>&beta;</th><th>Avg. NMAE</th></tr></thead>
+      <table class="res">
+        <thead><tr><th>Method</th><th>Setting</th><th>Test subset</th><th class="pR">&rho;</th><th class="pE">E</th><th class="pN">&nu;</th><th class="pA">&alpha;</th><th class="pB">&beta;</th><th>Avg. NMAE</th><th>Infer. time</th><th>VRAM</th></tr></thead>
         <tbody>
-          <tr class="grp"><td colspan="8">In-context learning (audio&ndash;language models)</td></tr>
-          <tr><td>Qwen2.5-Omni-7B</td><td>Single</td><td>0.338</td><td>0.614</td><td>0.071</td><td>13.38</td><td>1.61&times;10<sup>-1</sup></td><td>1.270</td></tr>
-          <tr><td>Qwen2.5-Omni-7B</td><td>Blend</td><td>0.257</td><td>0.495</td><td>0.067</td><td>8.23</td><td>1.73&times;10<sup>-1</sup></td><td>1.162</td></tr>
-          <tr><td>Audio Flamingo 3</td><td>Single</td><td>14.1</td><td>2.14</td><td>0.130</td><td>21.7</td><td>1.8&times;10<sup>-2</sup></td><td>12.42</td></tr>
-          <tr><td>Audio Flamingo 3</td><td>Blend</td><td>13.4</td><td>2.33</td><td>0.123</td><td>11.3</td><td>4.4&times;10<sup>-2</sup></td><td>10.92</td></tr>
-          <tr class="grp"><td colspan="8">Conventional regression</td></tr>
-          <tr><td>DSP + reg.</td><td>Single</td><td>0.190</td><td>0.443</td><td>0.047</td><td>9.93</td><td>3.26&times;10<sup>-7</sup></td><td>1.405</td></tr>
-          <tr><td>DSP + reg.</td><td>Blend</td><td>0.131</td><td>0.321</td><td>0.032</td><td>5.19</td><td>1.83&times;10<sup>-7</sup></td><td>0.961</td></tr>
-          <tr class="grp"><td colspan="8">Differentiable optimization</td></tr>
-          <tr><td>DiffSound</td><td>Single</td><td>&ndash;</td><td>0.893</td><td>0.890</td><td>&ndash;</td><td>&ndash;</td><td>0.891</td></tr>
-          <tr><td>DiffSound</td><td>Blend</td><td>&ndash;</td><td>0.487</td><td>0.696</td><td>&ndash;</td><td>&ndash;</td><td>0.592</td></tr>
-          <tr class="grp"><td colspan="8">Supervised, feed-forward (ours)</td></tr>
-          <tr class="ours"><td>Ours</td><td>Single</td><td>0.081</td><td>0.140</td><td>0.008</td><td>0.59</td><td>2.39&times;10<sup>-8</sup></td><td>0.078</td></tr>
-          <tr class="ours"><td>Ours</td><td>Blend</td><td>0.119</td><td>0.206</td><td>0.012</td><td>1.08</td><td>1.32&times;10<sup>-8</sup></td><td>0.116</td></tr>
+          <tr><td rowspan="2" class="mid">DSP + Ridge Reg.</td><td rowspan="2" class="mid">Conventional</td><td>Single</td><td>0.190</td><td>0.443</td><td>0.047</td><td>9.93</td><td>3.26&times;10<sup>-7</sup></td><td>1.405</td><td rowspan="2" class="mid">16.1 (ms)</td><td rowspan="2" class="mid">CPU</td></tr>
+          <tr><td>Blend</td><td>0.131</td><td>0.321</td><td>0.032</td><td>5.19</td><td>1.83&times;10<sup>-7</sup></td><td>0.961</td></tr>
+          <tr><td rowspan="2" class="mid">Qwen2.5-Omni-7B</td><td rowspan="2" class="mid">ICL</td><td>Single</td><td>0.338</td><td>0.614</td><td>0.071</td><td>13.38</td><td>1.61&times;10<sup>-1</sup></td><td>1.270</td><td rowspan="2" class="mid">5.6 (s)</td><td rowspan="2" class="mid">16.1 GB</td></tr>
+          <tr><td>Blend</td><td>0.257</td><td>0.495</td><td>0.067</td><td>8.23</td><td>1.73&times;10<sup>-1</sup></td><td>1.162</td></tr>
+          <tr><td rowspan="2" class="mid">Audio Flamingo 3</td><td rowspan="2" class="mid">ICL</td><td>Single</td><td>14.1</td><td>2.14</td><td>0.130</td><td>21.7</td><td>1.8&times;10<sup>-2</sup></td><td>12.42</td><td rowspan="2" class="mid">4.4 (s)</td><td rowspan="2" class="mid">18.3 GB</td></tr>
+          <tr><td>Blend</td><td>13.4</td><td>2.33</td><td>0.123</td><td>11.3</td><td>4.4&times;10<sup>-2</sup></td><td>10.92</td></tr>
+          <tr><td rowspan="2" class="mid">DiffSound</td><td rowspan="2" class="mid">Optimization</td><td>Single</td><td>N/A</td><td>0.893</td><td>0.890</td><td>N/A</td><td>N/A</td><td>&ndash;</td><td rowspan="2" class="mid">190 (ms)</td><td rowspan="2" class="mid">2.0 GB</td></tr>
+          <tr><td>Blend</td><td>N/A</td><td>0.487</td><td>0.696</td><td>N/A</td><td>N/A</td><td>&ndash;</td></tr>
+          <tr class="ours"><td rowspan="2" class="mid">Ours</td><td rowspan="2" class="mid">Feed-forward</td><td>Single</td><td>0.081</td><td>0.140</td><td>0.008</td><td>0.59</td><td>2.39&times;10<sup>-8</sup></td><td><b>0.078</b></td><td rowspan="2" class="mid">6.1 (ms)</td><td rowspan="2" class="mid">1.33 GB</td></tr>
+          <tr class="ours"><td>Blend</td><td>0.119</td><td>0.206</td><td>0.012</td><td>1.08</td><td>1.32&times;10<sup>-8</sup></td><td><b>0.116</b></td></tr>
         </tbody>
       </table>
     </div>
-    <p class="cap">Averaging more impacts at inference (K = 1 &rarr; 8) further reduces error (all-sample
-      NMAE 0.112 &rarr; 0.093), as set pooling stably combines multiple observations.</p>
+    <p class="cap">Comparison of physical-parameter estimation methods on ImpactMat. &rho; and E are reported in the
+      log-space target scale, &nu; is linear, and &alpha; and &beta; are in physical units. Avg.&nbsp;NMAE is computed over
+      all five normalized target dimensions and is omitted for DiffSound, which estimates only E and &nu; in our
+      evaluation. Evaluated with <i>K</i>&nbsp;=&nbsp;1; lower is better.</p>
+    <p class="cap">Averaging more impacts at inference (<i>K</i>&nbsp;=&nbsp;1&nbsp;&rarr;&nbsp;8) further reduces the
+      all-sample NMAE from 0.1124 to 0.0926, as set pooling stably combines multiple observations.</p>
   </section>
 
   <!-- BIBTEX -->
@@ -442,7 +525,7 @@
       <pre id="bib">@article{cho2026impactmat,
   title   = {ImpactMat: Continuous Material Estimation for Inverse Impact Sound Rendering},
   author  = {Cho, Hyebin and Kim, Bumsoo and Chung, Joon Son},
-  journal = {arXiv preprint},
+  journal = {arXiv preprint arXiv:2610.07061},
   year    = {2026}
 }</pre>
     </div>
@@ -547,11 +630,11 @@
       var e = DATA.entries[+slider.value];
       mix.innerHTML = e.pct_m1 + '% ' + DATA.m1 + ' &middot; ' + (100 - e.pct_m1) + '% ' + DATA.m2;
       box.innerHTML =
-        '<div class="pill"><b>&rho;</b> <span class="v">' + fmt(e.rho, 0) + '</span> kg/m&sup3;</div>' +
-        '<div class="pill"><b>E</b> <span class="v">' + fmtE(e.E) + '</span></div>' +
-        '<div class="pill"><b>&nu;</b> <span class="v">' + fmt(e.nu, 3) + '</span></div>' +
-        '<div class="pill"><b>&alpha;</b> <span class="v">' + fmt(e.alpha, 2) + '</span></div>' +
-        '<div class="pill"><b>&beta;</b> <span class="v">' + e.beta.toExponential(2) + '</span></div>';
+        '<div class="pill"><b class="pR">&rho;</b> <span class="v">' + fmt(e.rho, 0) + '</span> kg/m&sup3;</div>' +
+        '<div class="pill"><b class="pE">E</b> <span class="v">' + fmtE(e.E) + '</span></div>' +
+        '<div class="pill"><b class="pN">&nu;</b> <span class="v">' + fmt(e.nu, 3) + '</span></div>' +
+        '<div class="pill"><b class="pA">&alpha;</b> <span class="v">' + fmt(e.alpha, 2) + '</span></div>' +
+        '<div class="pill"><b class="pB">&beta;</b> <span class="v">' + e.beta.toExponential(2) + '</span></div>';
       au.src = 'assets/blend/' + e.wav;
     }
     slider.addEventListener('input', function () { render(); au.play().catch(function () {}); });
@@ -560,10 +643,88 @@
   })();
 </script>
 
+<script>
+  // render equations (KaTeX is loaded with `defer`, so it is ready by DOMContentLoaded)
+  document.addEventListener('DOMContentLoaded', function () {
+    if (!window.katex) return;
+    Array.prototype.forEach.call(document.querySelectorAll('.tex'), function (el) {
+      try {
+        window.katex.render(el.textContent, el, { displayMode: el.getAttribute('data-display') === '1', throwOnError: false, trust: true });
+      } catch (e) {}
+    });
+  });
+
+  // teaser video: start with sound. Browsers block unmuted autoplay until the visitor interacts,
+  // so fall back to muted playback and unmute on the first click / key press / tap.
+  (function () {
+    var v = document.getElementById('teaserVid');
+    if (!v) return;
+    var evts = ['pointerdown', 'keydown', 'touchend'];
+    function cleanup() { evts.forEach(function (e) { window.removeEventListener(e, onGesture, true); }); }
+    function onGesture(ev) {
+      if (ev.target === v) return;              // let the native controls handle clicks on the video itself
+      v.muted = false; v.volume = 1; cleanup();
+    }
+    v.addEventListener('volumechange', function () { if (!v.muted) cleanup(); });
+    v.muted = false; v.volume = 1;
+    var p = v.play();
+    if (p && p.catch) p.catch(function () {
+      v.muted = true;
+      var q = v.play(); if (q && q.catch) q.catch(function () {});
+      evts.forEach(function (e) { window.addEventListener(e, onGesture, true); });
+    });
+
+    // keep the teaser from talking over the rest of the page
+    var resumeWhenVisible = false;              // true only if WE paused it because it scrolled out of view
+    function othersPlaying() {
+      return Array.prototype.some.call(document.querySelectorAll('audio,video'), function (m) {
+        return m !== v && !m.paused && !m.ended;
+      });
+    }
+    // 1) pause when it leaves the viewport, resume when it comes back (unless the visitor paused it themselves)
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (entries) {
+        var visible = entries[entries.length - 1].intersectionRatio >= 0.2;
+        if (visible) {
+          if (resumeWhenVisible && !othersPlaying()) {
+            resumeWhenVisible = false;
+            var r = v.play();
+            if (r && r.catch) r.catch(function () { v.muted = true; v.play().catch(function () {}); });
+          }
+        } else if (!v.paused) {
+          resumeWhenVisible = true;
+          v.pause();
+        }
+      }, { threshold: [0, 0.2] }).observe(v);
+    }
+    // 3) the browser tab goes to the background -> pause; resume when the tab is shown again (if the teaser is still in view)
+    function inView() {
+      var r = v.getBoundingClientRect(), h = Math.min(r.bottom, window.innerHeight) - Math.max(r.top, 0);
+      return r.height > 0 && h / r.height >= 0.2;
+    }
+    document.addEventListener('visibilitychange', function () {
+      if (document.hidden) {
+        if (!v.paused) { resumeWhenVisible = true; v.pause(); }
+      } else if (resumeWhenVisible && inView() && !othersPlaying()) {
+        resumeWhenVisible = false;
+        var r = v.play();
+        if (r && r.catch) r.catch(function () { v.muted = true; v.play().catch(function () {}); });
+      }
+    });
+    // 2) another clip starts (Listen demos, Blend slider, ...) -> stop the teaser and don't auto-resume it
+    document.addEventListener('play', function (e) {
+      if (e.target === v || !(e.target instanceof HTMLMediaElement)) return;
+      resumeWhenVisible = false;
+      if (!v.paused) v.pause();
+    }, true);
+  })();
+</script>
+
 <footer>
   <div class="wrap">
-    Project page for <i>Continuous Material Property Estimation from Impact Sounds</i>.<br>
-    Chung-Ang University &amp; KAIST &middot; 2026.
+    Project page for <i>ImpactMat: Continuous Material Estimation for Inverse Impact Sound Rendering</i>.<br>
+    Hyebin Cho, Bumsoo Kim, Joon Son Chung<br>
+    KAIST &amp; Chung-Ang University &middot; 2026.
   </div>
 </footer>
 
