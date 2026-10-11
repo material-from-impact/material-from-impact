@@ -63,7 +63,13 @@
   video{width:100%;display:block;border-radius:16px;background:#000}
   .cap{color:var(--muted);font-size:.9rem;margin-top:10px;text-align:center}
   .abstract{padding:22px 24px;font-size:1.02rem}
-  /* ---- parameter pills ---- */
+  /* ---- pipeline chips ---- */
+  .flow{display:flex;flex-wrap:nowrap;align-items:center;justify-content:space-between;gap:6px;margin:6px 0 4px}
+  .chip{background:var(--accent-soft);border:1px solid var(--line);border-radius:12px;white-space:nowrap;text-align:center;
+    padding:8px 10px;font-weight:600;font-size:.86rem}
+  .chip small{display:block;font-weight:400;color:var(--muted);font-size:.72rem}
+  .arrow{color:var(--accent);font-weight:700;flex:none}
+  @media (max-width:860px){.flow{flex-wrap:wrap;justify-content:flex-start;gap:8px}.chip{white-space:normal;text-align:left}}
   .params{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
   .pill{font-family:var(--mono);font-size:.85rem;background:var(--panel);border:1px solid var(--line);
     border-radius:9px;padding:6px 11px}
@@ -163,15 +169,6 @@
   @media (max-width:640px){.modal-gal{grid-template-columns:repeat(2,minmax(0,1fr))}}
   .modal-gal figure{background:var(--accent-soft);border:1px solid var(--line);border-radius:12px;
     padding:8px 8px 6px;text-align:center}
-  /* ---- paper figures ---- */
-  .fig{padding:14px 14px 12px;margin:0 0 16px}
-  .fig img{display:block;width:100%;height:auto;background:#fff;border-radius:10px}
-  .fig.narrow img{max-width:660px;margin:0 auto}
-  .fig figcaption{color:var(--muted);font-size:.88rem;line-height:1.5;margin-top:10px}
-  .fig figcaption b{color:var(--ink)}
-  .figs2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-bottom:10px}
-  .figs2 .fig{margin:0}
-  @media (max-width:760px){.figs2{grid-template-columns:1fr}}
   /* ---- equations (KaTeX) ---- */
   .eqlist{padding:4px 22px}
   .eqrow{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);gap:6px 26px;align-items:center;
@@ -291,31 +288,29 @@
   <!-- METHOD -->
   <section id="method">
     <h2>Method</h2>
-    <p class="lead">A set of <i>K</i> impact recordings from the same object is encoded, pooled as an unordered
-      set, and mapped to continuous, renderer-compatible material parameters that drive physics-based sound synthesis.</p>
-    <figure class="card fig narrow">
-      <img src="assets/fig/fig1_overview.png" alt="Fig. 1: inverse impact sound rendering from reference audio" loading="lazy">
-      <figcaption><b>Fig. 1: Inverse impact sound rendering from reference audio.</b> Given a reference impact sound
-        from an object with unknown material, our continuous material estimator predicts five renderer-compatible
-        parameters, which are then used with a target mesh for physics-based sound synthesis. This enables
-        re-rendering with a similar material response on a new object.</figcaption>
-    </figure>
-    <figure class="card fig">
-      <img src="assets/fig/fig2_estimator.png" alt="Fig. 2: the proposed continuous material estimator" loading="lazy">
-      <figcaption><b>Fig. 2: Overview of the proposed continuous material estimator.</b> Multiple impact recordings are
-        encoded, pooled as an unordered set, and mapped to continuous material parameters. Auxiliary classification and
-        blend-consistency losses guide training, while inference uses the direct regression head.</figcaption>
-    </figure>
-    <div class="card" style="padding:18px 22px">
+    <p class="lead">A set of <i>K</i> impact recordings from the same object is encoded, pooled as an
+      unordered set, and mapped to continuous, renderer-compatible material parameters. Blend supervision
+      regularizes both the prediction and the latent representation.</p>
+    <div class="card" style="padding:22px 22px 18px">
+      <div class="flow">
+        <div class="chip">K impact sounds<small>same object</small></div>
+        <span class="arrow">&rarr;</span>
+        <div class="chip">Audio Encoder<small>PANN CNN14</small></div>
+        <span class="arrow">&rarr;</span>
+        <div class="chip">Set Pooling<small>mean &amp; std over hits</small></div>
+        <span class="arrow">&rarr;</span>
+        <div class="chip">Regression Head<small>+ aux. material class</small></div>
+        <span class="arrow">&rarr;</span>
+        <div class="chip" style="background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;border:none">
+          Parameters<small style="color:#eef">&theta; = [logE, log&rho;, &nu;, log&alpha;, log&beta;]</small></div>
+      </div>
       <div class="params">
         <div class="pill"><b class="pE">E</b>&nbsp; Young's modulus</div>
         <div class="pill"><b class="pR">&rho;</b>&nbsp; density</div>
         <div class="pill"><b class="pN">&nu;</b>&nbsp; Poisson's ratio</div>
         <div class="pill"><b><span class="pA">&alpha;</span>,<span class="pB">&beta;</span></b>&nbsp; Rayleigh damping</div>
       </div>
-      <p class="cap" style="text-align:left;margin-top:14px">
-        Each recording goes through a shared audio network (a PANN CNN14 encoder with a projection MLP, giving a 512-D
-        hit embedding); the mean and standard deviation over the <i>K</i> embeddings feed a direct regression head.
+      <p class="cap" style="text-align:left;margin-top:16px">
         Training combines a target-weighted regression loss, a soft-label material classification head,
         a blend regression term, and a <b>latent blend consistency</b> loss that aligns a blend's audio
         latent with the interpolation of its two base-material latents &mdash; teaching a continuous
@@ -405,18 +400,6 @@
 
   <!-- LISTEN: SYNTHETIC then REAL -->
   <div id="listen">
-  <div class="figs2">
-    <figure class="card fig">
-      <img src="assets/fig/fig3_rerender.png" alt="Fig. 3: spectrogram comparison for re-rendering validation" loading="lazy">
-      <figcaption><b>Fig. 3: Spectrogram comparison for re-rendering validation.</b> Each column compares an input
-        reference with the sound synthesized after feeding the estimated parameters back into the simulator.</figcaption>
-    </figure>
-    <figure class="card fig">
-      <img src="assets/fig/fig4_transfer.png" alt="Fig. 4: material transfer from reference audio to new geometry" loading="lazy">
-      <figcaption><b>Fig. 4: Material transfer from reference audio to new geometry.</b> Estimated material parameters
-        are transferred to the same target mesh to synthesize ceramic-, plastic-, steel-, and glass-like impact responses.</figcaption>
-    </figure>
-  </div>
   <section id="listen-syn">
     <h2>Listen &middot; Synthetic re-rendering</h2>
     <p class="lead">For each object we play the <b>input impact</b> and the sound <b>re-rendered from our
