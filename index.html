@@ -406,14 +406,14 @@
       predicted parameters</b> (FEM modal synthesis, same object &amp; hit). Close match = accurate parameters.</p>
     <div class="demos">
       <div class="card demo">
-        <span class="tag">Ceramic</span><h3>Bowl &middot; pure</h3>
+        <span class="tag">Ceramic</span><h3>Object &middot; pure</h3>
         <div class="row"><span>Input impact</span><audio controls preload="none" src="assets/audio/syn_Ceramic_input.wav"></audio></div>
         <div class="row pred"><span>Re-rendered (ours)</span><audio controls preload="none" src="assets/audio/syn_Ceramic_pred.wav"></audio></div>
         <div class="spec"><div class="lbls"><span>Input</span><span class="p">Re-render</span></div>
           <img loading="lazy" src="assets/spec/syn_Ceramic.png" alt="log-mel: input vs re-render"></div>
       </div>
       <div class="card demo">
-        <span class="tag">Glass</span><h3>Vessel &middot; pure</h3>
+        <span class="tag">Glass</span><h3>Object &middot; pure</h3>
         <div class="row"><span>Input impact</span><audio controls preload="none" src="assets/audio/syn_Glass_input.wav"></audio></div>
         <div class="row pred"><span>Re-rendered (ours)</span><audio controls preload="none" src="assets/audio/syn_Glass_pred.wav"></audio></div>
         <div class="spec"><div class="lbls"><span>Input</span><span class="p">Re-render</span></div>
@@ -496,8 +496,6 @@
       log-space target scale, &nu; is linear, and &alpha; and &beta; are in physical units. Avg.&nbsp;NMAE is computed over
       all five normalized target dimensions and is omitted for DiffSound, which estimates only E and &nu; in our
       evaluation. Evaluated with <i>K</i>&nbsp;=&nbsp;1; lower is better.</p>
-    <p class="cap">Averaging more impacts at inference (<i>K</i>&nbsp;=&nbsp;1&nbsp;&rarr;&nbsp;8) further reduces the
-      all-sample NMAE from 0.1124 to 0.0926, as set pooling stably combines multiple observations.</p>
   </section>
 
   <!-- BIBTEX -->
